@@ -5,7 +5,7 @@
 </template>
 
 <script>
-  import { AjsTable } from '@anguerjs/vue-table';
+  import { AjsTable } from '@potjs/vue-table';
   import { defineComponent } from 'vue';
 
   import { Divider, Slider, Switch } from 'ant-design-vue';

@@ -18,8 +18,8 @@
 </template>
 
 <script lang="ts">
-  import '@anguerjs/vue-layout/dist/styles/index.css';
-  import { AjsLayout } from '@anguerjs/vue-layout';
+  import '@potjs/vue-layout/dist/styles/index.css';
+  import { AjsLayout } from '@potjs/vue-layout';
   import { LayoutHeader, LayoutFooter, LayoutSidebar, LayoutPage } from './components';
   import { BellOutlined, FullscreenOutlined } from '@ant-design/icons-vue';
 

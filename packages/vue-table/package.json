@@ -1,5 +1,5 @@
 {
-  "name": "@anguerjs/vue-table",
+  "name": "@potjs/vue-table",
   "version": "0.0.0",
   "license": "MIT",
   "author": "Anguer",
@@ -23,13 +23,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/anguer/anguerjs.git",
+    "url": "git+https://github.com/potjs/pot.git",
     "directory": "packages/vue-table"
   },
   "bugs": {
-    "url": "https://github.com/anguer/anguerjs/issues"
+    "url": "https://github.com/potjs/pot/issues"
   },
-  "homepage": "https://github.com/anguer/anguerjs/tree/master/packages/vue-table#readme",
+  "homepage": "https://github.com/potjs/pot/tree/master/packages/vue-table#readme",
   "devDependencies": {
     "vue": "^3.2.3"
   }

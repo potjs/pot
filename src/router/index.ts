@@ -1,7 +1,7 @@
 import type { App } from 'vue';
 import { createWebHashHistory } from 'vue-router';
-import type { AjsRouteRecordRaw } from '@anguerjs/vue-router';
-import { AjsRouter } from '@anguerjs/vue-router';
+import type { AjsRouteRecordRaw } from '@potjs/vue-router';
+import { AjsRouter } from '@potjs/vue-router';
 
 import Layout from '/@/layout/index.vue';
 import { store } from '/@/store';

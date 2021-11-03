@@ -1,10 +1,10 @@
-# @anguerjs/vue-table [![npm](https://img.shields.io/npm/v/@anguerjs/vue-table.svg)](https://npmjs.com/package/@anguerjs/vue-table)
+# @potjs/vue-table [![npm](https://img.shields.io/npm/v/@potjs/vue-table.svg)](https://npmjs.com/package/@potjs/vue-table)
 
 Note:
 
 ## Install
 ```shell
-npm install -S @anguerjs/vue-table
+npm install -S @potjs/vue-table
 ```
 
 

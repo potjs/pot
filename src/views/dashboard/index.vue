@@ -13,7 +13,7 @@
   import { Button } from 'ant-design-vue';
   import { computed, ref } from 'vue';
   import { useStore } from 'vuex';
-  import { AjsMenu } from '@anguerjs/vue-layout';
+  import { AjsMenu } from '@potjs/vue-layout';
 
   export default {
     name: 'Home',

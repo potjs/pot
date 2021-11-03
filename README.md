@@ -1,9 +1,9 @@
 <div align="center">
 
-[![build status](https://github.com/anguer/anguerjs/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/anguer/anguerjs/actions/workflows/ci.yml)
-[![license](https://img.shields.io/github/license/anguer/anguerjs.svg)](LICENSE)
+[![build status](https://github.com/potjs/pot/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/potjs/pot/actions/workflows/ci.yml)
+[![license](https://img.shields.io/github/license/potjs/pot.svg)](LICENSE)
 
-<h1>Anguer JS</h1>
+<h1>Pot JS</h1>
 </div>
 
 **English** | [中文](./README.zh-CN.md)
@@ -17,18 +17,18 @@
 
 | Package                                           | Version                                                                                                                              | Description                                          |
 | ------------------------------------------------- | :----------------------------------------------------------------------------------------------------------------------------------- | :----------------------------------------------------|
-| [@anguerjs/vue-layout](packages/vue-layout)       | [![vue-layout version](https://img.shields.io/npm/v/@anguerjs/vue-layout.svg?label=%20)](packages/vue-layout/CHANGELOG.md)           | 基于 Vue3/TSX/Less 开发的布局系统                       |
-| [@anguerjs/vue-router](packages/vue-router)       | [![vue-router version](https://img.shields.io/npm/v/@anguerjs/vue-router.svg?label=%20)](packages/vue-router/CHANGELOG.md)           | vue-router 功能扩展                                    |
-| [@anguerjs/http](packages/http)                   | [![http version](https://img.shields.io/npm/v/@anguerjs/http.svg?label=%20)](packages/http/CHANGELOG.md)                             | 基于axios的二次封装                                     |
+| [@potjs/vue-layout](packages/vue-layout)       | [![vue-layout version](https://img.shields.io/npm/v/@potjs/vue-layout.svg?label=%20)](packages/vue-layout/CHANGELOG.md)           | 基于 Vue3/TSX/Less 开发的布局系统                       |
+| [@potjs/vue-router](packages/vue-router)       | [![vue-router version](https://img.shields.io/npm/v/@potjs/vue-router.svg?label=%20)](packages/vue-router/CHANGELOG.md)           | vue-router 功能扩展                                    |
+| [@potjs/http](packages/http)                   | [![http version](https://img.shields.io/npm/v/@potjs/http.svg?label=%20)](packages/http/CHANGELOG.md)                             | 基于axios的二次封装                                     |
 
 
 ## 文档
 
-[文档地址](https://anguer.github.io/anguerjs/)
+[文档地址](https://potjs.github.io/pot/)
 
 ## 如何贡献
 
-非常欢迎你的加入！[提一个 Issue](https://github.com/anguer/anguerjs/issues/new/choose) 或者提交一个 Pull Request。
+非常欢迎你的加入！[提一个 Issue](https://github.com/potjs/pot/issues/new/choose) 或者提交一个 Pull Request。
 
 **Pull Request:**
 
@@ -41,7 +41,7 @@
   
 ## Contributors
 
-[![contributors-img](https://contrib.rocks/image?repo=anguer/anguerjs)](https://github.com/anguer/anguerjs/graphs/contributors)
+[![contributors-img](https://contrib.rocks/image?repo=apotjs/pot)](https://github.com/potjs/pot/graphs/contributors)
 
 ## License
 

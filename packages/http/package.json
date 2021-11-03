@@ -1,6 +1,6 @@
 {
-  "name": "@anguerjs/http",
-  "version": "0.0.3",
+  "name": "@potjs/http",
+  "version": "0.0.0",
   "files": [
     "dist"
   ],
@@ -21,13 +21,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/anguer/anguerjs.git",
+    "url": "git+https://github.com/potjs/pot.git",
     "directory": "packages/http"
   },
   "bugs": {
-    "url": "https://github.com/anguer/anguerjs/issues"
+    "url": "https://github.com/potjs/pot/issues"
   },
-  "homepage": "https://github.com/anguer/anguerjs/tree/master/packages/http#readme",
+  "homepage": "https://github.com/potjs/pot/tree/master/packages/http#readme",
   "dependencies": {
     "axios": "^0.21.1",
     "lodash.clonedeep": "^4.5.0"

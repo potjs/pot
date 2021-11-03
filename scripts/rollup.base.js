@@ -3,11 +3,6 @@ import typescript from '@rollup/plugin-typescript';
 import nodeResolve from '@rollup/plugin-node-resolve';
 import babel from '@rollup/plugin-babel';
 
-/**
- *
- * @author anguer
- * @date Create by 2021-09-30
- */
 const external = [
   'vue',
   'vue-router',

@@ -17,7 +17,7 @@ const pkgPath = path.resolve(pkgDir, 'package.json');
  * @type {{ name: string, version: string }}
  */
 const pkg = require(pkgPath);
-const pkgName = pkg.name.replace(/^@anguerjs\//, '');
+const pkgName = pkg.name.replace(/^@potjs\//, '');
 const currentVersion = pkg.version;
 /**
  * @type {boolean}
@@ -106,7 +106,7 @@ async function main() {
     throw new Error(`invalid target version: ${targetVersion}`);
   }
 
-  const tag = pkgName === 'anguer' ? `v${targetVersion}` : `${pkgName}@${targetVersion}`;
+  const tag = pkgName === 'potjs' ? `v${targetVersion}` : `${pkgName}@${targetVersion}`;
 
   if (targetVersion.includes('beta') && !args.tag) {
     /**
