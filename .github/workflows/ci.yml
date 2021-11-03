@@ -1,0 +1,54 @@
+name: CI
+
+env:
+  CI: true
+  PNPM_CACHE_FOLDER: ~/.pnpm-store
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ ubuntu-latest ]
+        node_version: [ 12 ]
+      fail-fast: false
+
+    name: "Deploy: node-${{ matrix.node_version }}, ${{ matrix.os }}"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Set node version to ${{ matrix.node_version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node_version }}
+
+      - name: Install pnpm
+        run: npm i pnpm@latest -g
+      - name: load cache
+        uses: actions/cache@v2
+        with:
+          path: ~/.pnpm-store
+          key: pnpm-${{ hashFiles('pnpm-lock.yaml') }}
+
+      - name: Install deps
+        run: pnpm install
+
+      - name: Build docs
+        run: pnpm run build
+
+      - name: Deploy docs
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          publish_dir: dist
+          github_token: ${{ secrets.AJS_DEPLOY_TOKEN }}
+

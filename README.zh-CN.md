@@ -1,12 +1,12 @@
 <div align="center">
 
 [![build status](https://github.com/anguer/anguerjs/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/anguer/anguerjs/actions/workflows/ci.yml)
-[![license](https://img.shields.io/github/license/anguer/anguerjs.svg)](LICENSE)
+[![license](https://img.shields.io/github/license/anncwb/vue-vben-admin.svg)](LICENSE)
 
 <h1>Anguer JS</h1>
 </div>
 
-**English** | [中文](./README.zh-CN.md)
+**中文** | [English](./README.md)
 
 ## 简介
 
@@ -38,7 +38,7 @@
 4. 推送您的分支: `git push origin feat/xxxx`
 5. 提交`pull request`
 
-  
+
 ## Contributors
 
 [![contributors-img](https://contrib.rocks/image?repo=anguer/anguerjs)](https://github.com/anguer/anguerjs/graphs/contributors)

@@ -1,0 +1,13 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "jsx": "preserve",
+
+    "declaration": false,
+    "sourceMap": true,
+    "noImplicitOverride": true
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx", "typings/**/*.d.ts"],
+  "exclude": ["./__tests__/**", "node_modules", "dist", "temp"]
+}
