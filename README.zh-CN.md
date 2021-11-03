@@ -39,10 +39,6 @@
 5. 提交`pull request`
 
 
-## Contributors
-
-[![contributors-img](https://contrib.rocks/image?repo=potjs/pot)](https://github.com/potjs/pot/graphs/contributors)
-
 ## License
 
 [MIT](./LICENSE)

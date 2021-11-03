@@ -38,10 +38,6 @@
 4. 推送您的分支: `git push origin feat/xxxx`
 5. 提交`pull request`
 
-  
-## Contributors
-
-[![contributors-img](https://contrib.rocks/image?repo=apotjs/pot)](https://github.com/potjs/pot/graphs/contributors)
 
 ## License
 
