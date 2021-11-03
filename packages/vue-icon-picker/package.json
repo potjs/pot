@@ -1,0 +1,38 @@
+{
+  "name": "@potjs/vue-icon-picker",
+  "version": "0.0.0",
+  "license": "MIT",
+  "author": "Anguer",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "main": "dist/index.common.js",
+  "module": "dist/index.esm.js",
+  "notypes": "dist/index.d.ts",
+  "scripts": {
+    "build": "rimraf dist && run-s build-bundle build-styles",
+    "build-bundle": "rollup -c",
+    "build-styles": "lessc src/styles/index.less dist/styles/index.css",
+    "build-types": "run-s build-temp-types roll-types",
+    "build-temp-types": "tsc -p . --emitDeclarationOnly --outDir temp",
+    "roll-types": "api-extractor run && rimraf temp",
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s --commit-path . --lerna-package vue-icon-picker",
+    "release": "node ../../scripts/release.js"
+  },
+  "engines": {
+    "node": ">=12.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/potjs/pot.git",
+    "directory": "packages/vue-icon-picker"
+  },
+  "bugs": {
+    "url": "https://github.com/potjs/pot/issues"
+  },
+  "homepage": "https://github.com/potjs/pot/tree/master/packages/vue-icon-picker#readme",
+  "devDependencies": {
+    "vue": "^3.2.3"
+  }
+}
