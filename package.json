@@ -1,6 +1,6 @@
 {
-  "name": "anguerjs",
-  "version": "1.0.0",
+  "name": "potjs",
+  "version": "0.0.0",
   "private": true,
   "engines": {
     "node": ">=12.0.0",
@@ -19,17 +19,17 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/anguer/anguerjs.git"
+    "url": "git+https://github.com/potjs/pot.git"
   },
   "author": "Anguer",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/anguer/anguerjs/issues"
+    "url": "https://github.com/potjs/pot/issues"
   },
-  "homepage": "https://github.com/anguer/anguerjs#readme",
+  "homepage": "https://github.com/potjs/pot#readme",
   "dependencies": {
-    "@anguerjs/vue-layout": "workspace:*",
-    "@anguerjs/vue-router": "workspace:*",
+    "@potjs/vue-layout": "workspace:*",
+    "@potjs/vue-router": "workspace:*",
     "@ant-design/icons-vue": "^6.0.1",
     "ant-design-vue": "^2.2.6",
     "vue": "^3.2.6",

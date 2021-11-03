@@ -1,6 +1,6 @@
 {
-  "name": "@anguerjs/vue-router",
-  "version": "0.0.4",
+  "name": "@potjs/vue-router",
+  "version": "0.0.0",
   "license": "MIT",
   "author": "Anguer",
   "files": [
@@ -23,13 +23,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/anguer/anguerjs.git",
+    "url": "git+https://github.com/potjs/pot.git",
     "directory": "packages/vue-router"
   },
   "bugs": {
-    "url": "https://github.com/anguer/anguerjs/issues"
+    "url": "https://github.com/potjs/pot/issues"
   },
-  "homepage": "https://github.com/anguer/anguerjs/tree/master/packages/vue-router#readme",
+  "homepage": "https://github.com/potjs/pot/tree/master/packages/vue-router#readme",
   "devDependencies": {
     "vue": "^3.2.6",
     "vue-router": "^4.0.11"

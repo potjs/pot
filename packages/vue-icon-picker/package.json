@@ -1,5 +1,5 @@
 {
-  "name": "@anguerjs/vue-icon-picker",
+  "name": "@potjs/vue-icon-picker",
   "version": "0.0.0",
   "license": "MIT",
   "author": "Anguer",
@@ -25,13 +25,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/anguer/anguerjs.git",
+    "url": "git+https://github.com/potjs/pot.git",
     "directory": "packages/vue-icon-picker"
   },
   "bugs": {
-    "url": "https://github.com/anguer/anguerjs/issues"
+    "url": "https://github.com/potjs/pot/issues"
   },
-  "homepage": "https://github.com/anguer/anguerjs/tree/master/packages/vue-icon-picker#readme",
+  "homepage": "https://github.com/potjs/pot/tree/master/packages/vue-icon-picker#readme",
   "devDependencies": {
     "vue": "^3.2.3"
   }
