@@ -156,13 +156,13 @@ async function main() {
     console.log('No changes to commit.');
   }
 
+  step('\nPublishing package...');
+  await publishPackage(targetVersion, runIfNotDry);
+
   step('\nPushing to GitHub...');
   await runIfNotDry('git', ['tag', tag]);
   await runIfNotDry('git', ['push', 'origin', `refs/tags/${tag}`]);
   await runIfNotDry('git', ['push']);
-
-  step('\nPublishing package...');
-  await publishPackage(targetVersion, runIfNotDry);
 
   if (isDryRun) {
     console.log(`\nDry run finished - run git diff to see package changes.`);
