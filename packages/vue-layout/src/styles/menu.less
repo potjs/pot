@@ -16,6 +16,12 @@
 
   &-submenu {
     position: relative;
+
+    &-content {
+      //height: 0;
+      //overflow: hidden;
+      //transition: background 0.3s, width 0.3s cubic-bezier(0.2, 0, 0, 1) 0s, height 0.3s cubic-bezier(0.2, 0, 0, 1) 0s;
+    }
   }
 
   &-item, &-submenu-item {
@@ -45,9 +51,7 @@
   }
 
   &-item--trigger {
-    position: absolute;
-    top: 50%;
-    right: 16px;
+    position: relative;
     width: 10px;
     color: rgba(0, 0, 0, 0.85);
     transform: translateY(-50%);

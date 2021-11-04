@@ -1,7 +1,10 @@
 import type { Plugin, App, CSSProperties } from 'vue';
-import { defineComponent, ExtractPropTypes, toRefs, PropType, computed } from 'vue';
+import { defineComponent, ExtractPropTypes, toRefs, PropType, computed, ref } from 'vue';
 
+import type { MenuOptions, RenderLabelWithMenu } from './types';
 import { useCssModules } from '../../hooks/useCss';
+import { AjsMenuProviderProps, useMenuProvide, useMenuInject } from './injection';
+
 const {
   menuCls,
   menuItemCls,
@@ -11,29 +14,14 @@ const {
   menuItemLabelCls,
   menuItemTriggerCls,
   collapsedCls,
+  submenuContentCls,
 } = useCssModules();
-
-export interface MenuItem {
-  label: string;
-  icon?: string;
-  key?: string;
-  disabled?: boolean;
-  children?: MenuItem[];
-}
-
-export interface RenderLabelWithMenu {
-  (item: MenuItem): string | HTMLElement;
-}
 
 const labelRenderer: RenderLabelWithMenu = (menu) => menu.label;
 
 export const menuProps = {
-  width: {
-    type: String,
-    default: '200px',
-  },
   options: {
-    type: Array as PropType<MenuItem[]>,
+    type: Array as PropType<MenuOptions[]>,
     default: () => [],
   },
   mode: {
@@ -47,6 +35,10 @@ export const menuProps = {
   collapsed: {
     type: Boolean,
     default: false,
+  },
+  indent: {
+    type: Number,
+    default: 24,
   },
 };
 
@@ -66,6 +58,16 @@ const Menu = defineComponent({
   name: 'AjsMenu',
   props: menuProps,
   setup(props) {
+    const configProvider: AjsMenuProviderProps = {
+      options: computed(() => props.options),
+      mode: computed(() => props.mode),
+      renderLabel: computed(() => props.renderLabel),
+      collapsed: computed(() => props.collapsed),
+      indent: computed(() => props.indent),
+    };
+
+    useMenuProvide(configProvider);
+
     const { options, collapsed } = toRefs(props);
 
     const getProps = computed(() => {
@@ -89,16 +91,12 @@ const Menu = defineComponent({
   },
 });
 
-export const MenuItem = defineComponent({
+const MenuItem = defineComponent({
   name: 'AjsMenuItem',
   props: {
     menuInfo: {
-      type: Object as PropType<MenuItem>,
+      type: Object as PropType<MenuOptions>,
       default: () => {},
-    },
-    renderLabel: {
-      type: Function as PropType<RenderLabelWithMenu>,
-      default: labelRenderer,
     },
     depth: {
       type: Number,
@@ -106,33 +104,30 @@ export const MenuItem = defineComponent({
     },
   },
   setup(props) {
+    const { renderLabel, indent } = useMenuInject();
     const { menuInfo, depth } = toRefs(props);
 
     const getStyles = computed((): CSSProperties => {
       return {
-        paddingLeft: 24 * depth.value + 'px',
+        paddingLeft: indent.value * depth.value + 'px',
       };
     });
 
     return () => (
       <li class={menuItemCls} style={getStyles.value}>
         <span class={menuItemIconCls}>😊</span>
-        <span class={menuItemLabelCls}>{props.renderLabel(menuInfo.value)}</span>
+        <span class={menuItemLabelCls}>{renderLabel.value(menuInfo.value)}</span>
       </li>
     );
   },
 });
 
-export const SubMenu = defineComponent({
+const SubMenu = defineComponent({
   name: 'AjsSubMenu',
   props: {
     menuInfo: {
-      type: Object as PropType<MenuItem>,
+      type: Object as PropType<MenuOptions>,
       default: () => {},
-    },
-    renderLabel: {
-      type: Function as PropType<RenderLabelWithMenu>,
-      default: labelRenderer,
     },
     depth: {
       type: Number,
@@ -140,38 +135,49 @@ export const SubMenu = defineComponent({
     },
   },
   setup(props) {
+    const { renderLabel } = useMenuInject();
     const { menuInfo, depth } = toRefs(props);
 
-    const getProps = computed(() => {
-      return {
-        renderLabel: props.renderLabel,
-        depth: depth.value + 1,
-      };
-    });
+    const getProps = computed(() => ({
+      depth: depth.value + 1,
+    }));
 
-    const getStyles = computed((): CSSProperties => {
-      return {
+    const getInnerStyles = computed(
+      (): CSSProperties => ({
         paddingLeft: 24 * depth.value + 'px',
+      }),
+    );
+
+    const children = computed(() => menuInfo.value.children || []);
+    const show = ref(false);
+    const toggle = () => {
+      show.value = !show.value;
+    };
+
+    const getContentStyles = computed((): CSSProperties => {
+      return {
+        ...(!show.value && {
+          display: 'none',
+        }),
       };
     });
 
     return () => (
       <li class={submenuCls}>
-        <div class={submenuInnerCls} style={getStyles.value}>
+        <div class={submenuInnerCls} style={getInnerStyles.value} onClick={toggle}>
           <span class={menuItemIconCls}>😊</span>
-          <span class={menuItemLabelCls}>{props.renderLabel(menuInfo.value)}</span>
+          <span class={menuItemLabelCls}>{renderLabel.value(menuInfo.value)}</span>
           <span class={menuItemTriggerCls} />
         </div>
-        <ul class={menuCls}>
-          {menuInfo.value.children &&
-            menuInfo.value.children.map((item) => {
-              return (
-                <>
-                  {!item.children && <MenuItem menuInfo={item} {...getProps.value} />}
-                  {item.children && <SubMenu menuInfo={item} {...getProps.value} />}
-                </>
-              );
-            })}
+        <ul class={[menuCls, submenuContentCls]} style={getContentStyles.value}>
+          {children.value.map((item) => {
+            return (
+              <>
+                {!item.children && <MenuItem menuInfo={item} {...getProps.value} />}
+                {item.children && <SubMenu menuInfo={item} {...getProps.value} />}
+              </>
+            );
+          })}
         </ul>
       </li>
     );

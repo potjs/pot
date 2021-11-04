@@ -33,6 +33,7 @@ export function useCssModules() {
     menuItemTriggerCls: styles['ajs-menu-item--trigger'],
     submenuCls: styles['ajs-menu-submenu'],
     submenuInnerCls: styles['ajs-menu-submenu-item'],
+    submenuContentCls: styles['ajs-menu-submenu-content'],
   };
 }
 
