@@ -10,11 +10,7 @@ import LayoutContent from './Content';
 import { useConfigureTheme } from '../../hooks/useTheme';
 import type { AjsConfigProviderProps } from '../../hooks';
 import { useProvideConfig, useWindowResizeListener } from '../../hooks';
-import { useCssVars } from '../../hooks/useCss';
 import { MenuMode, TriggerPlacement } from '../../enums';
-
-const { getSidebarWidth, getSidebarCollapsedWidth, getHeaderHeight, getFooterHeight } =
-  useCssVars();
 
 export const layoutProps = {
   menuMode: {
@@ -23,7 +19,7 @@ export const layoutProps = {
   },
   headerHeight: {
     type: String,
-    default: getHeaderHeight,
+    default: '60px',
   },
   headerBackgroundColor: {
     type: String,
@@ -35,11 +31,11 @@ export const layoutProps = {
   },
   sidebarWidth: {
     type: String,
-    default: getSidebarWidth,
+    default: '210px',
   },
   sidebarCollapsedWidth: {
     type: String,
-    default: getSidebarCollapsedWidth,
+    default: '48px',
   },
   sidebarBackgroundColor: {
     type: String,
@@ -51,7 +47,7 @@ export const layoutProps = {
   },
   footerHeight: {
     type: String,
-    default: getFooterHeight,
+    default: '60px',
   },
   footerBackgroundColor: {
     type: String,

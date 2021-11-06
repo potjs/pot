@@ -1,20 +1,16 @@
-import type { Plugin, App, CSSProperties } from 'vue';
-import {
-  defineComponent,
-  ExtractPropTypes,
-  toRefs,
-  PropType,
-  computed,
-  ref,
-  createVNode,
-} from 'vue';
+import type { Plugin, App, CSSProperties, PropType, ExtractPropTypes } from 'vue';
+import { defineComponent, toRefs, computed, ref, createVNode } from 'vue';
 
-import type { MenuOptions, RenderLabelWithMenu } from './types';
+import type { MenuOptions, RenderLabelWithMenu, Theme } from './types';
 import { useCssModules } from '../../hooks/useCss';
 import { AjsMenuProviderProps, useMenuProvide, useMenuInject } from './injection';
+import { treeFindPath } from '../../utils';
 
 const {
+  activeCls,
   menuCls,
+  menuDarkCls,
+  menuLightCls,
   menuItemCls,
   submenuCls,
   submenuInnerCls,
@@ -52,9 +48,22 @@ export const menuProps = {
     type: String,
     default: 'key',
   },
+  theme: {
+    type: String as PropType<keyof Theme>,
+    default: '',
+  },
+  active: {
+    type: String,
+    default: '',
+  },
 };
 
 export type AjsMenuProps = Partial<ExtractPropTypes<typeof menuProps>>;
+
+const themes: Theme = {
+  dark: menuDarkCls,
+  light: menuLightCls,
+};
 
 // render icon and label for item
 const renderItem = (menuInfo: MenuOptions, depth: number, attr: object) => {
@@ -87,7 +96,7 @@ const BaseMenuItem = defineComponent({
       default: 'li',
     },
     className: {
-      type: String,
+      type: [String, Array] as PropType<string | any[]>,
       default: '',
     },
     inner: {
@@ -100,12 +109,13 @@ const BaseMenuItem = defineComponent({
     },
   },
   setup(props, { slots }) {
+    const { active } = useMenuInject();
     // resolveComponent('router-link')
     return () =>
       createVNode(
         props.tagName,
         {
-          class: props.className,
+          class: [props.className, { [activeCls]: active.value === props.index }],
           ...(!props.inner && {
             'data-menu-index': props.index,
           }),
@@ -128,7 +138,7 @@ const BaseMenuItem = defineComponent({
 const Menu = defineComponent({
   name: 'AjsMenu',
   props: menuProps,
-  emits: ['click'],
+  emits: ['click', 'update:active'],
   setup(props, { slots, emit }) {
     const configProvider: AjsMenuProviderProps = {
       options: computed(() => props.options),
@@ -137,6 +147,15 @@ const Menu = defineComponent({
       collapsed: computed(() => props.collapsed),
       indent: computed(() => props.indent),
       indexKey: computed(() => props.indexKey),
+      theme: computed(() => props.theme),
+      active: computed(() => props.active),
+      activePaths: computed(() => {
+        return treeFindPath(
+          props.options,
+          (t) => t[props.indexKey] === props.active,
+          props.indexKey,
+        );
+      }),
 
       rootSlots: computed(() => slots),
     };
@@ -152,7 +171,7 @@ const Menu = defineComponent({
     });
 
     return () => (
-      <ul class={[menuCls, { [collapsedCls]: collapsed.value }]}>
+      <ul class={[menuCls, { [collapsedCls]: collapsed.value }, themes[props.theme]]}>
         {options.value.map((item) => {
           return (
             <>
@@ -208,11 +227,14 @@ const SubMenu = defineComponent({
   },
   emits: ['click'],
   setup(props, { emit }) {
-    const { collapsed, indexKey } = useMenuInject();
+    const { collapsed, indexKey, activePaths } = useMenuInject();
     const { menuInfo, depth } = toRefs(props);
 
     const children = computed(() => menuInfo.value.children || []);
-    const show = ref(false);
+    const index = menuInfo.value[indexKey.value];
+    const getActive = computed(() => activePaths.value.includes(index));
+    // show or hide submenu list
+    const show = ref(getActive.value);
     const toggle = () => {
       show.value = !show.value;
     };
@@ -234,10 +256,10 @@ const SubMenu = defineComponent({
     });
 
     return () => (
-      <li class={submenuCls} data-submenu-index={menuInfo.value[indexKey.value]}>
+      <li class={[submenuCls, { [activeCls]: getActive.value }]} data-submenu-index={index}>
         {renderItem(menuInfo.value, depth.value, {
           tagName: 'div',
-          class: submenuInnerCls,
+          class: [submenuInnerCls, { [activeCls]: getActive.value }],
           inner: true,
           onClick: toggle,
         })}

@@ -1,8 +1,10 @@
 <template>
   <AjsMenu
+    :active="$route.path"
     :options="permissionRoutes"
     :collapsed="collapsed"
     index-key="path"
+    theme="dark"
     @click="handleMenuClick"
   >
     <template #item="{ item }">

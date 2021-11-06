@@ -10,3 +10,9 @@ export interface MenuOptions {
 export interface RenderLabelWithMenu {
   (item: MenuOptions): string | HTMLElement;
 }
+
+export interface Theme {
+  dark: string;
+  light: string;
+  [s: string]: any;
+}

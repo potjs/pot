@@ -5,6 +5,7 @@ export function useCssModules() {
   return {
     collapsedCls: styles['collapsed'],
     showCls: styles['show'],
+    activeCls: styles['active'],
     // layout classes
     layoutCls: styles['ajs-layout'],
     isRowCls: styles['is-row'],
@@ -27,6 +28,8 @@ export function useCssModules() {
     logoCls: styles['ajs-layout-logo'],
     // menu classes
     menuCls: styles['ajs-menu'],
+    menuDarkCls: styles['ajs-menu--dark'],
+    menuLightCls: styles['ajs-menu--light'],
     menuItemCls: styles['ajs-menu-item'],
     menuItemIconCls: styles['ajs-menu-item--icon'],
     menuItemLabelCls: styles['ajs-menu-item--label'],
@@ -34,14 +37,5 @@ export function useCssModules() {
     submenuCls: styles['ajs-menu-submenu'],
     submenuInnerCls: styles['ajs-menu-submenu-item'],
     submenuContentCls: styles['ajs-menu-submenu-content'],
-  };
-}
-
-export function useCssVars() {
-  return {
-    getSidebarWidth: '210px',
-    getSidebarCollapsedWidth: '48px',
-    getHeaderHeight: '60px',
-    getFooterHeight: '60px',
   };
 }
