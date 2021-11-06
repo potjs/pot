@@ -4,6 +4,7 @@ export interface MenuOptions {
   key?: string;
   disabled?: boolean;
   children?: MenuOptions[];
+  [s: string]: any;
 }
 
 export interface RenderLabelWithMenu {

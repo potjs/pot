@@ -1,13 +1,16 @@
-import type { ComputedRef, InjectionKey } from 'vue';
+import type { ComputedRef, InjectionKey, Slots } from 'vue';
 import { inject, provide } from 'vue';
 import { MenuOptions, RenderLabelWithMenu } from './types';
 
-export interface AjsMenuProviderProps extends Record<string, any> {
+export interface AjsMenuProviderProps {
   options: ComputedRef<MenuOptions[]>;
   mode: ComputedRef<string>;
   renderLabel: ComputedRef<RenderLabelWithMenu>;
   collapsed: ComputedRef<boolean>;
   indent: ComputedRef<number>;
+  indexKey: ComputedRef<string>;
+
+  rootSlots: ComputedRef<Slots>;
 }
 
 export const AjsMenuProviderKey: InjectionKey<AjsMenuProviderProps> = Symbol('AjsMenuProvider');

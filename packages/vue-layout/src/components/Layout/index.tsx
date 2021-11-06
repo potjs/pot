@@ -1,5 +1,5 @@
-import type { Plugin, App } from 'vue';
-import { computed, ref, defineComponent, ExtractPropTypes, PropType } from 'vue';
+import type { Plugin, App, ExtractPropTypes, PropType } from 'vue';
+import { computed, ref, defineComponent } from 'vue';
 
 import LayoutContainer from './Container';
 import { FullHeader as LayoutFullHeader, MultipleHeader as LayoutMultipleHeader } from './Header';
@@ -98,7 +98,7 @@ const Layout = defineComponent({
         // from <alias> to <key>
         const [key, alias = key] = name.split(':');
         if (slots[alias]) {
-          obj[key] = (...args: any[]) => slots[alias]?.(...args);
+          obj[key] = () => slots[alias]?.(configProvider);
         }
         return obj;
       }, {});
