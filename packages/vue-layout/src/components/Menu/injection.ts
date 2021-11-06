@@ -1,6 +1,6 @@
 import type { ComputedRef, InjectionKey, Slots } from 'vue';
 import { inject, provide } from 'vue';
-import { MenuOptions, RenderLabelWithMenu } from './types';
+import { MenuOptions, RenderLabelWithMenu, Theme } from './types';
 
 export interface AjsMenuProviderProps {
   options: ComputedRef<MenuOptions[]>;
@@ -9,6 +9,9 @@ export interface AjsMenuProviderProps {
   collapsed: ComputedRef<boolean>;
   indent: ComputedRef<number>;
   indexKey: ComputedRef<string>;
+  theme: ComputedRef<keyof Theme>;
+  active: ComputedRef<string>;
+  activePaths: ComputedRef<string[]>;
 
   rootSlots: ComputedRef<Slots>;
 }

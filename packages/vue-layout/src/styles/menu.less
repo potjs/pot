@@ -5,14 +5,23 @@
   margin: 0;
   padding: 0;
   width: 100%;
-  color: rgba(0, 0, 0, 0.85);
+  color: inherit;
   font-size: 14px;
   text-align: left;
   list-style: none;
-  background: #fff;
   outline: none;
   //transition: background 0.3s, width 0.3s cubic-bezier(0.2, 0, 0, 1) 0s;
   transition: all .2s linear;
+
+  &--dark {
+    color: #fff;
+    background: #2c3e50;
+  }
+
+  &--light {
+    color: #2c3e50;
+    background: #fff;
+  }
 
   &-submenu {
     position: relative;
@@ -33,6 +42,10 @@
 
     &:hover {
       background-color: #8cc8ff;
+    }
+
+    &.active {
+      background-color: #67c3e9;
     }
   }
 

@@ -5,6 +5,7 @@ export function useCssModules() {
   return {
     collapsedCls: styles['collapsed'],
     showCls: styles['show'],
+    activeCls: styles['active'],
     // layout classes
     layoutCls: styles['ajs-layout'],
     isRowCls: styles['is-row'],
@@ -27,6 +28,8 @@ export function useCssModules() {
     logoCls: styles['ajs-layout-logo'],
     // menu classes
     menuCls: styles['ajs-menu'],
+    menuDarkCls: styles['ajs-menu--dark'],
+    menuLightCls: styles['ajs-menu--light'],
     menuItemCls: styles['ajs-menu-item'],
     menuItemIconCls: styles['ajs-menu-item--icon'],
     menuItemLabelCls: styles['ajs-menu-item--label'],

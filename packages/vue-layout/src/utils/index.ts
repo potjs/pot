@@ -26,3 +26,23 @@ export function debounce<T extends FunctionArgs>(fn: T, delay: number) {
     }, delay);
   };
 }
+
+export type TreeFindFilter<Args extends any[] = any[]> = (...args: Args) => boolean;
+export function treeFindPath<T extends Record<string, any>>(
+  tree: T[],
+  func: TreeFindFilter,
+  key: keyof T = 'id',
+  path: string[] = [],
+): string[] {
+  if (!tree) return [];
+  for (const data of tree) {
+    path.push(data[key]);
+    if (func(data)) return path;
+    if (data.children) {
+      const findChildren = treeFindPath(data.children, func, key, path);
+      if (findChildren.length) return findChildren;
+    }
+    path.pop();
+  }
+  return [];
+}
