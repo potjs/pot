@@ -39,12 +39,3 @@ export function useCssModules() {
     submenuContentCls: styles['ajs-menu-submenu-content'],
   };
 }
-
-export function useCssVars() {
-  return {
-    getSidebarWidth: '210px',
-    getSidebarCollapsedWidth: '48px',
-    getHeaderHeight: '60px',
-    getFooterHeight: '60px',
-  };
-}
