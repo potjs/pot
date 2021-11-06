@@ -1,57 +1,50 @@
 <template>
-  <Menu mode="inline" theme="dark" :inline-collapsed="collapsed" @click="handleMenuClick">
-    <template v-for="item in permissionRoutes" :key="item.path">
-      <template v-if="!item.children">
-        <MenuItem :key="item.path">
-          <template #icon>
-            <PieChartOutlined />
-          </template>
-          {{ item.meta.title }}
-        </MenuItem>
-      </template>
-      <template v-else>
-        <MySubMenu :menu-info="item" :key="item.path" />
-      </template>
+  <AjsMenu
+    :options="permissionRoutes"
+    :collapsed="collapsed"
+    index-key="path"
+    @click="handleMenuClick"
+  >
+    <template #item="{ item }">
+      <ItemIcon>😊</ItemIcon>
+      <ItemLabel>{{ item.meta.title }}</ItemLabel>
     </template>
-  </Menu>
+  </AjsMenu>
 </template>
 
 <script lang="ts">
-  import { computed, defineComponent, ref } from 'vue';
+  import { computed, defineComponent } from 'vue';
   import { useStore } from 'vuex';
   import { useRouter } from 'vue-router';
-  import { PieChartOutlined } from '@ant-design/icons-vue';
-  import { Menu, MenuItem } from 'ant-design-vue';
-  import MySubMenu from '/@/layout/components/MySubMenu.vue';
+  import { AjsMenu } from '@potjs/vue-layout';
 
   export default defineComponent({
     name: 'LayoutSidebar',
+    props: {
+      collapsed: {
+        type: Boolean,
+        default: false,
+      },
+    },
     setup() {
       const store = useStore();
       const router = useRouter();
-      const collapsed = ref<boolean>(false);
       const permissionRoutes = computed(() => store.getters.permission_routes);
 
-      const toggleCollapsed = () => {
-        collapsed.value = !collapsed.value;
-      };
-
-      const handleMenuClick = (e) => {
-        router.push(e.key);
+      const handleMenuClick = (index) => {
+        console.log('#handleMenuClick', index);
+        router.push(index);
       };
 
       return {
-        collapsed,
-        toggleCollapsed,
         permissionRoutes,
         handleMenuClick,
       };
     },
     components: {
-      MySubMenu,
-      PieChartOutlined,
-      Menu,
-      MenuItem,
+      AjsMenu,
+      ItemIcon: AjsMenu.ItemIcon,
+      ItemLabel: AjsMenu.ItemLabel,
     },
   });
 </script>

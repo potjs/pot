@@ -2,7 +2,6 @@
   {
     "hide": false,
     "title": "概览",
-    "parentId": 0,
     "type": 3,
     "path": "/overview",
     "redirect": "/",
@@ -12,7 +11,6 @@
   {
     "hide": false,
     "title": "功能",
-    "parentId": 0,
     "type": 1,
     "path": "/feat",
     "icon": "fas journal-whills",
@@ -20,7 +18,6 @@
       {
         "hide": false,
         "title": "图标",
-        "parentId": "7d8dcd95a8a6b581cbdb7e50b9f72516",
         "type": 1,
         "path": "icon",
         "icon": "fas chart-pie",
@@ -29,7 +26,6 @@
       {
         "hide": false,
         "title": "水印",
-        "parentId": "7d8dcd95a8a6b581cbdb7e50b9f72516",
         "type": 1,
         "path": "watermark",
         "icon": "fas calendar-alt",
@@ -38,7 +34,6 @@
       {
         "hide": false,
         "title": "水波纹",
-        "parentId": "7d8dcd95a8a6b581cbdb7e50b9f72516",
         "type": 1,
         "path": "ripple",
         "icon": "fas calculator",
@@ -47,7 +42,6 @@
       {
         "hide": false,
         "title": "剪切板",
-        "parentId": "7d8dcd95a8a6b581cbdb7e50b9f72516",
         "type": 1,
         "path": "/copy",
         "icon": "fas calendar-alt",
@@ -56,7 +50,6 @@
       {
         "hide": false,
         "title": "全屏",
-        "parentId": "7d8dcd95a8a6b581cbdb7e50b9f72516",
         "type": 1,
         "path": "full-screen",
         "icon": "fas calculator",
@@ -67,7 +60,6 @@
   {
     "hide": false,
     "title": "关于",
-    "parentId": 0,
     "type": 1,
     "path": "/about",
     "icon": "fas database",
@@ -75,7 +67,6 @@
       {
         "hide": false,
         "title": "关于本站",
-        "parentId": "5aad8f39ecec59de5d43552207c7c226",
         "type": 1,
         "path": "self",
         "icon": "fas table",
@@ -86,7 +77,6 @@
   {
     "hide": false,
     "title": "组件",
-    "parentId": 0,
     "type": 1,
     "path": "/component",
     "icon": "fas coins",
@@ -94,7 +84,6 @@
       {
         "hide": false,
         "title": "基础组件",
-        "parentId": "fb88867478d797be614384ac521cf3de",
         "type": 1,
         "path": "basic",
         "icon": "fas chart-line",
@@ -103,7 +92,6 @@
       {
         "hide": false,
         "title": "图片裁剪",
-        "parentId": "fb88867478d797be614384ac521cf3de",
         "type": 1,
         "path": "cropper",
         "icon": "fas hand-holding-usd",
@@ -114,7 +102,6 @@
   {
     "hide": false,
     "title": "图表",
-    "parentId": 0,
     "type": 1,
     "path": "/charts",
     "icon": "fas diagnoses",
@@ -122,7 +109,6 @@
       {
         "hide": false,
         "title": "百度地图",
-        "parentId": "3903cb99f73c8930945edd3b186114ae",
         "type": 1,
         "path": "baidu",
         "icon": "fas holly-berry",
@@ -131,7 +117,6 @@
       {
         "hide": false,
         "title": "高德地图",
-        "parentId": "3903cb99f73c8930945edd3b186114ae",
         "type": 1,
         "path": "aMap",
         "icon": "fas donate",
@@ -140,18 +125,33 @@
       {
         "hide": false,
         "title": "Echarts",
-        "parentId": "3903cb99f73c8930945edd3b186114ae",
         "type": 1,
         "path": "echarts",
         "icon": "fas credit-card",
-        "children": []
+        "children": [
+          {
+            "hide": false,
+            "title": "柱状图",
+            "type": 1,
+            "path": "bar",
+            "icon": "fas donate",
+            "children": []
+          },
+          {
+            "hide": false,
+            "title": "饼图",
+            "type": 1,
+            "path": "pie",
+            "icon": "fas donate",
+            "children": []
+          }
+        ]
       }
     ]
   },
   {
     "hide": false,
     "title": "系统管理",
-    "parentId": 0,
     "type": 1,
     "path": "/system",
     "icon": "fas cog",
@@ -159,7 +159,6 @@
       {
         "hide": false,
         "title": "账号管理",
-        "parentId": "f7871f267402ffe89985284e64af4c77",
         "type": 1,
         "path": "users",
         "icon": "fas cogs",
@@ -168,7 +167,6 @@
       {
         "hide": false,
         "title": "角色管理",
-        "parentId": "f7871f267402ffe89985284e64af4c77",
         "type": 1,
         "path": "roles",
         "icon": "fas user-lock",
@@ -177,7 +175,6 @@
       {
         "hide": false,
         "title": "菜单管理",
-        "parentId": "f7871f267402ffe89985284e64af4c77",
         "type": 1,
         "path": "menu",
         "icon": "fas user-lock",

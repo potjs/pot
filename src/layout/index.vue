@@ -1,5 +1,5 @@
 <template>
-  <AjsLayout footer trigger="top" header-mix>
+  <AjsLayout footer trigger="top" :header-mix="false">
     <template #default><LayoutPage /></template>
 
     <template #header><LayoutHeader /></template>
@@ -11,7 +11,7 @@
 
     <template #footer><LayoutFooter /></template>
 
-    <template #sidebar><LayoutSidebar /></template>
+    <template #sidebar="{ collapsed }"><LayoutSidebar :collapsed="collapsed.value" /></template>
 
     <template #logo>Logo Slot</template>
   </AjsLayout>

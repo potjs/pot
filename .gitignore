@@ -110,3 +110,5 @@ dist-*/
 
 # vite env
 *.local
+
+*.template
