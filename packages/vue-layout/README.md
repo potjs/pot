@@ -1,17 +1,15 @@
 <h1 align="center">
 @potjs/vue-layout
-</h1>
 
 <div align="center">
 
-[![npm](https://img.shields.io/npm/v/@potjs/vue-layout.svg)](https://npmjs.com/package/@potjs/vue-layout) 
-[![downloads](https://img.shields.io/npm/dm/@potjs/vue-layout.svg)](https://npmjs.org/package/@potjs/vue-layout) 
-[![license](https://img.shields.io/github/license/potjs/pot.svg)](../../LICENSE) 
-[![node](https://img.shields.io/node/v/@potjs/vue-layout.svg)](https://nodejs.org/en/about/releases/) 
+[![npm](https://img.shields.io/npm/v/@potjs/vue-layout.svg)](https://npmjs.com/package/@potjs/vue-layout)
+[![downloads](https://img.shields.io/npm/dm/@potjs/vue-layout.svg)](https://npmjs.org/package/@potjs/vue-layout)
+[![license](https://img.shields.io/github/license/potjs/pot.svg)](../../LICENSE)
+[![node](https://img.shields.io/node/v/@potjs/vue-layout.svg)](https://nodejs.org/en/about/releases/)
 
 </div>
-
----
+</h1>
 
 ## Install
 ```shell
