@@ -11,16 +11,16 @@
 </div>
 </h1>
 
-**English** | [中文](./README.zh-CN.md)
+**中文** | [English](./README.md)
 
-## Install
+## 安装
 ```shell
 npm install -S @potjs/vue-layout
-# or
+# 或
 yarn add @potjs/vue-layout
 ```
 
-## Quickstart
+## 快速开始
 ```vue
 <template>
   <AjsLayout>
@@ -38,19 +38,19 @@ import { AjsLayout } from '@potjs/vue-layout';
 ## API
 
 ### Props
-| Property              | Description           | Type | Default |
+| 参数                  | 说明           | 类型 | 默认值 |
 | --------------------- | --------------------- | --- | --- |
 | mode | - | 'sidebar' | - |
 | collapsed | - | boolean | false |
 | theme | - | dark, light | false |
 
 ### Events
-| Event Name            | Description                                      |
+| 事件名称            | 说明                                      |
 | --------------------- | ------------------------------------------------ |
 | default | - |
 
 ### Slots
-| Name                  | Description                                      |
+| Name                  | 说明                                      |
 | --------------------- | ------------------------------------------------ |
 | default | - |
 | logo | - |

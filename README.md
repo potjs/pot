@@ -1,10 +1,12 @@
-<div align="center">
+<h1 align="center">
+Pot JS
+<div>
 
 [![build status](https://github.com/potjs/pot/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/potjs/pot/actions/workflows/ci.yml)
 [![license](https://img.shields.io/github/license/potjs/pot.svg)](LICENSE)
 
-<h1>Pot JS</h1>
 </div>
+</h1>
 
 **English** | [中文](./README.zh-CN.md)
 
