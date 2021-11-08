@@ -13,7 +13,7 @@ const {
 } = useCssModules();
 
 export default defineComponent({
-  name: 'AjsTrigger',
+  name: 'PotTrigger',
   props: {
     from: {
       type: String as PropType<'header' | 'sidebar'>,

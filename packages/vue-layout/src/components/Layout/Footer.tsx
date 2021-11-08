@@ -6,7 +6,7 @@ import { useInjectConfig } from '../../hooks';
 const { footerCls } = useCssModules();
 
 export default defineComponent({
-  name: 'AjsFooter',
+  name: 'PotFooter',
   setup(props, { slots }) {
     const { footer, footerHeight } = useInjectConfig();
 

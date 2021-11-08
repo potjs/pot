@@ -70,7 +70,7 @@ export abstract class AxiosTransform {
   responseInterceptorsCatch?: (error: Error) => void;
 }
 
-export class AjsHttp {
+export class PotHttp {
   private readonly axiosInstance: AxiosInstance;
   private readonly options: CreateAxiosOptions;
 
@@ -106,11 +106,13 @@ export class AjsHttp {
     // Add a request interceptor
     this.axiosInstance.interceptors.request.use((config: AxiosRequestConfig) => {
       // If cancel repeat request is turned on, then cancel repeat request is prohibited
-      const {headers: { ignoreCancelToken }} = config;
+      const {
+        headers: { ignoreCancelToken },
+      } = config;
 
       const ignoreCancel = !isUndefined(ignoreCancelToken)
-          ? ignoreCancelToken
-          : this.options.requestOptions?.ignoreCancelToken;
+        ? ignoreCancelToken
+        : this.options.requestOptions?.ignoreCancelToken;
 
       !ignoreCancel && axiosCanceler.addPending(config);
       if (isFunction(requestInterceptors)) {

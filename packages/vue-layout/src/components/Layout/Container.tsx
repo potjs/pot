@@ -4,7 +4,7 @@ import { useCssModules } from '../../hooks/useCss';
 const { layoutCls, isRowCls } = useCssModules();
 
 export default defineComponent({
-  name: 'AjsContainer',
+  name: 'PotContainer',
   props: {
     vertical: {
       type: Boolean,

@@ -2,7 +2,7 @@ import { defineComponent, ref, toRefs, unref, watchEffect } from 'vue';
 import { drawLine } from './utils';
 
 export default defineComponent({
-  name: 'AjsTable',
+  name: 'PotTable',
   props: {
     height: {
       type: Number,
@@ -27,12 +27,12 @@ export default defineComponent({
   },
   setup(props, {}) {
     const { height, width, data, rowHeight, borderColor } = toRefs(props);
-    const ajs_table = ref<HTMLCanvasElement | null>(null);
+    const pot_table = ref<HTMLCanvasElement | null>(null);
 
     watchEffect(
       () => {
-        console.log('#ajs_table', ajs_table);
-        const ctx = unref(ajs_table)?.getContext('2d');
+        console.log('#pot_table', pot_table);
+        const ctx = unref(pot_table)?.getContext('2d');
         console.log('#ctx', ctx, data.value);
 
         data.value.forEach((t, i) => {
@@ -62,7 +62,7 @@ export default defineComponent({
       <>
         {/* render canvas */}
         <canvas
-          ref={ajs_table}
+          ref={pot_table}
           height={unref(height)}
           width={unref(width)}
           style={{ background: '#9ed9a1' }}

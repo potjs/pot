@@ -6,7 +6,7 @@ import { useInjectConfig } from '../../hooks';
 const { logoCls } = useCssModules();
 
 export default defineComponent({
-  name: 'AjsLogo',
+  name: 'PotLogo',
   props: {
     from: {
       type: String as PropType<'header' | 'sidebar'>,

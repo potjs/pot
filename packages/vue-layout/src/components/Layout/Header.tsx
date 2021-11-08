@@ -15,7 +15,7 @@ const {
 } = useCssModules();
 
 const Header = defineComponent({
-  name: 'AjsHeader',
+  name: 'PotHeader',
   setup(props, { slots }) {
     const { collapsed, sidebarCollapsedWidth, sidebarWidth, headerHeight, isMobile } =
       useInjectConfig();
@@ -66,7 +66,7 @@ const Header = defineComponent({
 });
 
 const FullHeader = defineComponent({
-  name: 'AjsFullHeader',
+  name: 'PotFullHeader',
   setup(props, { slots }) {
     const { isFullHeader } = useInjectHooks();
     return () => <>{unref(isFullHeader) && <Header>{{ ...slots }}</Header>}</>;
@@ -74,7 +74,7 @@ const FullHeader = defineComponent({
 });
 
 const MultipleHeader = defineComponent({
-  name: 'AjsMultipleHeader',
+  name: 'PotMultipleHeader',
   setup(props, { slots }) {
     const { headerHeight } = useInjectConfig();
     const { isFullHeader } = useInjectHooks();

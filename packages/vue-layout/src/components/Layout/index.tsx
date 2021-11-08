@@ -8,7 +8,7 @@ import LayoutFooter from './Footer';
 import LayoutContent from './Content';
 
 import { useConfigureTheme } from '../../hooks/useTheme';
-import type { AjsConfigProviderProps } from '../../hooks';
+import type { PotConfigProviderProps } from '../../hooks';
 import { useProvideConfig, useWindowResizeListener } from '../../hooks';
 import { MenuMode, TriggerPlacement } from '../../enums';
 
@@ -59,13 +59,13 @@ export const layoutProps = {
   },
 };
 
-export type AjsLayoutProps = Partial<ExtractPropTypes<typeof layoutProps>>;
+export type PotLayoutProps = Partial<ExtractPropTypes<typeof layoutProps>>;
 
 const Layout = defineComponent({
-  name: 'AjsLayout',
+  name: 'PotLayout',
   props: layoutProps,
   setup(props, { slots }) {
-    const configProvider: AjsConfigProviderProps = {
+    const configProvider: PotConfigProviderProps = {
       menuMode: computed(() => props.menuMode),
       headerHeight: computed(() => props.headerHeight),
       headerBackgroundColor: computed(() => props.headerBackgroundColor),

@@ -12,45 +12,45 @@ export type Component<T extends any = any> =
   | (() => Promise<typeof import('*.vue')>)
   | (() => Promise<T>);
 
-export interface AjsLayout {
+export interface PotLayout {
   name: string;
   component: Component;
   meta: RouteMeta;
 }
 
-export interface AjsNotfound {
+export interface PotNotfound {
   name?: string;
   component: Component;
   root?: boolean;
   meta: RouteMeta;
 }
 
-export interface AjsRouterHooks extends Record<string, any> {
+export interface PotRouterHooks extends Record<string, any> {
   beforeEach?: NavigationGuardWithThis<undefined> | NavigationGuardWithThis<undefined>[];
   beforeResolve?: NavigationGuardWithThis<undefined> | NavigationGuardWithThis<undefined>[];
   afterEach?: NavigationHookAfter | NavigationHookAfter[];
 }
 
-export interface AjsRouteRecordRaw extends Omit<RouteRecordRaw, 'meta' | 'children'> {
+export interface PotRouteRecordRaw extends Omit<RouteRecordRaw, 'meta' | 'children'> {
   name: string;
   meta: RouteMeta;
   component?: Component | string;
   components?: Component;
-  children?: AjsRouteRecordRaw[];
+  children?: PotRouteRecordRaw[];
 }
 
-export interface AjsRouterOptions extends Omit<RouterOptions, 'routes'> {
-  routes: AjsRouteRecordRaw[];
-  layout: AjsLayout;
-  notfound: AjsNotfound;
+export interface PotRouterOptions extends Omit<RouterOptions, 'routes'> {
+  routes: PotRouteRecordRaw[];
+  layout: PotLayout;
+  notfound: PotNotfound;
 }
 
-export interface AjsRoute {
+export interface PotRoute {
   name?: string;
   path: string;
   title: string;
   component?: Component;
-  children?: AjsRoute[];
+  children?: PotRoute[];
   redirect?: string;
   icon?: string;
   hide?: boolean;
@@ -58,5 +58,5 @@ export interface AjsRoute {
 }
 
 export interface GenerateComponentWithRoute {
-  (item: AjsRoute, path: string): Component;
+  (item: PotRoute, path: string): Component;
 }

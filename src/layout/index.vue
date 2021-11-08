@@ -1,5 +1,5 @@
 <template>
-  <AjsLayout footer trigger="top" :header-mix="false">
+  <PotLayout footer trigger="top" :header-mix="false">
     <template #default><LayoutPage /></template>
 
     <template #header><LayoutHeader /></template>
@@ -14,19 +14,18 @@
     <template #sidebar="{ collapsed }"><LayoutSidebar :collapsed="collapsed.value" /></template>
 
     <template #logo>Logo Slot</template>
-  </AjsLayout>
+  </PotLayout>
 </template>
 
 <script lang="ts">
-  import '@potjs/vue-layout/dist/styles/index.css';
-  import { AjsLayout } from '@potjs/vue-layout';
+  import { PotLayout } from '@potjs/vue-layout';
   import { LayoutHeader, LayoutFooter, LayoutSidebar, LayoutPage } from './components';
   import { BellOutlined, FullscreenOutlined } from '@ant-design/icons-vue';
 
   export default {
     name: 'DefaultLayout',
     components: {
-      AjsLayout,
+      PotLayout,
       LayoutHeader,
       LayoutFooter,
       LayoutSidebar,

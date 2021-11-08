@@ -1,5 +1,5 @@
-export type { AjsLayoutProps } from './Layout';
-export { default as AjsLayout } from './Layout';
+export type { PotLayoutProps } from './Layout';
+export { default as PotLayout } from './Layout';
 
-export type { AjsMenuProps } from './Menu';
-export { default as AjsMenu } from './Menu';
+export type { PotMenuProps } from './Menu';
+export { default as PotMenu } from './Menu';

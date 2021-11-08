@@ -10,10 +10,10 @@ export enum MenuMode {
 }
 
 export enum ThemeConfig {
-  HEADER_BACKGROUND_COLOR = '--ajs-header-background-color',
-  HEADER_HEIGHT = '--ajs-header-height',
-  SIDEBAR_BACKGROUND_COLOR = '--ajs-sidebar-background-color',
-  SIDEBAR_WIDTH = '--ajs-sidebar-width',
+  HEADER_BACKGROUND_COLOR = '--pot-header-background-color',
+  HEADER_HEIGHT = '--pot-header-height',
+  SIDEBAR_BACKGROUND_COLOR = '--pot-sidebar-background-color',
+  SIDEBAR_WIDTH = '--pot-sidebar-width',
 }
 
 export enum TriggerPlacement {

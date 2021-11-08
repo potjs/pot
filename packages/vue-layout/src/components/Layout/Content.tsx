@@ -4,7 +4,7 @@ import { useCssModules } from '../../hooks/useCss';
 const { contentCls } = useCssModules();
 
 export default defineComponent({
-  name: 'AjsContent',
+  name: 'PotContent',
   setup(props, { slots }) {
     const data = {
       test: 'Hello world',

@@ -8,7 +8,7 @@ import LayoutTrigger from './Trigger';
 const { sidebarCls, sidebarOverlayCls, sidebarPlaceholderCls, sidebarWrapperCls } = useCssModules();
 
 export default defineComponent({
-  name: 'AjsSidebar',
+  name: 'PotSidebar',
   setup(props, { slots }) {
     const { collapsed, sidebarCollapsedWidth, sidebarWidth, headerHeight, isMobile } =
       useInjectConfig();

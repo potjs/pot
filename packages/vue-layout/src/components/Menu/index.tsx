@@ -3,7 +3,7 @@ import { defineComponent, toRefs, computed, ref, createVNode } from 'vue';
 
 import type { MenuOptions, RenderLabelWithMenu, Theme } from './types';
 import { useCssModules } from '../../hooks/useCss';
-import { AjsMenuProviderProps, useMenuProvide, useMenuInject } from './injection';
+import { PotMenuProviderProps, useMenuProvide, useMenuInject } from './injection';
 import { treeFindPath } from '../../utils';
 
 const {
@@ -58,7 +58,7 @@ export const menuProps = {
   },
 };
 
-export type AjsMenuProps = Partial<ExtractPropTypes<typeof menuProps>>;
+export type PotMenuProps = Partial<ExtractPropTypes<typeof menuProps>>;
 
 const themes: Theme = {
   dark: menuDarkCls,
@@ -128,19 +128,19 @@ const BaseMenuItem = defineComponent({
 /**
  * Menu component
  * @example
- * <AjsMenu :active="" :options="menuTree" theme="dark" mode="vertical" >
+ * <PotMenu :active="" :options="menuTree" theme="dark" mode="vertical" >
  *   <template #default="{ item }">
- *     <AjsMenu.ItemIcon>😊</AjsMenu.ItemIcon>
- *     <AjsMenu.ItemLabel>{{ item.label }}</AjsMenu.ItemLabel>
+ *     <PotMenu.ItemIcon>😊</PotMenu.ItemIcon>
+ *     <PotMenu.ItemLabel>{{ item.label }}</PotMenu.ItemLabel>
  *   </template>
- * </AjsMenu>
+ * </PotMenu>
  */
 const Menu = defineComponent({
-  name: 'AjsMenu',
+  name: 'PotMenu',
   props: menuProps,
   emits: ['click', 'update:active'],
   setup(props, { slots, emit }) {
-    const configProvider: AjsMenuProviderProps = {
+    const configProvider: PotMenuProviderProps = {
       options: computed(() => props.options),
       mode: computed(() => props.mode),
       renderLabel: computed(() => props.renderLabel),
@@ -186,7 +186,7 @@ const Menu = defineComponent({
 });
 
 const MenuItem = defineComponent({
-  name: 'AjsMenuItem',
+  name: 'PotMenuItem',
   props: {
     menuInfo: {
       type: Object as PropType<MenuOptions>,
@@ -214,7 +214,7 @@ const MenuItem = defineComponent({
 });
 
 const SubMenu = defineComponent({
-  name: 'AjsSubMenu',
+  name: 'PotSubMenu',
   props: {
     menuInfo: {
       type: Object as PropType<MenuOptions>,
@@ -279,14 +279,14 @@ const SubMenu = defineComponent({
 });
 
 const ItemIcon = defineComponent({
-  name: 'AjsMenuItemIcon',
+  name: 'PotMenuItemIcon',
   setup(props, { slots }) {
     return () => <span class={menuItemIconCls}>{slots.default?.({})}</span>;
   },
 });
 
 const ItemLabel = defineComponent({
-  name: 'AjsMenuItemLabel',
+  name: 'PotMenuItemLabel',
   setup(props, { slots }) {
     return () => <span class={menuItemLabelCls}>{slots.default?.({})}</span>;
   },

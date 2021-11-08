@@ -13,4 +13,3 @@ const plugins = [
 ];
 
 export default baseConfig(...plugins);
-
