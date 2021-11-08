@@ -65,7 +65,7 @@ export default (...plugins) => {
   //   output: {
   //     file: "dist/index.js",
   //     format: "umd",
-  //     name: "AjsLayout",
+  //     name: "PotLayout",
   //     exports: "named",
   //     globals: {
   //       vue: "Vue",
@@ -81,7 +81,7 @@ export default (...plugins) => {
   //   output: {
   //     file: "dist/index.min.js",
   //     format: "umd",
-  //     name: "AjsLayout",
+  //     name: "PotLayout",
   //     exports: "named",
   //     globals: {
   //       vue: "Vue",
