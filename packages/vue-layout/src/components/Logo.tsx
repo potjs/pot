@@ -1,7 +1,7 @@
 import type { CSSProperties } from 'vue';
 import { defineComponent, unref, computed, PropType } from 'vue';
-import { useCssModules } from '../../hooks/useCss';
-import { useInjectConfig } from '../../hooks';
+import { useCssModules } from '../hooks/useCss';
+import { useInjectConfig } from '../hooks';
 
 const { logoCls } = useCssModules();
 

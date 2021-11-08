@@ -1,9 +1,9 @@
 import type { CSSProperties } from 'vue';
 import { defineComponent, unref, computed } from 'vue';
-import { useCssModules } from '../../hooks/useCss';
+import { useCssModules } from '../hooks/useCss';
 import LayoutLogo from './Logo';
 import LayoutTrigger from './Trigger';
-import { useInjectConfig, useInjectHooks } from '../../hooks';
+import { useInjectConfig, useInjectHooks } from '../hooks';
 
 const {
   headerCls,

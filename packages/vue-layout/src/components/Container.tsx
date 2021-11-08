@@ -1,5 +1,5 @@
 import { defineComponent, computed, unref } from 'vue';
-import { useCssModules } from '../../hooks/useCss';
+import { useCssModules } from '../hooks/useCss';
 
 const { layoutCls, isRowCls } = useCssModules();
 

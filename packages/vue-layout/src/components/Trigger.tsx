@@ -1,8 +1,8 @@
 import type { PropType } from 'vue';
 import { computed, defineComponent, unref } from 'vue';
-import { useCssModules } from '../../hooks/useCss';
-import { TriggerPlacement } from '../../enums';
-import { useInjectConfig, useInjectHooks } from '../../hooks';
+import { useCssModules } from '../hooks/useCss';
+import { TriggerPlacement } from '../enums';
+import { useInjectConfig, useInjectHooks } from '../hooks';
 
 const {
   headerTriggerCls,

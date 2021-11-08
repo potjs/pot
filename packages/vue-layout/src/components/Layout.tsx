@@ -7,10 +7,10 @@ import LayoutSidebar from './Sidebar';
 import LayoutFooter from './Footer';
 import LayoutContent from './Content';
 
-import { useConfigureTheme } from '../../hooks/useTheme';
-import type { PotConfigProviderProps } from '../../hooks';
-import { useProvideConfig, useWindowResizeListener } from '../../hooks';
-import { MenuMode, TriggerPlacement } from '../../enums';
+import { useConfigureTheme } from '../hooks/useTheme';
+import type { PotConfigProviderProps } from '../hooks';
+import { useProvideConfig, useWindowResizeListener } from '../hooks';
+import { MenuMode, TriggerPlacement } from '../enums';
 
 export const layoutProps = {
   menuMode: {

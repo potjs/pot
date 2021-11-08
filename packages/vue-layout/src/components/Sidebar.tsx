@@ -1,8 +1,8 @@
 import type { CSSProperties } from 'vue';
 import { defineComponent, unref, computed } from 'vue';
-import { useCssModules } from '../../hooks/useCss';
+import { useCssModules } from '../hooks/useCss';
 import LayoutLogo from './Logo';
-import { useInjectConfig, useInjectHooks } from '../../hooks';
+import { useInjectConfig, useInjectHooks } from '../hooks';
 import LayoutTrigger from './Trigger';
 
 const { sidebarCls, sidebarOverlayCls, sidebarPlaceholderCls, sidebarWrapperCls } = useCssModules();

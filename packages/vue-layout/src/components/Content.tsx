@@ -1,5 +1,5 @@
 import { defineComponent } from 'vue';
-import { useCssModules } from '../../hooks/useCss';
+import { useCssModules } from '../hooks/useCss';
 
 const { contentCls } = useCssModules();
 
