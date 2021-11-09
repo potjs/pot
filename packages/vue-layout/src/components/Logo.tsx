@@ -1,9 +1,6 @@
 import type { CSSProperties } from 'vue';
 import { defineComponent, unref, computed, PropType } from 'vue';
-import { useCssModules } from '../hooks/useCss';
 import { useInjectConfig } from '../hooks';
-
-const { logoCls } = useCssModules();
 
 export default defineComponent({
   name: 'PotLogo',
@@ -14,7 +11,7 @@ export default defineComponent({
     },
   },
   setup(props, { slots }) {
-    const { collapsed, sidebarWidth, sidebarCollapsedWidth, headerHeight, isMobile } =
+    const { prefixCls, collapsed, sidebarWidth, sidebarCollapsedWidth, headerHeight, isMobile } =
       useInjectConfig();
 
     const renderHeaderLogo = () => {
@@ -32,7 +29,7 @@ export default defineComponent({
       );
 
       return (
-        <div class={logoCls} style={unref(getStyles)}>
+        <div class={`${prefixCls.value}-header-logo`} style={unref(getStyles)}>
           {slots.default?.({})}
         </div>
       );
@@ -55,7 +52,7 @@ export default defineComponent({
       );
 
       return (
-        <div class={logoCls} style={unref(getStyles)}>
+        <div class={`${prefixCls.value}-sidebar-logo`} style={unref(getStyles)}>
           {slots.default?.({})}
         </div>
       );

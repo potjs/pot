@@ -1,7 +1,5 @@
-import { defineComponent, computed, unref } from 'vue';
-import { useCssModules } from '../hooks/useCss';
-
-const { layoutCls, isRowCls } = useCssModules();
+import { defineComponent, computed } from 'vue';
+import { useInjectConfig } from '../hooks';
 
 export default defineComponent({
   name: 'PotContainer',
@@ -12,13 +10,15 @@ export default defineComponent({
     },
   },
   setup(props, { slots }) {
-    const getClasses = computed(() => ({
-      [layoutCls]: true,
-      [isRowCls]: !props.vertical,
+    const { prefixCls } = useInjectConfig();
+
+    const className = computed(() => ({
+      [`${prefixCls.value}`]: true,
+      [`is-row`]: !props.vertical,
     }));
 
     return () => (
-      <section class={unref(getClasses)}>
+      <section class={className.value}>
         <>{slots.default?.({})}</>
       </section>
     );

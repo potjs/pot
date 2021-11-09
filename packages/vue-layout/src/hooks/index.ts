@@ -3,17 +3,16 @@ import { provide, inject, computed } from 'vue';
 import { MenuMode, TriggerPlacement } from '../enums';
 import { useEventListener } from './useEventListener';
 
-export interface PotConfigProviderProps extends Record<string, any> {
+export interface PotConfigProviderProps {
+  prefixCls: ComputedRef<string>;
+  theme: ComputedRef<'dark' | 'light'>;
   menuMode: ComputedRef<MenuMode>;
   headerHeight: ComputedRef<string>;
-  headerBackgroundColor: ComputedRef<string>;
   headerMix: ComputedRef<boolean>;
   sidebarWidth: ComputedRef<string>;
   sidebarCollapsedWidth: ComputedRef<string>;
-  sidebarBackgroundColor: ComputedRef<string>;
   footer: ComputedRef<boolean>;
   footerHeight: ComputedRef<string>;
-  footerBackgroundColor: ComputedRef<string>;
   trigger: ComputedRef<TriggerPlacement>;
   collapsed: Ref<boolean>;
   isMobile: Ref<boolean>;

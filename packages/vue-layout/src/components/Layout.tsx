@@ -7,12 +7,19 @@ import LayoutSidebar from './Sidebar';
 import LayoutFooter from './Footer';
 import LayoutContent from './Content';
 
-import { useConfigureTheme } from '../hooks/useTheme';
 import type { PotConfigProviderProps } from '../hooks';
 import { useProvideConfig, useWindowResizeListener } from '../hooks';
 import { MenuMode, TriggerPlacement } from '../enums';
 
 export const layoutProps = {
+  prefixCls: {
+    type: String,
+    default: 'pot-layout',
+  },
+  theme: {
+    type: String as PropType<'dark' | 'light'>,
+    default: 'dark',
+  },
   menuMode: {
     type: String as PropType<MenuMode>,
     default: MenuMode.SIDEBAR,
@@ -20,10 +27,6 @@ export const layoutProps = {
   headerHeight: {
     type: String,
     default: '60px',
-  },
-  headerBackgroundColor: {
-    type: String,
-    default: '#fff',
   },
   headerMix: {
     type: Boolean,
@@ -37,10 +40,6 @@ export const layoutProps = {
     type: String,
     default: '48px',
   },
-  sidebarBackgroundColor: {
-    type: String,
-    default: '#001529',
-  },
   footer: {
     type: Boolean,
     default: false,
@@ -48,10 +47,6 @@ export const layoutProps = {
   footerHeight: {
     type: String,
     default: '60px',
-  },
-  footerBackgroundColor: {
-    type: String,
-    default: 'transparent',
   },
   trigger: {
     type: String as PropType<TriggerPlacement>,
@@ -66,23 +61,22 @@ const Layout = defineComponent({
   props: layoutProps,
   setup(props, { slots }) {
     const configProvider: PotConfigProviderProps = {
+      prefixCls: computed(() => props.prefixCls),
+      theme: computed(() => props.theme),
       menuMode: computed(() => props.menuMode),
       headerHeight: computed(() => props.headerHeight),
-      headerBackgroundColor: computed(() => props.headerBackgroundColor),
       headerMix: computed(() => props.headerMix),
       sidebarWidth: computed(() => props.sidebarWidth),
       sidebarCollapsedWidth: computed(() => props.sidebarCollapsedWidth),
-      sidebarBackgroundColor: computed(() => props.sidebarBackgroundColor),
       footer: computed(() => props.footer),
       footerHeight: computed(() => props.footerHeight),
-      footerBackgroundColor: computed(() => props.footerBackgroundColor),
       trigger: computed(() => props.trigger),
       collapsed: ref(false),
       isMobile: ref(false),
     };
 
     useProvideConfig(configProvider);
-    useConfigureTheme(props);
+
     useWindowResizeListener(({ width }) => {
       // console.log('#on window resize', width);
       configProvider.isMobile.value = width - 1 < 992;
@@ -115,7 +109,7 @@ const Layout = defineComponent({
      * render all components of layout
      */
     return () => (
-      <LayoutContainer>
+      <LayoutContainer class={`${props.prefixCls}-${props.theme}`}>
         {/* render full header */ render(['default:header', 'logo', 'action'])(LayoutFullHeader)}
         <LayoutContainer vertical={false}>
           {/* render sidebar */ render(['default:sidebar', 'logo'])(LayoutSidebar)}

@@ -1,17 +1,13 @@
 import type { CSSProperties } from 'vue';
 import { defineComponent, unref, computed } from 'vue';
-import { useCssModules } from '../hooks/useCss';
 import LayoutLogo from './Logo';
 import { useInjectConfig, useInjectHooks } from '../hooks';
 import LayoutTrigger from './Trigger';
 
-const { sidebarCls, sidebarOverlayCls, sidebarPlaceholderCls, sidebarWrapperCls } = useCssModules();
-
 export default defineComponent({
   name: 'PotSidebar',
   setup(props, { slots }) {
-    const { collapsed, sidebarCollapsedWidth, sidebarWidth, headerHeight, isMobile } =
-      useInjectConfig();
+    const { prefixCls, collapsed, sidebarWidth, isMobile } = useInjectConfig();
     const { isFullHeader, hasSidebar, toggleSidebar } = useInjectHooks();
 
     const renderLogo = () => {
@@ -29,33 +25,19 @@ export default defineComponent({
     };
 
     const renderSidebar = () => {
-      const getStyles = computed(
-        (): CSSProperties => ({
-          ...(unref(collapsed)
-            ? {
-                width: unref(sidebarCollapsedWidth),
-                maxWidth: unref(sidebarCollapsedWidth),
-                minWidth: unref(sidebarCollapsedWidth),
-                flex: `0 0 ${unref(sidebarCollapsedWidth)}`,
-              }
-            : {
-                width: unref(sidebarWidth),
-                maxWidth: unref(sidebarWidth),
-                minWidth: unref(sidebarWidth),
-                flex: `0 0 ${unref(sidebarWidth)}`,
-              }),
-          ...(unref(isFullHeader) && {
-            top: unref(headerHeight),
-          }),
-        }),
-      );
+      const className = computed(() => ({
+        [`full`]: isFullHeader.value,
+        [`collapsed`]: collapsed.value,
+      }));
 
       return (
         <>
-          <aside class={sidebarPlaceholderCls} style={unref(getStyles)} />
-          <aside class={{ [sidebarCls]: true }} style={unref(getStyles)}>
+          <aside class={[`${prefixCls.value}-sidebar--placeholder`, className.value]} />
+          <aside class={[`${prefixCls.value}-sidebar`, className.value]}>
             {!unref(isFullHeader) && renderLogo()}
-            {slots.default && <div class={sidebarWrapperCls}>{slots.default?.({})}</div>}
+            {slots.default && (
+              <div class={`${prefixCls.value}-sidebar--wrapper`}>{slots.default?.({})}</div>
+            )}
             {unref(hasSidebar) && <LayoutTrigger from={'sidebar'} />}
           </aside>
         </>
@@ -77,10 +59,14 @@ export default defineComponent({
       );
       return (
         <>
-          {!unref(collapsed) && <aside class={sidebarOverlayCls} onClick={toggleSidebar} />}
-          <aside class={{ [sidebarCls]: true }} style={unref(getStyles)}>
+          {!unref(collapsed) && (
+            <aside class={`${prefixCls.value}-sidebar--overlay`} onClick={toggleSidebar} />
+          )}
+          <aside class={`${prefixCls.value}-sidebar`} style={unref(getStyles)}>
             {renderLogo()}
-            {slots.default && <div class={sidebarWrapperCls}>{slots.default?.({})}</div>}
+            {slots.default && (
+              <div class={`${prefixCls.value}-sidebar--wrapper`}>{slots.default?.({})}</div>
+            )}
           </aside>
         </>
       );

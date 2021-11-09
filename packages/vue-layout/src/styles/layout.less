@@ -1,4 +1,8 @@
-// pot-layout
+/**
+ * Layout styles
+ * -----------------------------------
+ * Layout & Header & Footer & Sidebar
+ */
 .@{pot-prefix}-layout {
   position: relative;
   display: flex;
@@ -13,7 +17,7 @@
     flex-direction: row;
   }
 
-  // pot-layout-header
+  // layout-header
   &-header {
     position: fixed;
     top: 0;
@@ -77,9 +81,18 @@
     &.is-mix {
       width: calc(100% - @pot-sidebar-width);
     }
+
+    &-logo {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      transition: all .2s linear;
+    }
   }
 
-  // pot-layout-footer
+  // layout-footer
   &-footer {
     width: 100%;
     height: @pot-footer-height;
@@ -87,7 +100,7 @@
     background-color: @pot-footer-background-color;
   }
 
-  // pot-layout-sidebar
+  // layout-sidebar
   &-sidebar {
     position: fixed;
     left: 0;
@@ -100,21 +113,36 @@
 
     transition: all .2s linear;
 
-    // pot-layout-sidebar--wrapper
-    &--wrapper {
-      position: relative;
-    }
-
     // pot-layout-sidebar--placeholder
     &--placeholder {
-      width: @pot-sidebar-width;
       overflow: hidden;
+      width: @pot-sidebar-width;
       flex: 0 0 @pot-sidebar-width;
       max-width: @pot-sidebar-width;
       min-width: @pot-sidebar-width;
-      background-color: @pot-header-background-color;
+      background-color: transparent;
 
       transition: all .2s linear;
+    }
+
+    &.collapsed {
+      width: @pot-sidebar-collapsed-width;
+    }
+
+    &--placeholder.collapsed {
+      width: @pot-sidebar-collapsed-width;
+      flex: 0 0 @pot-sidebar-collapsed-width;
+      max-width: @pot-sidebar-collapsed-width;
+      min-width: @pot-sidebar-collapsed-width;
+    }
+
+    &.full, &--placeholder.full {
+      top: @pot-header-height;
+    }
+
+    // pot-layout-sidebar--wrapper
+    &--wrapper {
+      position: relative;
     }
 
     // pot-layout-sidebar--overlay
@@ -149,24 +177,24 @@
         transform: rotate(180deg);
       }
     }
+
+    &-logo {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      transition: all .2s linear;
+    }
   }
 
-  // pot-layout-content
+  // layout-content
   &-content {
     position: relative;
     flex: 1 1 auto;
     min-height: 0;
     padding: 20px;
     background-color: @pot-content-background-color;
-
-    transition: all .2s linear;
-  }
-
-  &-logo {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 
     transition: all .2s linear;
   }

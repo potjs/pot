@@ -1,23 +1,13 @@
 import type { CSSProperties } from 'vue';
 import { defineComponent, unref, computed } from 'vue';
-import { useCssModules } from '../hooks/useCss';
 import LayoutLogo from './Logo';
 import LayoutTrigger from './Trigger';
 import { useInjectConfig, useInjectHooks } from '../hooks';
 
-const {
-  headerCls,
-  headerLeftCls,
-  headerWrapperCls,
-  headerActionCls,
-  isMixCls,
-  headerPlaceholderCls,
-} = useCssModules();
-
 const Header = defineComponent({
   name: 'PotHeader',
   setup(props, { slots }) {
-    const { collapsed, sidebarCollapsedWidth, sidebarWidth, headerHeight, isMobile } =
+    const { prefixCls, collapsed, sidebarCollapsedWidth, sidebarWidth, headerHeight, isMobile } =
       useInjectConfig();
     const { isFullHeader, hasSidebar } = useInjectHooks();
 
@@ -50,16 +40,25 @@ const Header = defineComponent({
       );
     };
 
+    const className = computed(() => ({
+      [`${prefixCls.value}-header`]: true,
+      [`is-mix`]: getIsMix.value,
+    }));
+
     return () => (
-      <header class={{ [headerCls]: true, [isMixCls]: unref(getIsMix) }} style={unref(getStyles)}>
+      <header class={className.value} style={unref(getStyles)}>
         {
-          <div class={headerLeftCls}>
+          <div class={`${prefixCls.value}-header--left`}>
             {unref(isFullHeader) && renderLogo()}
             {unref(hasSidebar) && <LayoutTrigger from={'header'} />}
           </div>
         }
-        {slots.default && <div class={headerWrapperCls}>{slots.default?.({})}</div>}
-        {slots.action && <div class={headerActionCls}>{slots.action?.({})}</div>}
+        {slots.default && (
+          <div class={`${prefixCls.value}-header--wrapper`}>{slots.default?.({})}</div>
+        )}
+        {slots.action && (
+          <div class={`${prefixCls.value}-header--action`}>{slots.action?.({})}</div>
+        )}
       </header>
     );
   },
@@ -76,7 +75,7 @@ const FullHeader = defineComponent({
 const MultipleHeader = defineComponent({
   name: 'PotMultipleHeader',
   setup(props, { slots }) {
-    const { headerHeight } = useInjectConfig();
+    const { prefixCls, headerHeight } = useInjectConfig();
     const { isFullHeader } = useInjectHooks();
     const getStyles = computed(
       (): CSSProperties => ({
@@ -85,7 +84,7 @@ const MultipleHeader = defineComponent({
     );
     return () => (
       <>
-        <div class={headerPlaceholderCls} style={unref(getStyles)} />
+        <div class={`${prefixCls.value}-header--placeholder`} style={unref(getStyles)} />
         {!unref(isFullHeader) && <Header>{{ ...slots }}</Header>}
       </>
     );

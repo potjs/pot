@@ -34,7 +34,6 @@
       const permissionRoutes = computed(() => store.getters.permission_routes);
 
       const handleMenuClick = (index) => {
-        console.log('#handleMenuClick', index);
         router.push(index);
       };
 

@@ -1,18 +1,14 @@
 import { defineComponent } from 'vue';
-import { useCssModules } from '../hooks/useCss';
-
-const { contentCls } = useCssModules();
+import { useInjectConfig } from '../hooks';
 
 export default defineComponent({
   name: 'PotContent',
   setup(props, { slots }) {
-    const data = {
-      test: 'Hello world',
-    };
+    const { prefixCls } = useInjectConfig();
 
     return () => (
-      <main class={contentCls}>
-        <>{slots.default?.(data) /* 默认插槽 */}</>
+      <main class={`${prefixCls.value}-content`}>
+        <>{slots.default?.({}) /* 默认插槽 */}</>
       </main>
     );
   },

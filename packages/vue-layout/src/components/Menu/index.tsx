@@ -2,24 +2,8 @@ import type { Plugin, App, CSSProperties, PropType, ExtractPropTypes } from 'vue
 import { defineComponent, toRefs, computed, ref, createVNode } from 'vue';
 
 import type { MenuOptions, RenderLabelWithMenu, Theme } from './types';
-import { useCssModules } from '../../hooks/useCss';
 import { PotMenuProviderProps, useMenuProvide, useMenuInject } from './injection';
 import { treeFindPath } from '../../utils';
-
-const {
-  activeCls,
-  menuCls,
-  menuDarkCls,
-  menuLightCls,
-  menuItemCls,
-  submenuCls,
-  submenuInnerCls,
-  menuItemIconCls,
-  menuItemLabelCls,
-  menuItemTriggerCls,
-  collapsedCls,
-  submenuContentCls,
-} = useCssModules();
 
 const labelRenderer: RenderLabelWithMenu = (menu) => menu.label;
 
@@ -61,8 +45,8 @@ export const menuProps = {
 export type PotMenuProps = Partial<ExtractPropTypes<typeof menuProps>>;
 
 const themes: Theme = {
-  dark: menuDarkCls,
-  light: menuLightCls,
+  dark: 'dark',
+  light: 'light',
 };
 
 // render icon and label for item
@@ -115,12 +99,15 @@ const BaseMenuItem = defineComponent({
       createVNode(
         props.tagName,
         {
-          class: [props.className, { [activeCls]: active.value === props.index }],
+          class: [props.className, { [`active`]: active.value === props.index }],
           ...(!props.inner && {
             'data-menu-index': props.index,
           }),
         },
-        [slots.default?.(), props.inner && createVNode('span', { class: menuItemTriggerCls })],
+        [
+          slots.default?.(),
+          props.inner && createVNode('span', { class: `pot-menu-item--trigger` }),
+        ],
       );
   },
 });
@@ -170,8 +157,14 @@ const Menu = defineComponent({
       };
     });
 
+    const className = computed(() => ({
+      [`pot-menu`]: true,
+      [`collapsed`]: collapsed.value,
+      [`pot-menu-${themes[props.theme]}`]: true,
+    }));
+
     return () => (
-      <ul class={[menuCls, { [collapsedCls]: collapsed.value }, themes[props.theme]]}>
+      <ul class={className.value}>
         {options.value.map((item) => {
           return (
             <>
@@ -206,7 +199,7 @@ const MenuItem = defineComponent({
     return () =>
       renderItem(menuInfo.value, depth.value, {
         tagName: 'li',
-        className: menuItemCls,
+        className: `pot-menu-item`,
         index,
         onClick: () => emit('click', index, menuInfo.value),
       });
@@ -255,15 +248,20 @@ const SubMenu = defineComponent({
       };
     });
 
+    const className = computed(() => ({
+      [`pot-menu-submenu`]: true,
+      [`active`]: getActive.value,
+    }));
+
     return () => (
-      <li class={[submenuCls, { [activeCls]: getActive.value }]} data-submenu-index={index}>
+      <li class={className.value} data-submenu-index={index}>
         {renderItem(menuInfo.value, depth.value, {
           tagName: 'div',
-          class: [submenuInnerCls, { [activeCls]: getActive.value }],
+          className: [`pot-menu-submenu-item`, { [`active`]: getActive.value }],
           inner: true,
           onClick: toggle,
         })}
-        <ul class={[menuCls, submenuContentCls]} style={getContentStyles.value}>
+        <ul class={[`pot-menu`, `pot-menu-submenu-content`]} style={getContentStyles.value}>
           {children.value.map((item) => {
             return (
               <>
@@ -281,14 +279,14 @@ const SubMenu = defineComponent({
 const ItemIcon = defineComponent({
   name: 'PotMenuItemIcon',
   setup(props, { slots }) {
-    return () => <span class={menuItemIconCls}>{slots.default?.({})}</span>;
+    return () => <span class={`pot-menu-item--icon`}>{slots.default?.({})}</span>;
   },
 });
 
 const ItemLabel = defineComponent({
   name: 'PotMenuItemLabel',
   setup(props, { slots }) {
-    return () => <span class={menuItemLabelCls}>{slots.default?.({})}</span>;
+    return () => <span class={`pot-menu-item--label`}>{slots.default?.({})}</span>;
   },
 });
 
