@@ -3,7 +3,12 @@
  * -----------------------------------
  * Layout & Header & Footer & Sidebar
  */
-.@{pot-prefix}-layout {
+@layout: @{pot-prefix}-layout;
+@layout-header: @{layout}-header;
+@layout-footer: @{layout}-footer;
+@layout-sidebar: @{layout}-sidebar;
+
+.@{layout} {
   position: relative;
   display: flex;
   flex: auto;
@@ -13,12 +18,16 @@
   min-height: 100%;
   background-color: @pot-layout-background-color;
 
-  &.is-row {
+  &-vertical {
+    flex-direction: column;
+  }
+
+  &-horizontal {
     flex-direction: row;
   }
 
   // layout-header
-  &-header {
+  .@{layout-header} {
     position: fixed;
     top: 0;
     right: 0;
@@ -35,6 +44,14 @@
     justify-content: space-between;
 
     transition: all .2s linear;
+
+    // TODO: should be fix class name
+    &.is-mix {
+      width: calc(100% - @pot-sidebar-width);
+      &.collapsed {
+        width: calc(100% - @pot-sidebar-collapsed-width);
+      }
+    }
 
     // pot-layout-header--placeholder
     &--placeholder {
@@ -78,22 +95,19 @@
       }
     }
 
-    &.is-mix {
-      width: calc(100% - @pot-sidebar-width);
-    }
-
     &-logo {
       position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
+      height: @pot-header-height;
 
       transition: all .2s linear;
     }
   }
 
   // layout-footer
-  &-footer {
+  .@{layout-footer} {
     width: 100%;
     height: @pot-footer-height;
     flex: 0 0 auto;
@@ -101,7 +115,7 @@
   }
 
   // layout-sidebar
-  &-sidebar {
+  .@{layout-sidebar} {
     position: fixed;
     left: 0;
     top: 0;
@@ -112,6 +126,10 @@
     z-index: @pot-sidebar-z-index;
 
     transition: all .2s linear;
+
+    &.@{layout-sidebar}--mix {
+      top: @pot-header-height;
+    }
 
     // pot-layout-sidebar--placeholder
     &--placeholder {
@@ -127,6 +145,10 @@
 
     &.collapsed {
       width: @pot-sidebar-collapsed-width;
+
+      &.@{layout-sidebar}--mobile {
+        width: 0;
+      }
     }
 
     &--placeholder.collapsed {
@@ -136,10 +158,6 @@
       min-width: @pot-sidebar-collapsed-width;
     }
 
-    &.full, &--placeholder.full {
-      top: @pot-header-height;
-    }
-
     // pot-layout-sidebar--wrapper
     &--wrapper {
       position: relative;
@@ -147,7 +165,7 @@
 
     // pot-layout-sidebar--overlay
     &--overlay {
-      position: absolute;
+      position: fixed;
       top: 0;
       left: 0;
       width: 100vw;
@@ -183,6 +201,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      height: @pot-header-height;
 
       transition: all .2s linear;
     }

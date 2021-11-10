@@ -1,9 +1,9 @@
 import type { Plugin, App, CSSProperties, PropType, ExtractPropTypes } from 'vue';
 import { defineComponent, toRefs, computed, ref, createVNode } from 'vue';
 
-import type { MenuOptions, RenderLabelWithMenu, Theme } from './types';
-import { PotMenuProviderProps, useMenuProvide, useMenuInject } from './injection';
-import { treeFindPath } from '../../utils';
+import type { MenuOptions, RenderLabelWithMenu, Theme } from '../types';
+import { PotMenuProviderProps, useMenuProvide, useMenuInject } from '../injection';
+import { treeFindPath } from '../utils';
 
 const labelRenderer: RenderLabelWithMenu = (menu) => menu.label;
 

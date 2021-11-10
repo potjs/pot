@@ -1,12 +1,10 @@
-import { ThemeConfig } from '../enums';
-
 /**
  * Set Css Style
  * @param prop
  * @param val
  * @param dom
  */
-export function setCssVar(prop: ThemeConfig, val: any, dom = document.documentElement) {
+export function setCssVar(prop: string, val: any, dom = document.documentElement) {
   dom.style.setProperty(prop, val);
 }
 

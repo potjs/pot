@@ -1,12 +1,13 @@
+import type { PropType } from 'vue';
 import { defineComponent, computed } from 'vue';
 import { useInjectConfig } from '../hooks';
 
 export default defineComponent({
   name: 'PotContainer',
   props: {
-    vertical: {
-      type: Boolean,
-      default: true,
+    direction: {
+      type: String as PropType<'vertical' | 'horizontal'>,
+      default: 'vertical',
     },
   },
   setup(props, { slots }) {
@@ -14,7 +15,7 @@ export default defineComponent({
 
     const className = computed(() => ({
       [`${prefixCls.value}`]: true,
-      [`is-row`]: !props.vertical,
+      [`${prefixCls.value}-${props.direction}`]: true,
     }));
 
     return () => (

@@ -11,13 +11,12 @@ export default defineComponent({
     },
   },
   setup(props, { slots }) {
-    const { prefixCls, collapsed, sidebarWidth, sidebarCollapsedWidth, headerHeight, isMobile } =
+    const { prefixCls, collapsed, sidebarWidth, sidebarCollapsedWidth, isMobile } =
       useInjectConfig();
 
     const renderHeaderLogo = () => {
       const getStyles = computed(
         (): CSSProperties => ({
-          height: unref(headerHeight),
           ...(unref(isMobile)
             ? {
                 width: unref(sidebarCollapsedWidth),
@@ -38,7 +37,6 @@ export default defineComponent({
     const renderSidebarLogo = () => {
       const getStyles = computed(
         (): CSSProperties => ({
-          height: unref(headerHeight),
           ...(unref(isMobile)
             ? {
                 ...(!unref(collapsed) && {

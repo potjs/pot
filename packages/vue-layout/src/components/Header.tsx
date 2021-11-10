@@ -1,4 +1,3 @@
-import type { CSSProperties } from 'vue';
 import { defineComponent, unref, computed } from 'vue';
 import LayoutLogo from './Logo';
 import LayoutTrigger from './Trigger';
@@ -7,24 +6,12 @@ import { useInjectConfig, useInjectHooks } from '../hooks';
 const Header = defineComponent({
   name: 'PotHeader',
   setup(props, { slots }) {
-    const { prefixCls, collapsed, sidebarCollapsedWidth, sidebarWidth, headerHeight, isMobile } =
-      useInjectConfig();
-    const { isFullHeader, hasSidebar } = useInjectHooks();
+    const { prefixCls, collapsed, isMobile, hasSidebar } = useInjectConfig();
+    const { isFullHeader } = useInjectHooks();
 
     const getIsMix = computed(
       (): boolean => !unref(isMobile) && unref(hasSidebar) && !unref(isFullHeader),
     );
-
-    const getStyles = computed((): CSSProperties => {
-      return {
-        height: unref(headerHeight),
-        ...(unref(getIsMix) && {
-          width: `calc(100% - ${
-            unref(collapsed) ? unref(sidebarCollapsedWidth) : unref(sidebarWidth)
-          })`,
-        }),
-      };
-    });
 
     const renderLogo = () => {
       return (
@@ -43,10 +30,11 @@ const Header = defineComponent({
     const className = computed(() => ({
       [`${prefixCls.value}-header`]: true,
       [`is-mix`]: getIsMix.value,
+      [`collapsed`]: collapsed.value,
     }));
 
     return () => (
-      <header class={className.value} style={unref(getStyles)}>
+      <header class={className.value}>
         {
           <div class={`${prefixCls.value}-header--left`}>
             {unref(isFullHeader) && renderLogo()}
@@ -75,16 +63,11 @@ const FullHeader = defineComponent({
 const MultipleHeader = defineComponent({
   name: 'PotMultipleHeader',
   setup(props, { slots }) {
-    const { prefixCls, headerHeight } = useInjectConfig();
+    const { prefixCls } = useInjectConfig();
     const { isFullHeader } = useInjectHooks();
-    const getStyles = computed(
-      (): CSSProperties => ({
-        height: unref(headerHeight),
-      }),
-    );
     return () => (
       <>
-        <div class={`${prefixCls.value}-header--placeholder`} style={unref(getStyles)} />
+        <div class={`${prefixCls.value}-header--placeholder`} />
         {!unref(isFullHeader) && <Header>{{ ...slots }}</Header>}
       </>
     );

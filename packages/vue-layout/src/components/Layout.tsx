@@ -24,10 +24,6 @@ export const layoutProps = {
     type: String as PropType<MenuMode>,
     default: MenuMode.SIDEBAR,
   },
-  headerHeight: {
-    type: String,
-    default: '60px',
-  },
   headerMix: {
     type: Boolean,
     default: false,
@@ -43,10 +39,6 @@ export const layoutProps = {
   footer: {
     type: Boolean,
     default: false,
-  },
-  footerHeight: {
-    type: String,
-    default: '60px',
   },
   trigger: {
     type: String as PropType<TriggerPlacement>,
@@ -64,15 +56,15 @@ const Layout = defineComponent({
       prefixCls: computed(() => props.prefixCls),
       theme: computed(() => props.theme),
       menuMode: computed(() => props.menuMode),
-      headerHeight: computed(() => props.headerHeight),
       headerMix: computed(() => props.headerMix),
       sidebarWidth: computed(() => props.sidebarWidth),
       sidebarCollapsedWidth: computed(() => props.sidebarCollapsedWidth),
       footer: computed(() => props.footer),
-      footerHeight: computed(() => props.footerHeight),
       trigger: computed(() => props.trigger),
       collapsed: ref(false),
       isMobile: ref(false),
+
+      hasSidebar: computed(() => !!slots.sidebar),
     };
 
     useProvideConfig(configProvider);
@@ -105,13 +97,19 @@ const Layout = defineComponent({
       };
     }
 
+    const className = computed(() => ({
+      // [`${props.prefixCls}-theme--${props.theme}`]: true,
+      // [`${props.prefixCls}-mode--${props.menuMode}`]: true,
+      [`${props.prefixCls}-has-sidebar`]: configProvider.hasSidebar.value,
+    }));
+
     /**
      * render all components of layout
      */
     return () => (
-      <LayoutContainer class={`${props.prefixCls}-${props.theme}`}>
+      <LayoutContainer class={className.value}>
         {/* render full header */ render(['default:header', 'logo', 'action'])(LayoutFullHeader)}
-        <LayoutContainer vertical={false}>
+        <LayoutContainer direction={'horizontal'}>
           {/* render sidebar */ render(['default:sidebar', 'logo'])(LayoutSidebar)}
           <LayoutContainer>
             {

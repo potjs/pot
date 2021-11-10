@@ -7,21 +7,20 @@ export interface PotConfigProviderProps {
   prefixCls: ComputedRef<string>;
   theme: ComputedRef<'dark' | 'light'>;
   menuMode: ComputedRef<MenuMode>;
-  headerHeight: ComputedRef<string>;
   headerMix: ComputedRef<boolean>;
   sidebarWidth: ComputedRef<string>;
   sidebarCollapsedWidth: ComputedRef<string>;
   footer: ComputedRef<boolean>;
-  footerHeight: ComputedRef<string>;
   trigger: ComputedRef<TriggerPlacement>;
   collapsed: Ref<boolean>;
   isMobile: Ref<boolean>;
+
+  hasSidebar: ComputedRef<boolean>;
 }
 
 export interface PotHookProviderProps extends Record<string, any> {
   toggleSidebar: () => void;
   isFullHeader: ComputedRef<boolean>;
-  hasSidebar: ComputedRef<boolean>;
 }
 
 export const PotConfigProviderKey: InjectionKey<PotConfigProviderProps> =
@@ -44,7 +43,6 @@ export const useProvideConfig = (props: PotConfigProviderProps) => {
       props.collapsed.value = !props.collapsed.value;
     },
     isFullHeader: computed((): boolean => !props.headerMix.value),
-    hasSidebar: computed((): boolean => props.menuMode.value !== MenuMode.TOP_MENU),
   });
 };
 

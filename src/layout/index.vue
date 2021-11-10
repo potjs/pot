@@ -1,6 +1,6 @@
 <template>
-  <PotLayout footer trigger="top" :header-mix="false">
-    <template #default><LayoutPage /></template>
+  <PotLayout footer trigger="top" :header-mix="true">
+    <template #default><router-view /></template>
 
     <template #header><LayoutHeader /></template>
 
@@ -19,7 +19,7 @@
 
 <script lang="ts">
   import { PotLayout } from '@potjs/vue-layout';
-  import { LayoutHeader, LayoutFooter, LayoutSidebar, LayoutPage } from './components';
+  import { LayoutHeader, LayoutFooter, LayoutSidebar } from './components';
   import { BellOutlined, FullscreenOutlined } from '@ant-design/icons-vue';
 
   export default {
@@ -29,7 +29,6 @@
       LayoutHeader,
       LayoutFooter,
       LayoutSidebar,
-      LayoutPage,
       BellOutlined,
       FullscreenOutlined,
     },
