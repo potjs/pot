@@ -1,12 +1,12 @@
 import type { App } from 'vue';
 import type { RouterOptions, Router, RouteRecordRaw } from 'vue-router';
 import type {
-  AjsLayout,
-  AjsNotfound,
-  AjsRouterHooks,
-  AjsRouterOptions,
-  AjsRouteRecordRaw,
-  AjsRoute,
+  PotLayout,
+  PotNotfound,
+  PotRouterHooks,
+  PotRouterOptions,
+  PotRouteRecordRaw,
+  PotRoute,
   GenerateComponentWithRoute,
 } from './types';
 
@@ -22,21 +22,21 @@ function randomId(len = 10) {
 /**
  * Create a router instance
  */
-export default class AjsRouter {
+export default class PotRouter {
   readonly router: Router;
-  readonly layout: AjsLayout;
-  readonly notfound: AjsNotfound;
-  private _routes: AjsRouteRecordRaw[] = [];
+  readonly layout: PotLayout;
+  readonly notfound: PotNotfound;
+  private _routes: PotRouteRecordRaw[] = [];
 
   public get routes() {
     return this._routes;
   }
 
-  private set routes(theRoutes: AjsRouteRecordRaw[]) {
+  private set routes(theRoutes: PotRouteRecordRaw[]) {
     this._routes = [...theRoutes];
   }
 
-  constructor(routerOptions: AjsRouterOptions, hooks?: AjsRouterHooks) {
+  constructor(routerOptions: PotRouterOptions, hooks?: PotRouterHooks) {
     const { layout, notfound, ...options } = routerOptions;
     this.layout = layout;
     this.notfound = notfound;
@@ -56,7 +56,7 @@ export default class AjsRouter {
     app.use(this.router);
   }
 
-  setupRoutes(__: AjsRoute[], predicate?: GenerateComponentWithRoute): AjsRouteRecordRaw[] {
+  setupRoutes(__: PotRoute[], predicate?: GenerateComponentWithRoute): PotRouteRecordRaw[] {
     this.routes = this.generateRoute(__, undefined, predicate);
     // add routes to router
     this.router.addRoute({
@@ -74,7 +74,7 @@ export default class AjsRouter {
    * setup router global hooks
    * @private
    */
-  private setupHooks(hooks: AjsRouterHooks = {}): void {
+  private setupHooks(hooks: PotRouterHooks = {}): void {
     const { beforeEach, beforeResolve, afterEach } = hooks;
 
     // FIXME: should be fix this code
@@ -123,14 +123,14 @@ export default class AjsRouter {
    * @private
    */
   private generateRoute(
-    __: AjsRoute[],
-    parent?: AjsRouteRecordRaw,
+    __: PotRoute[],
+    parent?: PotRouteRecordRaw,
     predicate: GenerateComponentWithRoute = noop,
-  ): AjsRouteRecordRaw[] {
+  ): PotRouteRecordRaw[] {
     return __.map((item) => {
       const { path, name, component, redirect, children, ...meta } = item;
       const rePath = `${(parent && parent.path) || ''}/${path}`.replace('//', '/');
-      const currentRoute: AjsRouteRecordRaw = {
+      const currentRoute: PotRouteRecordRaw = {
         path: rePath,
         name: name || randomId(),
         component: predicate(item, rePath) || component,

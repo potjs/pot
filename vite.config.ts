@@ -32,6 +32,17 @@ export default ({ mode }): UserConfig => {
       ],
     },
 
+    css: {
+      preprocessorOptions: {
+        less: {
+          modifyVars: {
+            // 'pot-footer-background-color': '#e37171',
+          },
+          javascriptEnabled: true,
+        },
+      },
+    },
+
     server: {
       // Listening on all local IPs
       host: true,

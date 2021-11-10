@@ -1,9 +1,9 @@
 import type { App } from 'vue';
-import AjsTable from './table';
+import PotTable from './table';
 
-AjsTable.install = function (app: App) {
-  app.component(AjsTable.name, AjsTable);
+PotTable.install = function (app: App) {
+  app.component(PotTable.name, PotTable);
   return app;
 };
 
-export { AjsTable };
+export { PotTable };

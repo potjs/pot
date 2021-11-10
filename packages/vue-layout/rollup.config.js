@@ -7,10 +7,9 @@ const plugins = [
     plugins: [autoprefixer({ overrideBrowserslist: ['> 0.15% in CN'] })],
     extensions: ['.less', '.css'],
     use: ['less'],
-    modules: true,
+    modules: false,
     extract: 'styles/index.css',
   }),
 ];
 
 export default baseConfig(...plugins);
-

@@ -1,19 +1,10 @@
 import type { PropType } from 'vue';
 import { computed, defineComponent, unref } from 'vue';
-import { useCssModules } from '../../hooks/useCss';
-import { TriggerPlacement } from '../../enums';
-import { useInjectConfig, useInjectHooks } from '../../hooks';
-
-const {
-  headerTriggerCls,
-  sidebarTriggerCls,
-  collapsedCls,
-  headerTriggerInnerCls,
-  sidebarTriggerInnerCls,
-} = useCssModules();
+import { TriggerPlacement } from '../enums';
+import { useInjectConfig, useInjectHooks } from '../hooks';
 
 export default defineComponent({
-  name: 'AjsTrigger',
+  name: 'PotTrigger',
   props: {
     from: {
       type: String as PropType<'header' | 'sidebar'>,
@@ -21,29 +12,31 @@ export default defineComponent({
     },
   },
   setup(props) {
-    const { trigger, collapsed } = useInjectConfig();
+    const { prefixCls, trigger, collapsed } = useInjectConfig();
     const { toggleSidebar } = useInjectHooks();
 
     const renderHeaderTrigger = () => {
+      const className = computed(() => ({
+        [`${prefixCls.value}-header--trigger`]: true,
+        [`collapsed`]: collapsed.value,
+      }));
       return (
-        <div
-          class={{ [headerTriggerCls]: true, [collapsedCls]: unref(collapsed) }}
-          onClick={toggleSidebar}
-        >
+        <div class={className.value} onClick={toggleSidebar}>
           {/* TODO: fix icon on trigger */}
-          <span class={headerTriggerInnerCls}>Trigger</span>
+          <span class={`${prefixCls.value}-header--trigger-inner`}>Trigger</span>
         </div>
       );
     };
 
     const renderSidebarTrigger = () => {
+      const className = computed(() => ({
+        [`${prefixCls.value}-sidebar--trigger`]: true,
+        [`collapsed`]: collapsed.value,
+      }));
       return (
-        <div
-          class={{ [sidebarTriggerCls]: true, [collapsedCls]: unref(collapsed) }}
-          onClick={toggleSidebar}
-        >
+        <div class={className.value} onClick={toggleSidebar}>
           {/* TODO: fix icon on trigger */}
-          <span class={sidebarTriggerInnerCls}>Trigger</span>
+          <span class={`${prefixCls.value}-sidebar--trigger-inner`}>Trigger</span>
         </div>
       );
     };

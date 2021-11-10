@@ -1,12 +1,15 @@
 import type { App } from 'vue';
-import * as components from './components';
-export * from './components';
+
+export type { PotLayoutProps } from './Layout';
+export { default as PotLayout } from './Layout';
+import PotLayout from './Layout';
+
+export type { PotMenuProps } from './Menu';
+export { default as PotMenu } from './Menu';
+import PotMenu from './Menu';
 
 export const install = function (app: App) {
-  Object.values(components).forEach((comp) => {
-    if (comp.install) {
-      app.use(comp);
-    }
-  });
+  app.use(PotLayout);
+  app.use(PotMenu);
   return app;
 };

@@ -2,7 +2,7 @@ import type { ComputedRef, InjectionKey, Slots } from 'vue';
 import { inject, provide } from 'vue';
 import { MenuOptions, RenderLabelWithMenu, Theme } from './types';
 
-export interface AjsMenuProviderProps {
+export interface PotMenuProviderProps {
   options: ComputedRef<MenuOptions[]>;
   mode: ComputedRef<string>;
   renderLabel: ComputedRef<RenderLabelWithMenu>;
@@ -16,12 +16,12 @@ export interface AjsMenuProviderProps {
   rootSlots: ComputedRef<Slots>;
 }
 
-export const AjsMenuProviderKey: InjectionKey<AjsMenuProviderProps> = Symbol('AjsMenuProvider');
+export const PotMenuProviderKey: InjectionKey<PotMenuProviderProps> = Symbol('PotMenuProvider');
 
-export const useMenuProvide = (state: AjsMenuProviderProps) => {
-  provide(AjsMenuProviderKey, state);
+export const useMenuProvide = (state: PotMenuProviderProps) => {
+  provide(PotMenuProviderKey, state);
 };
 
 export const useMenuInject = () => {
-  return inject(AjsMenuProviderKey) as AjsMenuProviderProps;
+  return inject(PotMenuProviderKey) as PotMenuProviderProps;
 };

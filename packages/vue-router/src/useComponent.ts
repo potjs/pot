@@ -1,6 +1,6 @@
-import type { AjsLayout, AjsNotfound } from './types';
+import type { PotLayout, PotNotfound } from './types';
 
-export function useNotfound(args: AjsNotfound, layout: AjsLayout) {
+export function useNotfound(args: PotNotfound, layout: PotLayout) {
   const { name = 'PAGE_NOT_FOUND', component, root = true, meta } = args;
   return {
     path: '/:path(.*)*',
@@ -16,6 +16,6 @@ export function useNotfound(args: AjsNotfound, layout: AjsLayout) {
           meta,
         },
       ],
-    })
+    }),
   };
 }

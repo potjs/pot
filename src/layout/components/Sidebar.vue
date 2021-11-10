@@ -1,5 +1,5 @@
 <template>
-  <AjsMenu
+  <PotMenu
     :active="$route.path"
     :options="permissionRoutes"
     :collapsed="collapsed"
@@ -11,14 +11,14 @@
       <ItemIcon>😊</ItemIcon>
       <ItemLabel>{{ item.meta.title }}</ItemLabel>
     </template>
-  </AjsMenu>
+  </PotMenu>
 </template>
 
 <script lang="ts">
   import { computed, defineComponent } from 'vue';
   import { useStore } from 'vuex';
   import { useRouter } from 'vue-router';
-  import { AjsMenu } from '@potjs/vue-layout';
+  import { PotMenu } from '@potjs/vue-layout';
 
   export default defineComponent({
     name: 'LayoutSidebar',
@@ -34,7 +34,6 @@
       const permissionRoutes = computed(() => store.getters.permission_routes);
 
       const handleMenuClick = (index) => {
-        console.log('#handleMenuClick', index);
         router.push(index);
       };
 
@@ -44,9 +43,9 @@
       };
     },
     components: {
-      AjsMenu,
-      ItemIcon: AjsMenu.ItemIcon,
-      ItemLabel: AjsMenu.ItemLabel,
+      PotMenu,
+      ItemIcon: PotMenu.ItemIcon,
+      ItemLabel: PotMenu.ItemLabel,
     },
   });
 </script>

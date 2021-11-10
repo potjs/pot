@@ -23,15 +23,15 @@ yarn add @potjs/vue-layout
 ## Quickstart
 ```vue
 <template>
-  <AjsLayout>
+  <PotLayout>
     <template #default>your content</template>
     <template #header>your header</template>
     <template #footer>your footer</template>
-  </AjsLayout>
+  </PotLayout>
 </template>
 
 <script setup>
-import { AjsLayout } from '@potjs/vue-layout';
+import { PotLayout } from '@potjs/vue-layout';
 </script>
 ```
 

@@ -1,12 +1,9 @@
 import type { CSSProperties } from 'vue';
 import { defineComponent, unref, computed, PropType } from 'vue';
-import { useCssModules } from '../../hooks/useCss';
-import { useInjectConfig } from '../../hooks';
-
-const { logoCls } = useCssModules();
+import { useInjectConfig } from '../hooks';
 
 export default defineComponent({
-  name: 'AjsLogo',
+  name: 'PotLogo',
   props: {
     from: {
       type: String as PropType<'header' | 'sidebar'>,
@@ -14,13 +11,12 @@ export default defineComponent({
     },
   },
   setup(props, { slots }) {
-    const { collapsed, sidebarWidth, sidebarCollapsedWidth, headerHeight, isMobile } =
+    const { prefixCls, collapsed, sidebarWidth, sidebarCollapsedWidth, isMobile } =
       useInjectConfig();
 
     const renderHeaderLogo = () => {
       const getStyles = computed(
         (): CSSProperties => ({
-          height: unref(headerHeight),
           ...(unref(isMobile)
             ? {
                 width: unref(sidebarCollapsedWidth),
@@ -32,7 +28,7 @@ export default defineComponent({
       );
 
       return (
-        <div class={logoCls} style={unref(getStyles)}>
+        <div class={`${prefixCls.value}-header-logo`} style={unref(getStyles)}>
           {slots.default?.({})}
         </div>
       );
@@ -41,7 +37,6 @@ export default defineComponent({
     const renderSidebarLogo = () => {
       const getStyles = computed(
         (): CSSProperties => ({
-          height: unref(headerHeight),
           ...(unref(isMobile)
             ? {
                 ...(!unref(collapsed) && {
@@ -55,7 +50,7 @@ export default defineComponent({
       );
 
       return (
-        <div class={logoCls} style={unref(getStyles)}>
+        <div class={`${prefixCls.value}-sidebar-logo`} style={unref(getStyles)}>
           {slots.default?.({})}
         </div>
       );

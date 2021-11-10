@@ -1,7 +1,7 @@
 import type { App } from 'vue';
 import { createWebHashHistory } from 'vue-router';
-import type { AjsRouteRecordRaw } from '@potjs/vue-router';
-import { AjsRouter } from '@potjs/vue-router';
+import type { PotRouteRecordRaw } from '@potjs/vue-router';
+import { PotRouter } from '@potjs/vue-router';
 
 import Layout from '/@/layout/index.vue';
 import { store } from '/@/store';
@@ -15,7 +15,7 @@ export const modules = Object.keys(viewModules).reduce((modules, modulePath) => 
   return modules;
 }, {});
 
-export const basicRoutes: AjsRouteRecordRaw[] = [
+export const basicRoutes: PotRouteRecordRaw[] = [
   {
     path: '/login',
     name: 'Login',
@@ -38,7 +38,7 @@ export const basicRoutes: AjsRouteRecordRaw[] = [
   },
 ];
 
-export const router = new AjsRouter(
+export const router = new PotRouter(
   {
     history: createWebHashHistory(import.meta.env.VITE_PUBLIC_PATH),
     routes: basicRoutes,

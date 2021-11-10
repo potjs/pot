@@ -1,13 +1,13 @@
 <template>
-  <div>Home</div>
-  <Button type="primary"><router-link to="/login">退出</router-link></Button>
+  <div class="tmp-container">
+    <div v-for="i in 200" :key="i">{{ i }}</div>
+  </div>
 </template>
 
-<script lang="ts">
-  import { Button } from 'ant-design-vue';
+<script lang="ts" setup></script>
 
-  export default {
-    name: 'Home',
-    components: { Button },
-  };
-</script>
+<style lang="less">
+  .tmp-container {
+    background: #fff;
+  }
+</style>

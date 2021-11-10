@@ -1,17 +1,17 @@
 <template>
-  <div class="ajs-table">
-    <ajs-table :width="800" />
+  <div class="pot-table">
+    <pot-table :width="800" />
   </div>
 </template>
 
 <script>
-  import { AjsTable } from '@potjs/vue-table';
+  import { PotTable } from '@potjs/vue-table';
   import { defineComponent } from 'vue';
 
   import { Divider, Slider, Switch } from 'ant-design-vue';
 
   export default defineComponent({
-    components: { AjsTable, Divider, Slider, Switch },
+    components: { PotTable, Divider, Slider, Switch },
     setup() {},
   });
 </script>
@@ -33,7 +33,7 @@
     width: 100vw;
   }
 
-  .ajs-table {
+  .pot-table {
     display: flex;
     width: 100%;
     height: 100%;
