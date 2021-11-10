@@ -1,0 +1,1 @@
+import{_ as a}from"./index.a696c5db.js";import{o as s,j as r,F as n,K as o,k as e,s as t}from"./vendor.c13a0154.js";const d={class:"tmp-container"};var i=a({},[["render",function(a,i){return s(),r("div",d,[(s(),r(n,null,o(200,(a=>e("div",{key:a},t(a),1))),64))])}]]);export{i as default};
