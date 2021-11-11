@@ -1,4 +1,4 @@
-import { defineComponent, unref, computed } from 'vue';
+import { defineComponent, unref, computed, CSSProperties } from 'vue';
 import LayoutLogo from './Logo';
 import { useInjectConfig, useInjectHooks } from '../hooks';
 import LayoutTrigger from './Trigger';
@@ -13,7 +13,7 @@ export default defineComponent({
       return (
         <>
           {slots.logo && (
-            <LayoutLogo from={'sidebar'}>
+            <LayoutLogo>
               {{
                 default: () => slots.logo?.({}),
               }}
@@ -49,23 +49,28 @@ export default defineComponent({
     };
 
     const renderMobileSidebar = () => {
-      const sidebarClassName = computed(() => ({
-        [`${prefixCls.value}-sidebar`]: true,
-        [`${prefixCls.value}-sidebar--mobile`]: isMobile.value,
-        [`collapsed`]: collapsed.value,
+      const className = computed(() => ({
+        [`${prefixCls.value}-drawer`]: true,
+        [`${prefixCls.value}-drawer--open`]: !collapsed.value,
       }));
+
+      const getStyles = computed(
+        (): CSSProperties => ({
+          ...(collapsed.value && {
+            width: '0',
+          }),
+        }),
+      );
       return (
-        <>
-          {!unref(collapsed) && (
-            <aside class={`${prefixCls.value}-sidebar--overlay`} onClick={toggleSidebar} />
-          )}
-          <aside class={sidebarClassName.value}>
+        <div class={className.value}>
+          <aside class={`${prefixCls.value}-drawer--mask`} onClick={toggleSidebar} />
+          <aside class={`${prefixCls.value}-sidebar`} style={getStyles.value}>
             {renderLogo()}
             {slots.default && (
               <div class={`${prefixCls.value}-sidebar--wrapper`}>{slots.default?.({})}</div>
             )}
           </aside>
-        </>
+        </div>
       );
     };
 

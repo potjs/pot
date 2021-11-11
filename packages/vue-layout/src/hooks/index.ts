@@ -8,8 +8,6 @@ export interface PotConfigProviderProps {
   theme: ComputedRef<'dark' | 'light'>;
   menuMode: ComputedRef<MenuMode>;
   headerMix: ComputedRef<boolean>;
-  sidebarWidth: ComputedRef<string>;
-  sidebarCollapsedWidth: ComputedRef<string>;
   footer: ComputedRef<boolean>;
   trigger: ComputedRef<TriggerPlacement>;
   collapsed: Ref<boolean>;

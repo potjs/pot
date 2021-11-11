@@ -1,4 +1,4 @@
-import { defineComponent, unref, computed } from 'vue';
+import { defineComponent, unref } from 'vue';
 import LayoutLogo from './Logo';
 import LayoutTrigger from './Trigger';
 import { useInjectConfig, useInjectHooks } from '../hooks';
@@ -6,18 +6,14 @@ import { useInjectConfig, useInjectHooks } from '../hooks';
 const Header = defineComponent({
   name: 'PotHeader',
   setup(props, { slots }) {
-    const { prefixCls, collapsed, isMobile, hasSidebar } = useInjectConfig();
+    const { prefixCls, hasSidebar } = useInjectConfig();
     const { isFullHeader } = useInjectHooks();
-
-    const getIsMix = computed(
-      (): boolean => !unref(isMobile) && unref(hasSidebar) && !unref(isFullHeader),
-    );
 
     const renderLogo = () => {
       return (
         <>
           {slots.logo && (
-            <LayoutLogo from={'header'}>
+            <LayoutLogo>
               {{
                 default: () => slots.logo?.({}),
               }}
@@ -27,14 +23,8 @@ const Header = defineComponent({
       );
     };
 
-    const className = computed(() => ({
-      [`${prefixCls.value}-header`]: true,
-      [`is-mix`]: getIsMix.value,
-      [`collapsed`]: collapsed.value,
-    }));
-
     return () => (
-      <header class={className.value}>
+      <header class={`${prefixCls.value}-header`}>
         {
           <div class={`${prefixCls.value}-header--left`}>
             {unref(isFullHeader) && renderLogo()}

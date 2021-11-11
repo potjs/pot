@@ -1,5 +1,5 @@
 <template>
-  <PotLayout footer trigger="top" :header-mix="true">
+  <PotLayout footer trigger="top" :header-mix="false">
     <template #default><router-view /></template>
 
     <template #header><LayoutHeader /></template>
