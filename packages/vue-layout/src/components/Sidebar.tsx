@@ -2,11 +2,13 @@ import { defineComponent, unref, computed, CSSProperties } from 'vue';
 import LayoutLogo from './Logo';
 import { useInjectConfig, useInjectHooks } from '../hooks';
 import LayoutTrigger from './Trigger';
+import { TriggerPlacement } from '../enums';
+import { extendSlots } from '../utils';
 
 export default defineComponent({
   name: 'PotSidebar',
   setup(props, { slots }) {
-    const { prefixCls, collapsed, isMobile, hasSidebar } = useInjectConfig();
+    const { prefixCls, collapsed, isMobile, hasSidebar, trigger } = useInjectConfig();
     const { isFullHeader, toggleSidebar } = useInjectHooks();
 
     const renderLogo = () => {
@@ -42,7 +44,9 @@ export default defineComponent({
             {slots.default && (
               <div class={`${prefixCls.value}-sidebar--wrapper`}>{slots.default?.({})}</div>
             )}
-            {unref(hasSidebar) && <LayoutTrigger from={'sidebar'} />}
+            {unref(hasSidebar) && TriggerPlacement.BOTTOM === trigger.value && (
+              <LayoutTrigger>{{ ...extendSlots(slots, ['default:trigger']) }}</LayoutTrigger>
+            )}
           </aside>
         </>
       );

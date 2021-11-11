@@ -14,6 +14,7 @@
     <template #sidebar="{ collapsed }"><LayoutSidebar :collapsed="collapsed.value" /></template>
 
     <template #logo>Logo Slot</template>
+    <!--<template #trigger>Trigger</template>-->
   </PotLayout>
 </template>
 

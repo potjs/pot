@@ -9,6 +9,8 @@
 @layout-sidebar: @{layout}-sidebar;
 @layout-drawer: @{layout}-drawer;
 @layout-logo: @{layout}-logo;
+@layout-trigger: @{layout}-trigger;
+@layout-hamburger: @{layout}-hamburger;
 
 .@{layout} {
   position: relative;
@@ -47,7 +49,7 @@
 
     transition: all .2s linear;
 
-    // pot-layout-header--placeholder
+    // layout-header--placeholder
     &--placeholder {
       opacity: 0;
       pointer-events: none;
@@ -75,22 +77,12 @@
       padding: 0 10px;
     }
 
-    &--trigger {
-      padding: 0 10px;
-      cursor: pointer;
-
-      &-inner {
-        display: inline-block;
-        transform: rotate(0deg);
-      }
-
-      &.collapsed > &-inner {
-        transform: rotate(180deg);
-      }
-    }
-
     .@{layout-logo} {
       width: @pot-logo-width;
+    }
+
+    .@{layout-trigger} {
+      padding: 0 10px;
     }
   }
 
@@ -135,7 +127,7 @@
       }
     }
 
-    // pot-layout-sidebar--placeholder
+    // layout-sidebar--placeholder
     &--placeholder {
       overflow: hidden;
       width: @pot-sidebar-width;
@@ -154,35 +146,27 @@
       }
     }
 
-    // pot-layout-sidebar--wrapper
+    // layout-sidebar--wrapper
     &--wrapper {
       position: relative;
     }
 
-    // pot-layout-sidebar--trigger
-    &--trigger {
+    // layout-sidebar--trigger
+    .@{layout-trigger} {
       position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       bottom: 0;
       left: 0;
       width: 100%;
-      cursor: pointer;
       height: 32px;
-      line-height: 32px;
       color: #bfbfbf;
       background-color: rgba(255,255,255,.1);
-
-      &-inner {
-        display: inline-block;
-        transform: rotate(0deg);
-      }
-
-      &.collapsed > &-inner {
-        transform: rotate(180deg);
-      }
     }
   }
 
-  // pot-layout-drawer
+  // layout-drawer
   .@{layout-drawer} {
     position: fixed;
     z-index: @pot-drawer-z-index;
@@ -192,7 +176,7 @@
     height: 100%;
     //transition: transform .3s cubic-bezier(.7,.3,.1,1),height 0s ease .3s,width 0s ease .3s;
 
-    // pot-layout-drawer--mask
+    // layout-drawer--mask
     &--mask {
       position: absolute;
       top: 0;
@@ -211,7 +195,7 @@
     }
   }
 
-  // pot-layout-logo
+  // layout-logo
   .@{layout-logo} {
     position: relative;
     display: flex;
@@ -233,4 +217,53 @@
 
     transition: all .2s linear;
   }
+
+  // layout-trigger
+  .@{layout-trigger} {
+    cursor: pointer;
+  }
+
+  // layout-hamburger
+  .@{layout-hamburger} {
+    display: flex;
+    align-self: center;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 18px;
+    height: 16px;
+    cursor: pointer;
+
+    &--top, &--mid, &--bottom {
+      align-self: flex-end;
+      height: 2px;
+      width: 50%;
+      background: #3E4651;
+      transition: all 400ms ease-in-out;
+    }
+
+    &--top {
+      width: 100%;
+    }
+    &--bottom {
+      width: 75%;
+    }
+
+    &.active {
+      .@{layout-hamburger} {
+        &--top, &--mid, &--bottom {
+          align-self: flex-start;
+        }
+
+        &--top {
+          width: 75%;
+          //animation: burger-hover 1s infinite ease-in-out alternate;
+        }
+        &--bottom {
+          width: 100%;
+          //animation: burger-hover 1s infinite ease-in-out alternate forwards 200ms;
+        }
+      }
+    }
+  }
 }
+

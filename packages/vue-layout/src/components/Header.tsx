@@ -2,11 +2,13 @@ import { defineComponent, unref } from 'vue';
 import LayoutLogo from './Logo';
 import LayoutTrigger from './Trigger';
 import { useInjectConfig, useInjectHooks } from '../hooks';
+import { TriggerPlacement } from '../enums';
+import { extendSlots } from '../utils';
 
 const Header = defineComponent({
   name: 'PotHeader',
   setup(props, { slots }) {
-    const { prefixCls, hasSidebar } = useInjectConfig();
+    const { prefixCls, hasSidebar, trigger } = useInjectConfig();
     const { isFullHeader } = useInjectHooks();
 
     const renderLogo = () => {
@@ -28,7 +30,9 @@ const Header = defineComponent({
         {
           <div class={`${prefixCls.value}-header--left`}>
             {unref(isFullHeader) && renderLogo()}
-            {unref(hasSidebar) && <LayoutTrigger from={'header'} />}
+            {unref(hasSidebar) && TriggerPlacement.TOP === trigger.value && (
+              <LayoutTrigger>{{ ...extendSlots(slots, ['default:trigger']) }}</LayoutTrigger>
+            )}
           </div>
         }
         {slots.default && (
