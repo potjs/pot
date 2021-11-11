@@ -1,3 +1,12 @@
+## [0.0.1-beta.3](https://github.com/potjs/pot/compare/vue-layout@0.0.1-beta.2...vue-layout@0.0.1-beta.3) (2021-11-11)
+
+
+### Bug Fixes
+
+* fix trigger to layout ([3e0dfc4](https://github.com/potjs/pot/commit/3e0dfc4c0b0bb851d85912f6a2a0894c92fcd3b6))
+
+
+
 ## [0.0.1-beta.2](https://github.com/potjs/pot/compare/vue-layout@0.0.1-beta.1...vue-layout@0.0.1-beta.2) (2021-11-11)
 
 
