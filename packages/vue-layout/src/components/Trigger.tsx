@@ -1,57 +1,38 @@
-import type { PropType } from 'vue';
-import { computed, defineComponent, unref } from 'vue';
-import { TriggerPlacement } from '../enums';
+import { computed, defineComponent } from 'vue';
 import { useInjectConfig, useInjectHooks } from '../hooks';
 
 export default defineComponent({
   name: 'PotTrigger',
-  props: {
-    from: {
-      type: String as PropType<'header' | 'sidebar'>,
-      required: true,
-    },
-  },
-  setup(props) {
-    const { prefixCls, trigger, collapsed } = useInjectConfig();
+  setup(props, { slots }) {
+    const { prefixCls, collapsed } = useInjectConfig();
     const { toggleSidebar } = useInjectHooks();
 
-    const renderHeaderTrigger = () => {
-      const className = computed(() => ({
-        [`${prefixCls.value}-header--trigger`]: true,
-        [`collapsed`]: collapsed.value,
-      }));
-      return (
-        <div class={className.value} onClick={toggleSidebar}>
-          {/* TODO: fix icon on trigger */}
-          <span class={`${prefixCls.value}-header--trigger-inner`}>Trigger</span>
-        </div>
-      );
-    };
+    const hamburgerClass = computed(() => ({
+      [`${prefixCls.value}-hamburger`]: true,
+      [`active`]: collapsed.value,
+    }));
 
-    const renderSidebarTrigger = () => {
-      const className = computed(() => ({
-        [`${prefixCls.value}-sidebar--trigger`]: true,
-        [`collapsed`]: collapsed.value,
-      }));
-      return (
-        <div class={className.value} onClick={toggleSidebar}>
-          {/* TODO: fix icon on trigger */}
-          <span class={`${prefixCls.value}-sidebar--trigger-inner`}>Trigger</span>
-        </div>
-      );
+    const renderIcon = () => {
+      if (slots.default) {
+        return <>{slots.default?.({})}</>;
+      } else {
+        return (
+          <>
+            <div class={hamburgerClass.value}>
+              <span class={`${prefixCls.value}-hamburger--top`} />
+              <span class={`${prefixCls.value}-hamburger--mid`} />
+              <span class={`${prefixCls.value}-hamburger--bottom`} />
+            </div>
+          </>
+        );
+      }
     };
-
-    const inHeader = computed(
-      () => props.from === 'header' && unref(trigger) === TriggerPlacement.TOP,
-    );
-    const inSidebar = computed(
-      () => props.from === 'sidebar' && unref(trigger) === TriggerPlacement.BOTTOM,
-    );
 
     return () => (
       <>
-        {unref(inHeader) && renderHeaderTrigger()}
-        {unref(inSidebar) && renderSidebarTrigger()}
+        <div class={`${prefixCls.value}-trigger`} onClick={toggleSidebar}>
+          {renderIcon()}
+        </div>
       </>
     );
   },

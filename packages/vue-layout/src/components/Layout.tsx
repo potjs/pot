@@ -28,14 +28,6 @@ export const layoutProps = {
     type: Boolean,
     default: false,
   },
-  sidebarWidth: {
-    type: String,
-    default: '210px',
-  },
-  sidebarCollapsedWidth: {
-    type: String,
-    default: '48px',
-  },
   footer: {
     type: Boolean,
     default: false,
@@ -57,8 +49,6 @@ const Layout = defineComponent({
       theme: computed(() => props.theme),
       menuMode: computed(() => props.menuMode),
       headerMix: computed(() => props.headerMix),
-      sidebarWidth: computed(() => props.sidebarWidth),
-      sidebarCollapsedWidth: computed(() => props.sidebarCollapsedWidth),
       footer: computed(() => props.footer),
       trigger: computed(() => props.trigger),
       collapsed: ref(false),
@@ -100,7 +90,7 @@ const Layout = defineComponent({
     const className = computed(() => ({
       // [`${props.prefixCls}-theme--${props.theme}`]: true,
       // [`${props.prefixCls}-mode--${props.menuMode}`]: true,
-      [`${props.prefixCls}-has-sidebar`]: configProvider.hasSidebar.value,
+      // [`${props.prefixCls}-has-sidebar`]: configProvider.hasSidebar.value,
     }));
 
     /**
@@ -108,12 +98,16 @@ const Layout = defineComponent({
      */
     return () => (
       <LayoutContainer class={className.value}>
-        {/* render full header */ render(['default:header', 'logo', 'action'])(LayoutFullHeader)}
+        {
+          /* render full header */ render(['default:header', 'logo', 'action', 'trigger'])(
+            LayoutFullHeader,
+          )
+        }
         <LayoutContainer direction={'horizontal'}>
-          {/* render sidebar */ render(['default:sidebar', 'logo'])(LayoutSidebar)}
+          {/* render sidebar */ render(['default:sidebar', 'logo', 'trigger'])(LayoutSidebar)}
           <LayoutContainer>
             {
-              /* render multiple header */ render(['default:header', 'logo', 'action'])(
+              /* render multiple header */ render(['default:header', 'logo', 'action', 'trigger'])(
                 LayoutMultipleHeader,
               )
             }

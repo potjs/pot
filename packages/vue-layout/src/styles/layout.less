@@ -7,6 +7,10 @@
 @layout-header: @{layout}-header;
 @layout-footer: @{layout}-footer;
 @layout-sidebar: @{layout}-sidebar;
+@layout-drawer: @{layout}-drawer;
+@layout-logo: @{layout}-logo;
+@layout-trigger: @{layout}-trigger;
+@layout-hamburger: @{layout}-hamburger;
 
 .@{layout} {
   position: relative;
@@ -45,15 +49,7 @@
 
     transition: all .2s linear;
 
-    // TODO: should be fix class name
-    &.is-mix {
-      width: calc(100% - @pot-sidebar-width);
-      &.collapsed {
-        width: calc(100% - @pot-sidebar-collapsed-width);
-      }
-    }
-
-    // pot-layout-header--placeholder
+    // layout-header--placeholder
     &--placeholder {
       opacity: 0;
       pointer-events: none;
@@ -81,28 +77,12 @@
       padding: 0 10px;
     }
 
-    &--trigger {
-      padding: 0 10px;
-      cursor: pointer;
-
-      &-inner {
-        display: inline-block;
-        transform: rotate(0deg);
-      }
-
-      &.collapsed > &-inner {
-        transform: rotate(180deg);
-      }
+    .@{layout-logo} {
+      width: @pot-logo-width;
     }
 
-    &-logo {
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: @pot-header-height;
-
-      transition: all .2s linear;
+    .@{layout-trigger} {
+      padding: 0 10px;
     }
   }
 
@@ -127,11 +107,27 @@
 
     transition: all .2s linear;
 
-    &.@{layout-sidebar}--mix {
+    &--mix {
       top: @pot-header-height;
     }
 
-    // pot-layout-sidebar--placeholder
+    &+.@{layout} {
+      .@{layout-header} {
+        width: calc(100% - @pot-sidebar-width);
+      }
+    }
+
+    &.collapsed {
+      width: @pot-sidebar-collapsed-width;
+
+      &+.@{layout} {
+        .@{layout-header} {
+          width: calc(100% - @pot-sidebar-collapsed-width);
+        }
+      }
+    }
+
+    // layout-sidebar--placeholder
     &--placeholder {
       overflow: hidden;
       width: @pot-sidebar-width;
@@ -141,70 +137,74 @@
       background-color: transparent;
 
       transition: all .2s linear;
-    }
 
-    &.collapsed {
-      width: @pot-sidebar-collapsed-width;
-
-      &.@{layout-sidebar}--mobile {
-        width: 0;
+      &.collapsed {
+        width: @pot-sidebar-collapsed-width;
+        flex: 0 0 @pot-sidebar-collapsed-width;
+        max-width: @pot-sidebar-collapsed-width;
+        min-width: @pot-sidebar-collapsed-width;
       }
     }
 
-    &--placeholder.collapsed {
-      width: @pot-sidebar-collapsed-width;
-      flex: 0 0 @pot-sidebar-collapsed-width;
-      max-width: @pot-sidebar-collapsed-width;
-      min-width: @pot-sidebar-collapsed-width;
-    }
-
-    // pot-layout-sidebar--wrapper
+    // layout-sidebar--wrapper
     &--wrapper {
       position: relative;
     }
 
-    // pot-layout-sidebar--overlay
-    &--overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background-color: @pot-sidebar-overlay-background;
-      z-index: @pot-sidebar-z-index - 1;
-    }
-
-    // pot-layout-sidebar--trigger
-    &--trigger {
+    // layout-sidebar--trigger
+    .@{layout-trigger} {
       position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      cursor: pointer;
-      height: 32px;
-      line-height: 32px;
-      color: #bfbfbf;
-      background-color: rgba(255,255,255,.1);
-
-      &-inner {
-        display: inline-block;
-        transform: rotate(0deg);
-      }
-
-      &.collapsed > &-inner {
-        transform: rotate(180deg);
-      }
-    }
-
-    &-logo {
-      position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
-      height: @pot-header-height;
-
-      transition: all .2s linear;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 32px;
+      color: #bfbfbf;
+      background-color: rgba(255,255,255,.1);
     }
+  }
+
+  // layout-drawer
+  .@{layout-drawer} {
+    position: fixed;
+    z-index: @pot-drawer-z-index;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 100%;
+    //transition: transform .3s cubic-bezier(.7,.3,.1,1),height 0s ease .3s,width 0s ease .3s;
+
+    // layout-drawer--mask
+    &--mask {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: @pot-drawer-mask-background;
+    }
+
+    &.@{layout-drawer}--open {
+      width: 100%;
+
+      .@{layout-drawer}--mask {
+
+      }
+    }
+  }
+
+  // layout-logo
+  .@{layout-logo} {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: @pot-logo-height;
+    width: 100%;
+
+    transition: all .2s linear;
   }
 
   // layout-content
@@ -217,4 +217,53 @@
 
     transition: all .2s linear;
   }
+
+  // layout-trigger
+  .@{layout-trigger} {
+    cursor: pointer;
+  }
+
+  // layout-hamburger
+  .@{layout-hamburger} {
+    display: flex;
+    align-self: center;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 18px;
+    height: 16px;
+    cursor: pointer;
+
+    &--top, &--mid, &--bottom {
+      align-self: flex-end;
+      height: 2px;
+      width: 50%;
+      background: #3E4651;
+      transition: all 400ms ease-in-out;
+    }
+
+    &--top {
+      width: 100%;
+    }
+    &--bottom {
+      width: 75%;
+    }
+
+    &.active {
+      .@{layout-hamburger} {
+        &--top, &--mid, &--bottom {
+          align-self: flex-start;
+        }
+
+        &--top {
+          width: 75%;
+          //animation: burger-hover 1s infinite ease-in-out alternate;
+        }
+        &--bottom {
+          width: 100%;
+          //animation: burger-hover 1s infinite ease-in-out alternate forwards 200ms;
+        }
+      }
+    }
+  }
 }
+

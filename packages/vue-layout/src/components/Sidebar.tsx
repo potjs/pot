@@ -1,19 +1,21 @@
-import { defineComponent, unref, computed } from 'vue';
+import { defineComponent, unref, computed, CSSProperties } from 'vue';
 import LayoutLogo from './Logo';
 import { useInjectConfig, useInjectHooks } from '../hooks';
 import LayoutTrigger from './Trigger';
+import { TriggerPlacement } from '../enums';
+import { extendSlots } from '../utils';
 
 export default defineComponent({
   name: 'PotSidebar',
   setup(props, { slots }) {
-    const { prefixCls, collapsed, isMobile, hasSidebar } = useInjectConfig();
+    const { prefixCls, collapsed, isMobile, hasSidebar, trigger } = useInjectConfig();
     const { isFullHeader, toggleSidebar } = useInjectHooks();
 
     const renderLogo = () => {
       return (
         <>
           {slots.logo && (
-            <LayoutLogo from={'sidebar'}>
+            <LayoutLogo>
               {{
                 default: () => slots.logo?.({}),
               }}
@@ -42,30 +44,37 @@ export default defineComponent({
             {slots.default && (
               <div class={`${prefixCls.value}-sidebar--wrapper`}>{slots.default?.({})}</div>
             )}
-            {unref(hasSidebar) && <LayoutTrigger from={'sidebar'} />}
+            {unref(hasSidebar) && TriggerPlacement.BOTTOM === trigger.value && (
+              <LayoutTrigger>{{ ...extendSlots(slots, ['default:trigger']) }}</LayoutTrigger>
+            )}
           </aside>
         </>
       );
     };
 
     const renderMobileSidebar = () => {
-      const sidebarClassName = computed(() => ({
-        [`${prefixCls.value}-sidebar`]: true,
-        [`${prefixCls.value}-sidebar--mobile`]: isMobile.value,
-        [`collapsed`]: collapsed.value,
+      const className = computed(() => ({
+        [`${prefixCls.value}-drawer`]: true,
+        [`${prefixCls.value}-drawer--open`]: !collapsed.value,
       }));
+
+      const getStyles = computed(
+        (): CSSProperties => ({
+          ...(collapsed.value && {
+            width: '0',
+          }),
+        }),
+      );
       return (
-        <>
-          {!unref(collapsed) && (
-            <aside class={`${prefixCls.value}-sidebar--overlay`} onClick={toggleSidebar} />
-          )}
-          <aside class={sidebarClassName.value}>
+        <div class={className.value}>
+          <aside class={`${prefixCls.value}-drawer--mask`} onClick={toggleSidebar} />
+          <aside class={`${prefixCls.value}-sidebar`} style={getStyles.value}>
             {renderLogo()}
             {slots.default && (
               <div class={`${prefixCls.value}-sidebar--wrapper`}>{slots.default?.({})}</div>
             )}
           </aside>
-        </>
+        </div>
       );
     };
 

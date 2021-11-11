@@ -1,3 +1,5 @@
+import type { Slots } from 'vue';
+
 /**
  * Set Css Style
  * @param prop
@@ -43,4 +45,15 @@ export function treeFindPath<T extends Record<string, any>>(
     path.pop();
   }
   return [];
+}
+
+export function extendSlots(slots: Slots, extendKeys: string[] = [], data?: any) {
+  return extendKeys.reduce((obj: Record<string, any>, name: string) => {
+    // from <alias> to <key>
+    const [key, alias = key] = name.split(':');
+    if (slots[alias]) {
+      obj[key] = () => slots[alias]?.(data);
+    }
+    return obj;
+  }, {});
 }
