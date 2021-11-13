@@ -1,3 +1,13 @@
+## [0.0.2-beta.0](https://github.com/potjs/pot/compare/vue-layout@0.0.1-beta.3...vue-layout@0.0.2-beta.0) (2021-11-13)
+
+
+### Bug Fixes
+
+* clean code and merge menu to layout ([fdd7a25](https://github.com/potjs/pot/commit/fdd7a254bf90219e94bd367bedd74c24881f32d7))
+* split menu component ([b1f175c](https://github.com/potjs/pot/commit/b1f175ca5ae6655fda6b3a30396acff871a13869))
+
+
+
 ## [0.0.1-beta.3](https://github.com/potjs/pot/compare/vue-layout@0.0.1-beta.2...vue-layout@0.0.1-beta.3) (2021-11-11)
 
 
