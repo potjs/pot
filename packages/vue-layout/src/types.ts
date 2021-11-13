@@ -1,18 +1,32 @@
-export interface MenuOptions {
+export enum MenuMode {
+  // left menu
+  SIDE = 'side',
+  MIX_SIDE = 'mix-side',
+  MIX = 'mix',
+  // top menu
+  TOP = 'top',
+}
+
+export enum TriggerPlacement {
+  TOP = 'top',
+  BOTTOM = 'bottom',
+  NONE = 'none',
+}
+
+export enum Theme {
+  DARK = 'dark',
+  LIGHT = 'light',
+}
+
+export interface MenuRaw {
   label: string;
   icon?: string;
   key?: string;
   disabled?: boolean;
-  children?: MenuOptions[];
+  children?: MenuRaw[];
   [s: string]: any;
 }
 
 export interface RenderLabelWithMenu {
-  (item: MenuOptions): string | HTMLElement;
-}
-
-export interface Theme {
-  dark: string;
-  light: string;
-  [s: string]: any;
+  (item: MenuRaw): string | HTMLElement;
 }

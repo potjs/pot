@@ -1,15 +1,14 @@
 import { defineComponent, unref } from 'vue';
 import LayoutLogo from './Logo';
 import LayoutTrigger from './Trigger';
-import { useInjectConfig, useInjectHooks } from '../hooks';
-import { TriggerPlacement } from '../enums';
+import { useInjectConfig } from '../hooks';
+import { TriggerPlacement } from '../types';
 import { extendSlots } from '../utils';
 
 const Header = defineComponent({
   name: 'PotHeader',
   setup(props, { slots }) {
-    const { prefixCls, hasSidebar, trigger } = useInjectConfig();
-    const { isFullHeader } = useInjectHooks();
+    const { prefixCls, hasSidebar, triggerPlacement, isFullHeader } = useInjectConfig();
 
     const renderLogo = () => {
       return (
@@ -30,7 +29,7 @@ const Header = defineComponent({
         {
           <div class={`${prefixCls.value}-header--left`}>
             {unref(isFullHeader) && renderLogo()}
-            {unref(hasSidebar) && TriggerPlacement.TOP === trigger.value && (
+            {unref(hasSidebar) && TriggerPlacement.TOP === triggerPlacement.value && (
               <LayoutTrigger>{{ ...extendSlots(slots, ['default:trigger']) }}</LayoutTrigger>
             )}
           </div>
@@ -49,7 +48,7 @@ const Header = defineComponent({
 const FullHeader = defineComponent({
   name: 'PotFullHeader',
   setup(props, { slots }) {
-    const { isFullHeader } = useInjectHooks();
+    const { isFullHeader } = useInjectConfig();
     return () => <>{unref(isFullHeader) && <Header>{{ ...slots }}</Header>}</>;
   },
 });
@@ -57,8 +56,7 @@ const FullHeader = defineComponent({
 const MultipleHeader = defineComponent({
   name: 'PotMultipleHeader',
   setup(props, { slots }) {
-    const { prefixCls } = useInjectConfig();
-    const { isFullHeader } = useInjectHooks();
+    const { prefixCls, isFullHeader } = useInjectConfig();
     return () => (
       <>
         <div class={`${prefixCls.value}-header--placeholder`} />

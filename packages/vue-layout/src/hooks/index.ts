@@ -1,24 +1,31 @@
 import type { Ref, ComputedRef, InjectionKey } from 'vue';
-import { provide, inject, computed } from 'vue';
-import { MenuMode, TriggerPlacement } from '../enums';
+import { provide, inject } from 'vue';
+import { MenuMode, MenuRaw, RenderLabelWithMenu, TriggerPlacement, Theme } from '../types';
 import { useEventListener } from './useEventListener';
 
 export interface PotConfigProviderProps {
   prefixCls: ComputedRef<string>;
-  theme: ComputedRef<'dark' | 'light'>;
+  menuTheme: ComputedRef<Theme>;
   menuMode: ComputedRef<MenuMode>;
-  headerMix: ComputedRef<boolean>;
-  footer: ComputedRef<boolean>;
-  trigger: ComputedRef<TriggerPlacement>;
+  menuData: ComputedRef<MenuRaw[]>;
+  menuIndent: ComputedRef<number>;
+  menuKey: ComputedRef<string>;
+  menuActive: ComputedRef<string>;
+  menuActivePaths: ComputedRef<string[]>;
+  triggerPlacement: ComputedRef<TriggerPlacement>;
   collapsed: Ref<boolean>;
   isMobile: Ref<boolean>;
 
   hasSidebar: ComputedRef<boolean>;
+  isFullHeader: ComputedRef<boolean>;
+
+  renderMenuLabel: ComputedRef<RenderLabelWithMenu>;
+
+  onMenuSelect: (...args: any[]) => void;
 }
 
 export interface PotHookProviderProps extends Record<string, any> {
   toggleSidebar: () => void;
-  isFullHeader: ComputedRef<boolean>;
 }
 
 export const PotConfigProviderKey: InjectionKey<PotConfigProviderProps> =
@@ -40,7 +47,6 @@ export const useProvideConfig = (props: PotConfigProviderProps) => {
     toggleSidebar(): void {
       props.collapsed.value = !props.collapsed.value;
     },
-    isFullHeader: computed((): boolean => !props.headerMix.value),
   });
 };
 

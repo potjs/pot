@@ -1,15 +1,15 @@
 import type { CSSProperties, PropType } from 'vue';
 import { computed, defineComponent, ref, toRefs } from 'vue';
-import { MenuOptions } from '../../types';
-import { useMenuInject } from '../../injection';
+import { MenuRaw } from '../../types';
 
 import { MenuItem } from './MenuItem';
+import { useInjectConfig } from '../../hooks';
 
 export const Submenu = defineComponent({
   name: 'PotSubmenu',
   props: {
     menuInfo: {
-      type: Object as PropType<MenuOptions>,
+      type: Object as PropType<MenuRaw>,
       default: () => {},
     },
     depth: {
@@ -17,14 +17,13 @@ export const Submenu = defineComponent({
       default: 0,
     },
   },
-  emits: ['click'],
-  setup(props, { emit }) {
-    const { collapsed, indexKey, activePaths, renderLabel, indent } = useMenuInject();
+  setup(props) {
+    const { collapsed, menuIndent, menuKey, menuActivePaths, renderMenuLabel } = useInjectConfig();
     const { menuInfo, depth } = toRefs(props);
 
     const children = computed(() => menuInfo.value.children || []);
-    const index = menuInfo.value[indexKey.value];
-    const getActive = computed(() => activePaths.value.includes(index));
+    const index = menuInfo.value[menuKey.value];
+    const getActive = computed(() => menuActivePaths.value.includes(index));
     // show or hide submenu list
     const show = ref(getActive.value);
     const toggle = () => {
@@ -43,7 +42,6 @@ export const Submenu = defineComponent({
     const getProps = computed(() => {
       return {
         depth: depth.value + 1,
-        onClick: (...args: any[]) => emit('click', ...args),
       };
     });
 
@@ -54,7 +52,7 @@ export const Submenu = defineComponent({
 
     const getStyles = computed((): CSSProperties => {
       return {
-        paddingLeft: indent.value * props.depth + 'px',
+        paddingLeft: menuIndent.value * props.depth + 'px',
       };
     });
 
@@ -66,7 +64,7 @@ export const Submenu = defineComponent({
           onClick={toggle}
         >
           <span class={`pot-menu-item--icon`}>🙄</span>
-          <span class={`pot-menu-item--label`}>{renderLabel.value(menuInfo.value)}</span>
+          <span class={`pot-menu-item--label`}>{renderMenuLabel.value(menuInfo.value)}</span>
           <span class={`pot-menu-item--trigger`} />
         </div>
         <ul class={[`pot-menu`]} style={getContentStyles.value}>

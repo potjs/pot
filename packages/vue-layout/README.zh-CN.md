@@ -40,14 +40,20 @@ import { PotLayout } from '@potjs/vue-layout';
 ### Props
 | 参数                  | 说明           | 类型 | 默认值 |
 | --------------------- | --------------------- | --- | --- |
-| mode | - | 'sidebar' | - |
-| collapsed | - | boolean | false |
-| theme | - | dark, light | false |
+| mode | - | 'pot' | - |
+| menuTheme | - | dark, light | - |
+| menuMode | - | - | - |
+| menuData | - | - | - |
+| menuIndent | - | - | - |
+| menuKey | - | - | - |
+| menuActive | - | - | - |
+| renderMenuLabel | - | - | - |
+| triggerPlacement | - | - | - |
 
 ### Events
 | 事件名称            | 说明                                      |
 | --------------------- | ------------------------------------------------ |
-| default | - |
+| menuSelect | - |
 
 ### Slots
 | Name                  | 说明                                      |
@@ -56,5 +62,4 @@ import { PotLayout } from '@potjs/vue-layout';
 | logo | - |
 | header | - |
 | footer | - |
-| sidebar | - |
 
