@@ -9,30 +9,45 @@ import LayoutContent from './Content';
 
 import type { PotConfigProviderProps } from '../hooks';
 import { useProvideConfig, useWindowResizeListener } from '../hooks';
-import { MenuMode, TriggerPlacement } from '../enums';
+import { MenuMode, MenuRaw, RenderLabelWithMenu, TriggerPlacement, Theme } from '../types';
+import { extendSlots, treeFindPath } from '../utils';
+
+const labelRenderer: RenderLabelWithMenu = (menu) => menu.label;
 
 export const layoutProps = {
   prefixCls: {
     type: String,
-    default: 'pot-layout',
+    default: 'pot',
   },
-  theme: {
-    type: String as PropType<'dark' | 'light'>,
-    default: 'dark',
+  menuTheme: {
+    type: String as PropType<Theme>,
+    default: '',
   },
   menuMode: {
     type: String as PropType<MenuMode>,
-    default: MenuMode.SIDEBAR,
+    default: MenuMode.SIDE,
   },
-  headerMix: {
-    type: Boolean,
-    default: false,
+  menuData: {
+    type: Array as PropType<MenuRaw[]>,
+    default: () => [],
   },
-  footer: {
-    type: Boolean,
-    default: false,
+  menuIndent: {
+    type: Number,
+    default: 24,
   },
-  trigger: {
+  menuKey: {
+    type: String,
+    default: 'key',
+  },
+  menuActive: {
+    type: String,
+    default: '',
+  },
+  renderMenuLabel: {
+    type: Function as PropType<RenderLabelWithMenu>,
+    default: labelRenderer,
+  },
+  triggerPlacement: {
     type: String as PropType<TriggerPlacement>,
     default: TriggerPlacement.TOP,
   },
@@ -43,20 +58,36 @@ export type PotLayoutProps = Partial<ExtractPropTypes<typeof layoutProps>>;
 const Layout = defineComponent({
   name: 'PotLayout',
   props: layoutProps,
-  setup(props, { slots }) {
+  emits: ['menuSelect'],
+  setup(props, { slots, emit }) {
     const configProvider: PotConfigProviderProps = {
-      prefixCls: computed(() => props.prefixCls),
-      theme: computed(() => props.theme),
+      prefixCls: computed(() => props.prefixCls + '-layout'),
+      menuTheme: computed(() => props.menuTheme),
       menuMode: computed(() => props.menuMode),
-      headerMix: computed(() => props.headerMix),
-      footer: computed(() => props.footer),
-      trigger: computed(() => props.trigger),
+      menuData: computed(() => props.menuData),
+      menuIndent: computed(() => props.menuIndent),
+      menuKey: computed(() => props.menuKey),
+      menuActive: computed(() => props.menuActive),
+      menuActivePaths: computed(() => {
+        return treeFindPath(
+          props.menuData,
+          (t) => t[props.menuKey] === props.menuActive,
+          props.menuKey,
+        );
+      }),
+      triggerPlacement: computed(() => props.triggerPlacement),
       collapsed: ref(false),
       isMobile: ref(false),
 
-      hasSidebar: computed(() => !!slots.sidebar),
-    };
+      hasSidebar: computed((): boolean => props.menuMode !== MenuMode.TOP),
+      isFullHeader: computed(
+        (): boolean => props.menuMode === MenuMode.MIX || props.menuMode === MenuMode.MIX_SIDE,
+      ),
 
+      renderMenuLabel: computed(() => props.renderMenuLabel),
+
+      onMenuSelect: (...args: any[]) => emit('menuSelect', ...args),
+    };
     useProvideConfig(configProvider);
 
     useWindowResizeListener(({ width }) => {
@@ -65,15 +96,7 @@ const Layout = defineComponent({
     });
 
     function render(slotNames: string[]) {
-      // get exist slots
-      const localSlots = slotNames.reduce((obj: Record<string, any>, name: string) => {
-        // from <alias> to <key>
-        const [key, alias = key] = name.split(':');
-        if (slots[alias]) {
-          obj[key] = () => slots[alias]?.(configProvider);
-        }
-        return obj;
-      }, {});
+      const localSlots = extendSlots(slots, slotNames, configProvider);
 
       return (BasicComponent: any) => {
         const { default: currentSlot, ...scopeSlots } = localSlots;
@@ -87,24 +110,22 @@ const Layout = defineComponent({
       };
     }
 
-    const className = computed(() => ({
-      // [`${props.prefixCls}-theme--${props.theme}`]: true,
-      // [`${props.prefixCls}-mode--${props.menuMode}`]: true,
-      // [`${props.prefixCls}-has-sidebar`]: configProvider.hasSidebar.value,
-    }));
-
     /**
      * render all components of layout
      */
     return () => (
-      <LayoutContainer class={className.value}>
+      <LayoutContainer>
         {
           /* render full header */ render(['default:header', 'logo', 'action', 'trigger'])(
             LayoutFullHeader,
           )
         }
         <LayoutContainer direction={'horizontal'}>
-          {/* render sidebar */ render(['default:sidebar', 'logo', 'trigger'])(LayoutSidebar)}
+          {
+            /* render sidebar */
+            // render(['default:sidebar', 'logo', 'trigger'])(LayoutSidebar)
+            configProvider.hasSidebar.value && <LayoutSidebar />
+          }
           <LayoutContainer>
             {
               /* render multiple header */ render(['default:header', 'logo', 'action', 'trigger'])(
