@@ -6,12 +6,8 @@
     index-key="path"
     theme="dark"
     @click="handleMenuClick"
-  >
-    <template #item="{ item }">
-      <ItemIcon>😊</ItemIcon>
-      <ItemLabel>{{ item.meta.title }}</ItemLabel>
-    </template>
-  </PotMenu>
+    :render-label="renderLabel"
+  />
 </template>
 
 <script lang="ts">
@@ -22,6 +18,9 @@
 
   export default defineComponent({
     name: 'LayoutSidebar',
+    components: {
+      PotMenu,
+    },
     props: {
       collapsed: {
         type: Boolean,
@@ -37,15 +36,13 @@
         router.push(index);
       };
 
+      const renderLabel = (item) => item.meta.title;
+
       return {
         permissionRoutes,
         handleMenuClick,
+        renderLabel,
       };
-    },
-    components: {
-      PotMenu,
-      ItemIcon: PotMenu.ItemIcon,
-      ItemLabel: PotMenu.ItemLabel,
     },
   });
 </script>
