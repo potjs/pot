@@ -4,7 +4,7 @@ import { MenuRaw } from '../../types';
 
 import { MenuItem } from './MenuItem';
 import { useInjectConfig } from '../../hooks';
-// import Popper from '@potjs/vue-popper';
+import Popper from '@potjs/vue-popper';
 
 export const Submenu = defineComponent({
   name: 'PotSubmenu',
@@ -66,9 +66,10 @@ export const Submenu = defineComponent({
       const getContentStyles = computed((): CSSProperties => {
         const getShow = !show.value || collapsed.value;
         return {
-          ...(getShow && {
-            display: 'none',
-          }),
+          ...(getShow &&
+            {
+              // display: 'none',
+            }),
         };
       });
       return (
@@ -87,22 +88,22 @@ export const Submenu = defineComponent({
 
     return () => (
       <li class={className.value} data-submenu-index={index}>
-        {renderInner()}
-        {renderContent()}
-        {/*{collapsed.value && (*/}
-        {/*  <Popper trigger={'click'} placement={'right-start'} appendToBody={depth.value === 0}>*/}
-        {/*    {{*/}
-        {/*      default: () => renderInner(),*/}
-        {/*      content: () => renderContent(),*/}
-        {/*    }}*/}
-        {/*  </Popover>*/}
-        {/*)}*/}
-        {/*{!collapsed.value && (*/}
-        {/*  <>*/}
-        {/*    {renderInner()}*/}
-        {/*    {renderContent()}*/}
-        {/*  </>*/}
-        {/*)}*/}
+        {/*{renderInner()}*/}
+        {/*{renderContent()}*/}
+        {collapsed.value && (
+          <Popper trigger={'click'} placement={'right-start'} appendToBody={depth.value === 0}>
+            {{
+              default: () => renderInner(),
+              content: () => renderContent(),
+            }}
+          </Popper>
+        )}
+        {!collapsed.value && (
+          <>
+            {renderInner()}
+            {renderContent()}
+          </>
+        )}
       </li>
     );
   },
