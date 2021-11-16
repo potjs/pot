@@ -1,6 +1,6 @@
 {
   "name": "@potjs/vue-popper",
-  "version": "0.0.1-beta.0",
+  "version": "0.0.1-beta.1",
   "license": "MIT",
   "author": "Anguer",
   "files": [
@@ -9,7 +9,7 @@
   ],
   "main": "dist/index.common.js",
   "module": "dist/index.esm.js",
-  "notypes": "dist/index.d.ts",
+  "types": "dist/index.d.ts",
   "scripts": {
     "build": "rimraf dist && run-s build-bundle build-types",
     "build-bundle": "rollup -c",

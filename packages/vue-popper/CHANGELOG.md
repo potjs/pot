@@ -1,3 +1,7 @@
+## [0.0.1-beta.1](https://github.com/potjs/pot/compare/vue-popper@0.0.1-beta.0...vue-popper@0.0.1-beta.1) (2021-11-16)
+
+
+
 ## 0.0.1-beta.0 (2021-11-16)
 
 
