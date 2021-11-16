@@ -152,7 +152,7 @@ export interface IUsePopperReturns {
   popperId: string;
 }
 
-export function userPopper(
+export function usePopper(
   props: IPopperOptions,
   { emit }: SetupContext<EmitType[]>,
 ): IUsePopperReturns {
