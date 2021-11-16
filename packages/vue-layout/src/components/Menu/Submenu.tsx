@@ -88,7 +88,7 @@ export const Submenu = defineComponent({
     return () => (
       <li class={className.value} data-submenu-index={index}>
         {collapsed.value && (
-          <Popover>
+          <Popover trigger={'click'} placement={'right-start'}>
             {{
               default: () => renderInner(),
               content: () => renderContent(),

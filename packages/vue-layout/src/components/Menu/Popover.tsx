@@ -3,75 +3,109 @@ import {
   createVNode,
   Teleport,
   Fragment,
-  cloneVNode,
-  ref,
-  computed,
-  // watch,
+  onMounted,
+  onBeforeUnmount,
+  onActivated,
+  onDeactivated,
+  renderSlot,
+  toDisplayString,
+  // ExtractPropTypes,
 } from 'vue';
-import { getFirstVNode } from '../../utils/vnode';
+import usePopper, {
+  defaultOptions as popoverOptions,
+  IPopperOptions,
+  renderPopper,
+  renderTrigger,
+} from '../../hooks/usePopper';
+
+// export type PotPopoverProps = Partial<ExtractPropTypes<typeof popoverOptions>>;
+
+// export * from '../../hooks/usePopper';
 
 export const Popover = defineComponent({
   name: 'PotMenuPopover',
-  // emits: ['visible'],
-  setup(props, { slots }) {
-    const inTrigger = ref(false);
-    const inContent = ref(false);
+  props: popoverOptions,
+  emits: ['update:visible', 'after-enter', 'after-leave', 'before-enter', 'before-leave'],
+  setup(props, ctx) {
+    const popperStates = usePopper(props as IPopperOptions, ctx);
 
-    const visible = computed(() => inTrigger.value || inContent.value);
+    const forceDestroy = () => popperStates.doDestroy(true);
+    onMounted(popperStates.initializePopper);
+    onBeforeUnmount(forceDestroy);
+    onActivated(popperStates.initializePopper);
+    onDeactivated(forceDestroy);
 
-    // watch(visible, (val) => {
-    //   emit('visible', val);
-    // });
+    return popperStates;
+  },
 
-    const renderTrigger = () => {
-      const triggerRoot = getFirstVNode(slots.default?.(), 1);
-      if (!triggerRoot) {
-        throw new Error('No trigger on popover');
-      }
+  render() {
+    const {
+      $slots,
+      class: kls,
+      style,
+      effect,
+      transition,
+      popperClass,
+      pure,
+      stopPopperMouseEvent,
+      // hide,
+      onPopperMouseEnter,
+      onPopperMouseLeave,
+      onAfterEnter,
+      onAfterLeave,
+      onBeforeEnter,
+      onBeforeLeave,
+      popperStyle,
+      visibility,
+      popperId,
+    } = this;
 
-      return cloneVNode(triggerRoot, {
-        onMouseover: () => {
-          inTrigger.value = true;
-        },
-        onMouseleave: () => {
-          inTrigger.value = false;
-        },
-      });
-    };
+    const popper = renderPopper(
+      {
+        effect: effect,
+        name: transition,
+        popperClass: popperClass,
+        popperId,
+        popperStyle: popperStyle,
+        pure: pure,
+        stopPopperMouseEvent: stopPopperMouseEvent,
+        onMouseenter: onPopperMouseEnter,
+        onMouseleave: onPopperMouseLeave,
+        onAfterEnter,
+        onAfterLeave,
+        onBeforeEnter,
+        onBeforeLeave,
+        visibility: visibility,
+      },
+      [
+        renderSlot($slots, 'content', {}, () => {
+          return [toDisplayString(this.content)];
+        }),
+        // renderSlot($slots, 'content'),
+      ],
+    );
 
-    const renderContent = () => {
-      const styles = computed(() => {
-        return {
-          ...(!visible.value && { display: 'none' }),
-        };
-      });
+    const _t = $slots.default?.();
+    if (!_t) {
+      throw new Error('#PotMenuPopover: Trigger must be provided');
+    }
+    const trigger = renderTrigger(_t, {
+      'aria-describedby': popperId,
+      class: kls,
+      style,
+      ref: 'triggerRef',
+      ...this.events,
+    });
 
-      return createVNode(
-        'div',
+    return createVNode(Fragment, null, [
+      trigger,
+      createVNode(
+        Teleport as any,
         {
-          class: [`pot-menu-popover`],
-          style: styles.value,
-          onMouseover: () => {
-            inContent.value = true;
-          },
-          onMouseleave: () => {
-            inContent.value = false;
-          },
+          to: 'body',
         },
-        [slots.content?.()],
-      );
-    };
-
-    return () =>
-      createVNode(Fragment, null, [
-        renderTrigger(),
-        createVNode(
-          Teleport as any,
-          {
-            to: 'body',
-          },
-          [renderContent()],
-        ),
-      ]);
+        [popper],
+      ),
+    ]);
   },
 });

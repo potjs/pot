@@ -1,3 +1,7 @@
+//
+export type Nullable<T> = T | null;
+export type TimeoutHandle = ReturnType<typeof setTimeout>;
+
 export enum MenuMode {
   // left menu
   SIDE = 'side',

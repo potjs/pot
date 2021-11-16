@@ -4,12 +4,12 @@ importers:
 
   .:
     specifiers:
-      '@potjs/vue-layout': workspace:*
-      '@potjs/vue-router': workspace:*
       '@ant-design/icons-vue': ^6.0.1
       '@babel/core': ^7.15.0
       '@babel/preset-env': ^7.15.0
       '@microsoft/api-extractor': ^7.18.5
+      '@potjs/vue-layout': workspace:*
+      '@potjs/vue-router': workspace:*
       '@rollup/plugin-babel': ^5.3.0
       '@rollup/plugin-node-resolve': ^13.0.4
       '@rollup/plugin-typescript': ^8.2.5
@@ -50,9 +50,9 @@ importers:
       vuex: ^4.0.2
       yorkie: ^2.0.0
     dependencies:
+      '@ant-design/icons-vue': registry.npmjs.org/@ant-design/icons-vue/6.0.1_vue@3.2.19
       '@potjs/vue-layout': link:packages/vue-layout
       '@potjs/vue-router': link:packages/vue-router
-      '@ant-design/icons-vue': registry.npmjs.org/@ant-design/icons-vue/6.0.1_vue@3.2.19
       ant-design-vue: registry.npmjs.org/ant-design-vue/2.2.8_3426e2b756ba723128e9f1df8b2f24a0
       vue: registry.npmjs.org/vue/3.2.19
       vue-router: registry.npmjs.org/vue-router/4.0.11_vue@3.2.19
@@ -116,7 +116,10 @@ importers:
 
   packages/vue-layout:
     specifiers:
+      '@popperjs/core': ^2.10.2
       vue: ^3.2.6
+    dependencies:
+      '@popperjs/core': registry.npmjs.org/@popperjs/core/2.10.2
     devDependencies:
       vue: registry.npmjs.org/vue/3.2.19
 
@@ -1697,6 +1700,12 @@ packages:
       '@nodelib/fs.scandir': registry.npmjs.org/@nodelib/fs.scandir/2.1.5
       fastq: registry.npmjs.org/fastq/1.13.0
     dev: true
+
+  registry.npmjs.org/@popperjs/core/2.10.2:
+    resolution: {integrity: sha512-IXf3XA7+XyN7CP9gGh/XB0UxVMlvARGEgGXLubFICsUMGz6Q+DU+i4gGlpOxTjKvXjkJDJC8YdqdKkDj9qZHEQ==, registry: https://registry.yarnpkg.com/, tarball: https://registry.npmjs.org/@popperjs/core/-/core-2.10.2.tgz}
+    name: '@popperjs/core'
+    version: 2.10.2
+    dev: false
 
   registry.npmjs.org/@rollup/plugin-babel/5.3.0_@babel+core@7.15.5+rollup@2.57.0:
     resolution: {integrity: sha512-9uIC8HZOnVLrLHxayq/PTzw+uS25E14KPUBh5ktF+18Mjo5yK0ToMMx6epY0uEgkjwJw0aBW4x2horYXh8juWw==, registry: https://registry.yarnpkg.com/, tarball: https://registry.npmjs.org/@rollup/plugin-babel/-/plugin-babel-5.3.0.tgz}

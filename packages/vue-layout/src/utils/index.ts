@@ -1,14 +1,6 @@
 import type { Slots } from 'vue';
 
-/**
- * Set Css Style
- * @param prop
- * @param val
- * @param dom
- */
-export function setCssVar(prop: string, val: any, dom = document.documentElement) {
-  dom.style.setProperty(prop, val);
-}
+export const NOOP = () => {};
 
 export type FunctionArgs<Args extends any[] = any[]> = (...args: Args) => void;
 
@@ -56,4 +48,8 @@ export function extendSlots(slots: Slots, extendKeys: string[] = [], data?: any)
     }
     return obj;
   }, {});
+}
+
+export function generateId(len = 10) {
+  return Math.random().toString(36).substr(2, len);
 }
