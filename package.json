@@ -9,7 +9,8 @@
   "scripts": {
     "preinstall": "node scripts/preinstall",
     "dev": "vite",
-    "build": "run-s build-layout build-router build-docs",
+    "build": "run-s build-popper build-layout build-router build-docs",
+    "build-popper": "cd packages/vue-popper && npm run build",
     "build-layout": "cd packages/vue-layout && npm run build",
     "build-router": "cd packages/vue-router && npm run build",
     "build-docs": "vite build --mode production",

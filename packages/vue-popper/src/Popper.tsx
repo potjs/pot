@@ -11,7 +11,7 @@ import {
   toDisplayString,
   withDirectives,
 } from 'vue';
-import usePopper, { defaultPopperProps } from './use-popper';
+import { usePopper, defaultPopperProps } from './use-popper';
 import { renderPopper, renderTrigger } from './renderers';
 import clickOutside from './clickOutside';
 
