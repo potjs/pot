@@ -11,16 +11,15 @@ import {
   toDisplayString,
   withDirectives,
 } from 'vue';
-import usePopper from '../hooks/usePopper';
-import { renderPopper, renderTrigger } from '../hooks/usePopper/renders';
-import popoverOptions from '../hooks/usePopper/defaults';
-import clickOutside from '../hooks/usePopper/clickOutside';
+import usePopper, { defaultPopperProps } from './use-popper';
+import { renderPopper, renderTrigger } from './renderers';
+import clickOutside from './clickOutside';
 
-import type { IPopperOptions } from '../hooks/usePopper';
+import type { IPopperOptions } from './use-popper';
 
-export const Popover = defineComponent({
-  name: 'PotPopover',
-  props: popoverOptions,
+export default defineComponent({
+  name: 'PotPopper',
+  props: defaultPopperProps,
   emits: ['update:visible', 'after-enter', 'after-leave', 'before-enter', 'before-leave'],
   setup(props, ctx) {
     const popperStates = usePopper(props as IPopperOptions, ctx);
@@ -83,7 +82,7 @@ export const Popover = defineComponent({
 
     const _t = $slots.default?.();
     if (!_t) {
-      throw new Error('#PotPopover: Trigger must be provided');
+      throw new Error('#PotPopper: Trigger must be provided');
     }
     const triggerProps = {
       'aria-describedby': popperId,

@@ -1,7 +1,7 @@
 /**
  * modified from https://github.com/element-plus/element-plus/blob/master/packages/components/popper/src/use-popper/defaults.ts
  */
-import { Nullable } from './interfaces';
+import { Nullable } from '../interfaces';
 import { Options, Placement, PositioningStrategy } from '@popperjs/core';
 import { PropType } from 'vue';
 

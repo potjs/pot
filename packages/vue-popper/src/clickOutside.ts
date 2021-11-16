@@ -1,10 +1,10 @@
 /**
  * modified from https://github.com/element-plus/element-plus/blob/master/packages/directives/click-outside/index.ts
  */
-import { on } from '../../utils/dom';
+import { on } from './dom';
 
 import type { ComponentPublicInstance, DirectiveBinding, ObjectDirective } from 'vue';
-import type { Nullable } from '../../types';
+import type { Nullable } from './interfaces';
 
 type DocumentHandler = <T extends MouseEvent>(mouseup: T, mousedown: T) => void;
 type FlushList = Map<

@@ -3,7 +3,7 @@
  */
 import { computed, ref, reactive, watch, unref, WritableComputedRef } from 'vue';
 import { createPopper } from '@popperjs/core';
-import { isBool, isHTMLElement, isArray, isString, generateId } from './utils';
+import { isBool, isHTMLElement, isArray, isString, generateId } from '../utils';
 
 import type { ComponentPublicInstance, CSSProperties, SetupContext, Ref } from 'vue';
 import type {
@@ -12,7 +12,7 @@ import type {
   Options,
   Instance as PopperInstance,
 } from '@popperjs/core';
-import type { TimeoutHandle, Nullable } from './interfaces';
+import type { TimeoutHandle, Nullable } from '../interfaces';
 import type { IPopperOptions, RefElement, TriggerType } from './defaults';
 
 export type ElementType = ComponentPublicInstance | HTMLElement;
@@ -152,7 +152,7 @@ export interface IUsePopperReturns {
   popperId: string;
 }
 
-export function usePopper(
+export default function (
   props: IPopperOptions,
   { emit }: SetupContext<EmitType[]>,
 ): IUsePopperReturns {
@@ -411,3 +411,5 @@ export function usePopper(
     popperId: generateId(),
   };
 }
+
+export * from './defaults';
