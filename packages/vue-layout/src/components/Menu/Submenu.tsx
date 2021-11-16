@@ -4,7 +4,7 @@ import { MenuRaw } from '../../types';
 
 import { MenuItem } from './MenuItem';
 import { useInjectConfig } from '../../hooks';
-// import { Popover } from '../Popover';
+// import Popper from '@potjs/vue-popper';
 
 export const Submenu = defineComponent({
   name: 'PotSubmenu',
@@ -90,7 +90,7 @@ export const Submenu = defineComponent({
         {renderInner()}
         {renderContent()}
         {/*{collapsed.value && (*/}
-        {/*  <Popover trigger={'click'} placement={'right-start'} appendToBody={depth.value === 0}>*/}
+        {/*  <Popper trigger={'click'} placement={'right-start'} appendToBody={depth.value === 0}>*/}
         {/*    {{*/}
         {/*      default: () => renderInner(),*/}
         {/*      content: () => renderContent(),*/}
