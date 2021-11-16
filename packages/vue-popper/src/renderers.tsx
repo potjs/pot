@@ -11,7 +11,7 @@ import {
   withDirectives,
 } from 'vue';
 import { NOOP, getFirstVNode } from './utils';
-import { Effect } from './defaults';
+import { Effect } from './use-popper';
 
 interface IRenderPopperProps {
   effect: Effect;
