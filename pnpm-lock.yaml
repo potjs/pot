@@ -108,16 +108,19 @@ importers:
     devDependencies:
       '@types/lodash.clonedeep': registry.npmjs.org/@types/lodash.clonedeep/4.5.6
 
-  packages/vue-icon-picker:
-    specifiers:
-      vue: ^3.2.3
-    devDependencies:
-      vue: registry.npmjs.org/vue/3.2.19
-
   packages/vue-layout:
     specifiers:
       '@popperjs/core': ^2.10.2
       vue: ^3.2.6
+    dependencies:
+      '@popperjs/core': registry.npmjs.org/@popperjs/core/2.10.2
+    devDependencies:
+      vue: registry.npmjs.org/vue/3.2.19
+
+  packages/vue-popper:
+    specifiers:
+      '@popperjs/core': ^2.10.2
+      vue: ^3.2.3
     dependencies:
       '@popperjs/core': registry.npmjs.org/@popperjs/core/2.10.2
     devDependencies:
