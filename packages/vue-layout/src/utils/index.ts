@@ -1,7 +1,5 @@
 import type { Slots } from 'vue';
 
-export const NOOP = () => {};
-
 export type FunctionArgs<Args extends any[] = any[]> = (...args: Args) => void;
 
 export function debounce<T extends FunctionArgs>(fn: T, delay: number) {
@@ -48,8 +46,4 @@ export function extendSlots(slots: Slots, extendKeys: string[] = [], data?: any)
     }
     return obj;
   }, {});
-}
-
-export function generateId(len = 10) {
-  return Math.random().toString(36).substr(2, len);
 }

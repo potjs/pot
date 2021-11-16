@@ -110,10 +110,10 @@ importers:
 
   packages/vue-layout:
     specifiers:
-      '@popperjs/core': ^2.10.2
+      '@potjs/vue-popper': workspace:*
       vue: ^3.2.6
     dependencies:
-      '@popperjs/core': registry.npmjs.org/@popperjs/core/2.10.2
+      '@potjs/vue-popper': link:../vue-popper
     devDependencies:
       vue: registry.npmjs.org/vue/3.2.19
 

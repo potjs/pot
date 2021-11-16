@@ -4,7 +4,7 @@ import { MenuRaw } from '../../types';
 
 import { MenuItem } from './MenuItem';
 import { useInjectConfig } from '../../hooks';
-import { Popover } from '../Popover';
+// import { Popover } from '../Popover';
 
 export const Submenu = defineComponent({
   name: 'PotSubmenu',
@@ -64,11 +64,11 @@ export const Submenu = defineComponent({
 
     const renderContent = () => {
       const getContentStyles = computed((): CSSProperties => {
-        // const getShow = !show.value || collapsed.value;
+        const getShow = !show.value || collapsed.value;
         return {
-          // ...(getShow && {
-          //   display: 'none',
-          // }),
+          ...(getShow && {
+            display: 'none',
+          }),
         };
       });
       return (
@@ -87,20 +87,22 @@ export const Submenu = defineComponent({
 
     return () => (
       <li class={className.value} data-submenu-index={index}>
-        {collapsed.value && (
-          <Popover trigger={'click'} placement={'right-start'} appendToBody={depth.value === 0}>
-            {{
-              default: () => renderInner(),
-              content: () => renderContent(),
-            }}
-          </Popover>
-        )}
-        {!collapsed.value && (
-          <>
-            {renderInner()}
-            {renderContent()}
-          </>
-        )}
+        {renderInner()}
+        {renderContent()}
+        {/*{collapsed.value && (*/}
+        {/*  <Popover trigger={'click'} placement={'right-start'} appendToBody={depth.value === 0}>*/}
+        {/*    {{*/}
+        {/*      default: () => renderInner(),*/}
+        {/*      content: () => renderContent(),*/}
+        {/*    }}*/}
+        {/*  </Popover>*/}
+        {/*)}*/}
+        {/*{!collapsed.value && (*/}
+        {/*  <>*/}
+        {/*    {renderInner()}*/}
+        {/*    {renderContent()}*/}
+        {/*  </>*/}
+        {/*)}*/}
       </li>
     );
   },

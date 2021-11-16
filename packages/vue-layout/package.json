@@ -35,6 +35,6 @@
     "vue": "^3.2.6"
   },
   "dependencies": {
-    "@popperjs/core": "^2.10.2"
+    "@potjs/vue-popper": "workspace:*"
   }
 }
