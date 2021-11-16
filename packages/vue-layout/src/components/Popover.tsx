@@ -9,21 +9,17 @@ import {
   onDeactivated,
   renderSlot,
   toDisplayString,
-  // ExtractPropTypes,
+  withDirectives,
 } from 'vue';
-import usePopper, {
-  defaultOptions as popoverOptions,
-  IPopperOptions,
-  renderPopper,
-  renderTrigger,
-} from '../../hooks/usePopper';
+import usePopper from '../hooks/usePopper';
+import { renderPopper, renderTrigger } from '../hooks/usePopper/renders';
+import popoverOptions from '../hooks/usePopper/defaults';
+import clickOutside from '../hooks/usePopper/clickOutside';
 
-// export type PotPopoverProps = Partial<ExtractPropTypes<typeof popoverOptions>>;
-
-// export * from '../../hooks/usePopper';
+import type { IPopperOptions } from '../hooks/usePopper';
 
 export const Popover = defineComponent({
-  name: 'PotMenuPopover',
+  name: 'PotPopover',
   props: popoverOptions,
   emits: ['update:visible', 'after-enter', 'after-leave', 'before-enter', 'before-leave'],
   setup(props, ctx) {
@@ -41,14 +37,14 @@ export const Popover = defineComponent({
   render() {
     const {
       $slots,
-      class: kls,
+      appendToBody,
       style,
       effect,
       transition,
       popperClass,
       pure,
       stopPopperMouseEvent,
-      // hide,
+      hide,
       onPopperMouseEnter,
       onPopperMouseLeave,
       onAfterEnter,
@@ -58,6 +54,7 @@ export const Popover = defineComponent({
       popperStyle,
       visibility,
       popperId,
+      isManualMode,
     } = this;
 
     const popper = renderPopper(
@@ -81,21 +78,23 @@ export const Popover = defineComponent({
         renderSlot($slots, 'content', {}, () => {
           return [toDisplayString(this.content)];
         }),
-        // renderSlot($slots, 'content'),
       ],
     );
 
     const _t = $slots.default?.();
     if (!_t) {
-      throw new Error('#PotMenuPopover: Trigger must be provided');
+      throw new Error('#PotPopover: Trigger must be provided');
     }
-    const trigger = renderTrigger(_t, {
+    const triggerProps = {
       'aria-describedby': popperId,
-      class: kls,
       style,
       ref: 'triggerRef',
       ...this.events,
-    });
+    };
+
+    const trigger = isManualMode()
+      ? renderTrigger(_t, triggerProps)
+      : withDirectives(renderTrigger(_t, triggerProps), [[clickOutside, hide]]);
 
     return createVNode(Fragment, null, [
       trigger,
@@ -103,6 +102,7 @@ export const Popover = defineComponent({
         Teleport as any,
         {
           to: 'body',
+          disabled: !appendToBody,
         },
         [popper],
       ),

@@ -1,40 +1,20 @@
 /**
  * modified from https://github.com/element-plus/element-plus/blob/master/packages/components/popper/src/use-popper/index.ts
  */
-import {
-  computed,
-  ref,
-  reactive,
-  watch,
-  unref,
-  createVNode,
-  cloneVNode,
-  withDirectives,
-  Transition,
-  vShow,
-  withCtx,
-} from 'vue';
+import { computed, ref, reactive, watch, unref, WritableComputedRef } from 'vue';
 import { createPopper } from '@popperjs/core';
-import { isBool, isHTMLElement, isArray, isString } from '../utils/is';
-import { NOOP, generateId } from '../utils';
-import { getFirstVNode } from '../utils/vnode';
+import { isBool, isHTMLElement, isArray, isString } from '../../utils/is';
+import { generateId } from '../../utils';
 
-import type {
-  ComponentPublicInstance,
-  CSSProperties,
-  SetupContext,
-  Ref,
-  PropType,
-  VNode,
-} from 'vue';
+import type { ComponentPublicInstance, CSSProperties, SetupContext, Ref } from 'vue';
 import type {
   StrictModifiers,
   Placement,
   Options,
-  PositioningStrategy,
   Instance as PopperInstance,
 } from '@popperjs/core';
-import type { TimeoutHandle, Nullable } from '../types';
+import type { TimeoutHandle, Nullable } from '../../types';
+import type { IPopperOptions, RefElement, TriggerType } from './defaults';
 
 export type ElementType = ComponentPublicInstance | HTMLElement;
 export type EmitType =
@@ -75,153 +55,6 @@ interface IUsePopperState {
 
 export const DEFAULT_TRIGGER = ['hover'];
 export const UPDATE_VISIBLE_EVENT = 'update:visible';
-
-export enum Effect {
-  DARK = 'dark',
-  LIGHT = 'light',
-}
-
-export type RefElement = Nullable<HTMLElement>;
-export type Offset = [number, number] | number;
-export type { Placement, PositioningStrategy, PopperInstance, Options };
-
-export type TriggerType = 'click' | 'hover' | 'focus' | 'manual';
-
-export type Trigger = TriggerType | TriggerType[];
-
-export type IPopperOptions = {
-  arrowOffset: number;
-  autoClose: number;
-  boundariesPadding: number;
-  class: string;
-  cutoff: boolean;
-  disabled: boolean;
-  enterable: boolean;
-  hideAfter: number;
-  manualMode: boolean;
-  offset: number;
-  placement: Placement;
-  popperOptions: Partial<Options>;
-  showAfter: number;
-  showArrow: boolean;
-  strategy: PositioningStrategy;
-  trigger: Trigger;
-  visible: boolean;
-  stopPopperMouseEvent: boolean;
-  gpuAcceleration: boolean;
-  fallbackPlacements: Array<Placement>;
-};
-
-export const defaultOptions = {
-  // the arrow size is an equailateral triangle with 10px side length, the 3rd side length ~ 14.1px
-  // adding a offset to the ceil of 4.1 should be 5 this resolves the problem of arrow overflowing out of popper.
-  arrowOffset: {
-    type: Number,
-    default: 5,
-  },
-  appendToBody: {
-    type: Boolean,
-    default: true,
-  },
-  autoClose: {
-    type: Number,
-    default: 0,
-  },
-  boundariesPadding: {
-    type: Number,
-    default: 0,
-  },
-  content: {
-    type: String,
-    default: '',
-  },
-  class: {
-    type: String,
-    default: '',
-  },
-  style: Object,
-  hideAfter: {
-    type: Number,
-    default: 200,
-  },
-  cutoff: {
-    type: Boolean,
-    default: false,
-  },
-  disabled: {
-    type: Boolean,
-    default: false,
-  },
-  effect: {
-    type: String as PropType<Effect>,
-    default: Effect.DARK,
-  },
-  enterable: {
-    type: Boolean,
-    default: true,
-  },
-  manualMode: {
-    type: Boolean,
-    default: false,
-  },
-  showAfter: {
-    type: Number,
-    default: 0,
-  },
-  offset: {
-    type: Number,
-    default: 12,
-  },
-  placement: {
-    type: String as PropType<Placement>,
-    default: 'bottom' as Placement,
-  },
-  popperClass: {
-    type: String,
-    default: '',
-  },
-  pure: {
-    type: Boolean,
-    default: false,
-  },
-  // Once this option were given, the entire popper is under the users' control, top priority
-  popperOptions: {
-    type: Object as PropType<Partial<Options>>,
-    default: () => null,
-  },
-  showArrow: {
-    type: Boolean,
-    default: false,
-  },
-  strategy: {
-    type: String as PropType<PositioningStrategy>,
-    default: 'fixed' as PositioningStrategy,
-  },
-  transition: {
-    type: String,
-    default: 'el-fade-in-linear',
-  },
-  trigger: {
-    type: [String, Array] as PropType<Trigger>,
-    default: 'hover',
-  },
-  visible: {
-    type: Boolean,
-    default: undefined,
-  },
-  stopPopperMouseEvent: {
-    type: Boolean,
-    default: true,
-  },
-  gpuAcceleration: {
-    type: Boolean,
-    default: true,
-  },
-  fallbackPlacements: {
-    type: Array as PropType<Placement[]>,
-    default: () => [],
-  },
-};
 
 export function buildModifiers(props: ModifierProps, externalModifiers: StrictModifiers[] = []) {
   const { arrow, arrowOffset, offset, gpuAcceleration, fallbackPlacements } = props;
@@ -297,7 +130,33 @@ export function usePopperOptions(props: IUsePopperProps, state: IUsePopperState)
   });
 }
 
-export default function (props: IPopperOptions, { emit }: SetupContext<EmitType[]>) {
+export interface IUsePopperReturns {
+  update: () => void;
+  doDestroy: (_: boolean) => void;
+  show: () => void;
+  hide: () => void;
+  onPopperMouseEnter: () => void;
+  onPopperMouseLeave: () => void;
+  onAfterEnter: () => void;
+  onAfterLeave: () => void;
+  onBeforeEnter: () => void;
+  onBeforeLeave: () => void;
+  initializePopper: () => void;
+  isManualMode: () => boolean;
+  arrowRef: Ref<RefElement>;
+  events: PopperEvents;
+  popperInstance: Nullable<PopperInstance>;
+  popperRef: Ref<RefElement>;
+  popperStyle: Ref<CSSProperties>;
+  triggerRef: Ref<ElementType>;
+  visibility: WritableComputedRef<boolean>;
+  popperId: string;
+}
+
+export default function (
+  props: IPopperOptions,
+  { emit }: SetupContext<EmitType[]>,
+): IUsePopperReturns {
   const arrowRef = ref<RefElement>(null);
   // const triggerRef = ref(null) as Ref<ElementType>;
   const triggerRef = ref<RefElement>(null) as Ref<ElementType>;
@@ -554,95 +413,4 @@ export default function (props: IPopperOptions, { emit }: SetupContext<EmitType[
   };
 }
 
-interface IRenderPopperProps {
-  effect: Effect;
-  name: string;
-  stopPopperMouseEvent: boolean;
-  popperClass: string;
-  popperStyle?: Partial<CSSProperties>;
-  popperId: string;
-  popperRef?: Ref<HTMLElement>;
-  pure?: boolean;
-  visibility: boolean;
-  onMouseenter: () => void;
-  onMouseleave: () => void;
-  onAfterEnter?: () => void;
-  onAfterLeave?: () => void;
-  onBeforeEnter?: () => void;
-  onBeforeLeave?: () => void;
-}
-
-export function renderPopper(props: IRenderPopperProps, children: VNode[]) {
-  const {
-    effect,
-    name,
-    stopPopperMouseEvent,
-    popperClass,
-    popperStyle,
-    popperRef,
-    pure,
-    popperId,
-    visibility,
-    onMouseenter,
-    onMouseleave,
-    onAfterEnter,
-    onAfterLeave,
-    onBeforeEnter,
-    onBeforeLeave,
-  } = props;
-
-  const kls = [popperClass, 'pot-menu-popover', `is-${effect}`, pure ? 'is-pure' : ''];
-
-  const mouseUpAndDown = stopPopperMouseEvent ? stop : NOOP;
-  return createVNode(
-    Transition,
-    {
-      name,
-      onAfterEnter,
-      onAfterLeave,
-      onBeforeEnter,
-      onBeforeLeave,
-    },
-    {
-      default: withCtx(() => [
-        withDirectives(
-          createVNode(
-            'div',
-            {
-              'aria-hidden': String(!visibility),
-              class: kls,
-              style: popperStyle ?? {},
-              id: popperId,
-              ref: popperRef ?? 'popperRef',
-              role: 'tooltip',
-              onMouseenter,
-              onMouseleave,
-              onClick: stop,
-              onMousedown: mouseUpAndDown,
-              onMouseup: mouseUpAndDown,
-            },
-            children,
-          ),
-          [[vShow, visibility]],
-        ),
-      ]),
-    },
-  );
-}
-
-type EventHandler = (e: Event) => any;
-interface IRenderTriggerProps extends Record<string, unknown> {
-  ref: string | Ref<ComponentPublicInstance | HTMLElement>;
-  onClick?: EventHandler;
-  onMouseover?: EventHandler;
-  onMouseleave?: EventHandler;
-  onFocus?: EventHandler;
-}
-
-export function renderTrigger(trigger: VNode[], extraProps: IRenderTriggerProps) {
-  const firstElement = getFirstVNode(trigger, 1);
-  if (!firstElement) {
-    throw new Error('#renderTrigger: trigger expects single rooted node');
-  }
-  return cloneVNode(firstElement, extraProps, true);
-}
+export * from './defaults';

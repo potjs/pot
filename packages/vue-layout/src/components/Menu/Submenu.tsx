@@ -4,7 +4,7 @@ import { MenuRaw } from '../../types';
 
 import { MenuItem } from './MenuItem';
 import { useInjectConfig } from '../../hooks';
-import { Popover } from './Popover';
+import { Popover } from '../Popover';
 
 export const Submenu = defineComponent({
   name: 'PotSubmenu',
@@ -88,7 +88,7 @@ export const Submenu = defineComponent({
     return () => (
       <li class={className.value} data-submenu-index={index}>
         {collapsed.value && (
-          <Popover trigger={'click'} placement={'right-start'}>
+          <Popover trigger={'click'} placement={'right-start'} appendToBody={depth.value === 0}>
             {{
               default: () => renderInner(),
               content: () => renderContent(),
