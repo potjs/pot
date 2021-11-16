@@ -1,3 +1,12 @@
+## [0.0.1-beta.4](https://github.com/potjs/pot/compare/vue-popper@0.0.1-beta.3...vue-popper@0.0.1-beta.4) (2021-11-16)
+
+
+### Bug Fixes
+
+* fix ts types and add root build cmd ([2ad33f3](https://github.com/potjs/pot/commit/2ad33f35392b70065e2f9637325b0d8d107cb42b))
+
+
+
 ## [0.0.1-beta.3](https://github.com/potjs/pot/compare/vue-popper@0.0.1-beta.2...vue-popper@0.0.1-beta.3) (2021-11-16)
 
 
