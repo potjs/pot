@@ -32,7 +32,7 @@
   },
   "homepage": "https://github.com/potjs/pot/tree/master/packages/vue-layout#readme",
   "devDependencies": {
-    "vue": "^3.2.6"
+    "vue": "^3.2.22"
   },
   "dependencies": {
     "@potjs/vue-popper": "workspace:*"

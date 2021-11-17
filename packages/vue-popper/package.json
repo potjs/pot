@@ -31,7 +31,7 @@
   },
   "homepage": "https://github.com/potjs/pot/tree/master/packages/vue-popper#readme",
   "devDependencies": {
-    "vue": "^3.2.3"
+    "vue": "^3.2.22"
   },
   "dependencies": {
     "@popperjs/core": "^2.10.2"
