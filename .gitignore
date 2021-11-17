@@ -74,6 +74,7 @@ jspm_packages/
 # Nuxt.js build / generate output
 .nuxt
 dist
+lib/
 temp
 dist-*/
 

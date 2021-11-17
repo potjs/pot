@@ -12,7 +12,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "dev": "rollup -c -w",
-    "build": "rimraf dist && run-s build-bundle build-types",
+    "build": "rimraf dist && run-s build-bundle rollup-types",
     "build-bundle": "rollup -c",
     "build-types": "tsc -p tsconfig.type.json --outDir temp && api-extractor run && rimraf temp",
     "rollup-types": "tsc -p tsconfig.type.json --outDir dist",
