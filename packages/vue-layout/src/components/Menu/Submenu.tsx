@@ -91,7 +91,12 @@ export const Submenu = defineComponent({
         {/*{renderInner()}*/}
         {/*{renderContent()}*/}
         {collapsed.value && (
-          <Popper trigger={'click'} placement={'right-start'} appendToBody={depth.value === 0}>
+          <Popper
+            class={'pot-menu-popper'}
+            trigger={'hover'}
+            placement={'right-start'}
+            appendToBody={depth.value === 0}
+          >
             {{
               default: () => renderInner(),
               content: () => renderContent(),
