@@ -29,6 +29,7 @@
   },
   "homepage": "https://github.com/potjs/pot#readme",
   "dependencies": {
+    "@potjs/vue-popper": "workspace:*",
     "@potjs/vue-layout": "workspace:*",
     "@potjs/vue-router": "workspace:*",
     "@ant-design/icons-vue": "^6.0.1",

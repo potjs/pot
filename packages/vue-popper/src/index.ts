@@ -2,15 +2,15 @@ import Popper from './Popper';
 
 import type { App, Plugin } from 'vue';
 
-Popper.install = (app: App): void => {
+Popper.install = (app: App): App => {
   app.component(Popper.name, Popper);
+  return app;
 };
 
 export default Popper as typeof Popper & Plugin;
 
-export { defaultPopperProps, Effect } from './use-popper/defaults';
+export * from './defaultSetting';
 export * from './renderers';
-export { usePopper } from './use-popper';
+export { usePopper } from './usePopper';
 export type { Placement, Options, Instance as PopperInstance } from '@popperjs/core';
-export type { EmitType } from './use-popper';
-export type { TriggerType, IPopperOptions } from './use-popper/defaults';
+export type { EmitType } from './usePopper';

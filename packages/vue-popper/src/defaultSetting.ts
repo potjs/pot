@@ -1,9 +1,11 @@
 /**
  * modified from https://github.com/element-plus/element-plus/blob/master/packages/components/popper/src/use-popper/defaults.ts
  */
-import { Nullable } from '../interfaces';
-import { Options, Placement, PositioningStrategy } from '@popperjs/core';
-import { PropType } from 'vue';
+import type { Options, Placement, PositioningStrategy } from '@popperjs/core';
+import type { PropType } from 'vue';
+
+export type Nullable<T> = T | null;
+export type TimeoutHandle = ReturnType<typeof setTimeout>;
 
 export enum Effect {
   DARK = 'dark',

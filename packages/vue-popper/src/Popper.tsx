@@ -11,11 +11,12 @@ import {
   toDisplayString,
   withDirectives,
 } from 'vue';
-import { usePopper, defaultPopperProps } from './use-popper';
+import { defaultPopperProps } from './defaultSetting';
+import { usePopper } from './usePopper';
 import { renderPopper, renderTrigger } from './renderers';
 import clickOutside from './clickOutside';
 
-import type { IPopperOptions } from './use-popper';
+import type { IPopperOptions } from './defaultSetting';
 
 export default defineComponent({
   name: 'PotPopper',
@@ -38,9 +39,9 @@ export default defineComponent({
       $slots,
       appendToBody,
       style,
+      class: kls,
       effect,
       transition,
-      popperClass,
       pure,
       stopPopperMouseEvent,
       hide,
@@ -50,7 +51,6 @@ export default defineComponent({
       onAfterLeave,
       onBeforeEnter,
       onBeforeLeave,
-      popperStyle,
       visibility,
       popperId,
       isManualMode,
@@ -58,20 +58,19 @@ export default defineComponent({
 
     const popper = renderPopper(
       {
-        effect: effect,
+        effect,
         name: transition,
-        popperClass: popperClass,
+        popperClass: kls,
         popperId,
-        popperStyle: popperStyle,
-        pure: pure,
-        stopPopperMouseEvent: stopPopperMouseEvent,
+        pure,
+        stopPopperMouseEvent,
         onMouseenter: onPopperMouseEnter,
         onMouseleave: onPopperMouseLeave,
         onAfterEnter,
         onAfterLeave,
         onBeforeEnter,
         onBeforeLeave,
-        visibility: visibility,
+        visibility,
       },
       [
         renderSlot($slots, 'content', {}, () => {

@@ -1,19 +1,24 @@
 /**
  * modified from https://github.com/element-plus/element-plus/blob/master/packages/components/popper/src/use-popper/index.ts
  */
-import { computed, ref, reactive, watch, unref, WritableComputedRef } from 'vue';
+import { computed, ref, reactive, watch, unref } from 'vue';
 import { createPopper } from '@popperjs/core';
-import { isBool, isHTMLElement, isArray, isString, generateId } from '../utils';
+import { isBool, isHTMLElement, isArray, isString, generateId } from './utils';
 
-import type { ComponentPublicInstance, CSSProperties, SetupContext, Ref } from 'vue';
+import type { ComponentPublicInstance, SetupContext, Ref, WritableComputedRef } from 'vue';
 import type {
   StrictModifiers,
   Placement,
   Options,
   Instance as PopperInstance,
 } from '@popperjs/core';
-import type { TimeoutHandle, Nullable } from '../interfaces';
-import type { IPopperOptions, RefElement, TriggerType } from './defaults';
+import type {
+  TimeoutHandle,
+  Nullable,
+  IPopperOptions,
+  RefElement,
+  TriggerType,
+} from './defaultSetting';
 
 export type ElementType = ComponentPublicInstance | HTMLElement;
 export type EmitType =
@@ -146,7 +151,6 @@ export interface IUsePopperReturns {
   events: PopperEvents;
   popperInstance: Nullable<PopperInstance>;
   popperRef: Ref<RefElement>;
-  popperStyle: Ref<CSSProperties>;
   triggerRef: Ref<ElementType>;
   visibility: WritableComputedRef<boolean>;
   popperId: string;
@@ -168,10 +172,6 @@ export function usePopper(
 
   const isManualMode = () => props.manualMode || props.trigger === 'manual';
 
-  const popperStyle = ref<CSSProperties>({
-    // zIndex: PopupManager.nextZIndex(),
-  });
-
   const popperOptions = usePopperOptions(props, <IUsePopperState>{
     arrow: arrowRef,
   });
@@ -179,6 +179,7 @@ export function usePopper(
   const state = reactive({
     visible: props.visible,
   });
+
   // visible has been taken by props.visible, avoiding name collision
   // Either marking type here or setter parameter
   const visibility = computed<boolean>({
@@ -236,6 +237,7 @@ export function usePopper(
       close();
     }
   };
+
   const close = () => {
     _hide();
     if (props.disabled) {
@@ -297,7 +299,7 @@ export function usePopper(
       return;
     }
     if (popperInstance) {
-      popperInstance.update();
+      popperInstance.update().then();
     } else {
       initializePopper();
     }
@@ -305,7 +307,6 @@ export function usePopper(
 
   function onVisibilityChange(toState: boolean) {
     if (toState) {
-      // popperStyle.value.zIndex = PopupManager.nextZIndex();
       initializePopper();
     }
   }
@@ -371,10 +372,10 @@ export function usePopper(
     }
   }
 
-  watch(popperOptions, (val) => {
+  watch(popperOptions, async (val) => {
     if (!popperInstance) return;
-    popperInstance.setOptions(val);
-    popperInstance.update();
+    await popperInstance.setOptions(val);
+    await popperInstance.update();
   });
 
   watch(visibility, onVisibilityChange);
@@ -405,11 +406,8 @@ export function usePopper(
     events,
     popperInstance,
     popperRef,
-    popperStyle,
     triggerRef,
     visibility,
     popperId: generateId(),
   };
 }
-
-export * from './defaults';

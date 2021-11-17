@@ -9,6 +9,7 @@ importers:
       '@babel/preset-env': ^7.15.0
       '@microsoft/api-extractor': ^7.18.5
       '@potjs/vue-layout': workspace:*
+      '@potjs/vue-popper': workspace:*
       '@potjs/vue-router': workspace:*
       '@rollup/plugin-babel': ^5.3.0
       '@rollup/plugin-node-resolve': ^13.0.4
@@ -52,6 +53,7 @@ importers:
     dependencies:
       '@ant-design/icons-vue': registry.npmjs.org/@ant-design/icons-vue/6.0.1_vue@3.2.19
       '@potjs/vue-layout': link:packages/vue-layout
+      '@potjs/vue-popper': link:packages/vue-popper
       '@potjs/vue-router': link:packages/vue-router
       ant-design-vue: registry.npmjs.org/ant-design-vue/2.2.8_3426e2b756ba723128e9f1df8b2f24a0
       vue: registry.npmjs.org/vue/3.2.19

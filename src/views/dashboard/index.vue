@@ -1,13 +1,47 @@
 <template>
   <div class="tmp-container">
-    <div v-for="i in 200" :key="i">{{ i }}</div>
+    <div v-for="i in 100" :key="i">
+      <Popper class="demo-popper" :placement="placements[i % placements.length]">
+        <Button type="primary" style="margin-bottom: 20px; width: 120px">
+          {{ placements[i % placements.length] }}
+        </Button>
+        <template #content><span>Hello world</span></template>
+      </Popper>
+    </div>
   </div>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+  import Popper from '@potjs/vue-popper';
+  import { Button } from 'ant-design-vue';
+  import { ref } from 'vue';
+
+  const placements = ref([
+    'top',
+    'top-start',
+    'top-end',
+    'right',
+    'right-start',
+    'right-end',
+    'bottom',
+    'bottom-start',
+    'bottom-end',
+    'left',
+    'left-start',
+    'left-end',
+  ]);
+</script>
 
 <style lang="less">
   .tmp-container {
     background: #fff;
+  }
+
+  .demo-popper {
+    padding: 10px;
+    background: #000;
+    border-radius: 3px;
+    color: #fff;
+    z-index: 99999;
   }
 </style>

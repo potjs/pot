@@ -11,7 +11,7 @@ import {
   withDirectives,
 } from 'vue';
 import { NOOP, getFirstVNode } from './utils';
-import { Effect } from './use-popper';
+import { Effect } from './defaultSetting';
 
 interface IRenderPopperProps {
   effect: Effect;
@@ -50,7 +50,7 @@ export function renderPopper(props: IRenderPopperProps, children: VNode[]) {
     onBeforeLeave,
   } = props;
 
-  const kls = [popperClass, 'pot-popper', `is-${effect}`, pure ? 'is-pure' : ''];
+  const kls = [popperClass, `is-${effect}`, pure ? 'is-pure' : ''];
 
   const mouseUpAndDown = stopPopperMouseEvent ? stop : NOOP;
   return createVNode(
