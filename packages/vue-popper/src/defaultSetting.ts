@@ -29,7 +29,6 @@ export type IPopperOptions = {
   disabled: boolean;
   enterable: boolean;
   hideAfter: number;
-  manualMode: boolean;
   offset: number;
   placement: Placement;
   popperOptions: Partial<Options>;
@@ -91,10 +90,6 @@ export const defaultPopperProps = {
     type: Boolean,
     default: true,
   },
-  manualMode: {
-    type: Boolean,
-    default: false,
-  },
   showAfter: {
     type: Number,
     default: 0,
@@ -130,7 +125,7 @@ export const defaultPopperProps = {
   },
   transition: {
     type: String,
-    default: 'el-fade-in-linear',
+    default: 'fade',
   },
   trigger: {
     type: [String, Array] as PropType<Trigger>,

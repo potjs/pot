@@ -53,7 +53,7 @@ export default defineComponent({
       onBeforeLeave,
       visibility,
       popperId,
-      isManualMode,
+      isManual,
     } = this;
 
     const popper = renderPopper(
@@ -90,7 +90,7 @@ export default defineComponent({
       ...this.events,
     };
 
-    const trigger = isManualMode()
+    const trigger = isManual
       ? renderTrigger(_t, triggerProps)
       : withDirectives(renderTrigger(_t, triggerProps), [[clickOutside, hide]]);
 

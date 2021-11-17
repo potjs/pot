@@ -5,7 +5,13 @@ import { computed, ref, reactive, watch, unref } from 'vue';
 import { createPopper } from '@popperjs/core';
 import { isBool, isHTMLElement, isArray, isString, generateId } from './utils';
 
-import type { ComponentPublicInstance, SetupContext, Ref, WritableComputedRef } from 'vue';
+import type {
+  ComponentPublicInstance,
+  SetupContext,
+  Ref,
+  WritableComputedRef,
+  ComputedRef,
+} from 'vue';
 import type {
   StrictModifiers,
   Placement,
@@ -95,7 +101,6 @@ export function buildModifiers(props: ModifierProps, externalModifiers: StrictMo
         adaptive: gpuAcceleration,
       },
     },
-    // tippyModifier,
   ];
 
   if (arrow) {
@@ -146,7 +151,7 @@ export interface IUsePopperReturns {
   onBeforeEnter: () => void;
   onBeforeLeave: () => void;
   initializePopper: () => void;
-  isManualMode: () => boolean;
+  isManual: ComputedRef<boolean>;
   arrowRef: Ref<RefElement>;
   events: PopperEvents;
   popperInstance: Nullable<PopperInstance>;
@@ -170,7 +175,7 @@ export function usePopper(
   let hideTimer: Nullable<TimeoutHandle> = null;
   let triggerFocused = false;
 
-  const isManualMode = () => props.manualMode || props.trigger === 'manual';
+  const isManual = computed((): boolean => props.trigger === 'manual');
 
   const popperOptions = usePopperOptions(props, <IUsePopperState>{
     arrow: arrowRef,
@@ -191,7 +196,7 @@ export function usePopper(
       }
     },
     set(val) {
-      if (isManualMode()) return;
+      if (unref(isManual)) return;
       isBool(props.visible) ? emit(UPDATE_VISIBLE_EVENT, val) : (state.visible = val);
     },
   });
@@ -215,7 +220,7 @@ export function usePopper(
   }
 
   const show = () => {
-    if (isManualMode() || props.disabled) return;
+    if (unref(isManual) || props.disabled) return;
     clearTimers();
     if (props.showAfter === 0) {
       _show();
@@ -227,7 +232,7 @@ export function usePopper(
   };
 
   const hide = () => {
-    if (isManualMode()) return;
+    if (unref(isManual)) return;
     clearTimers();
     if (props.hideAfter > 0) {
       hideTimer = setTimeout(() => {
@@ -311,7 +316,7 @@ export function usePopper(
     }
   }
 
-  if (!isManualMode()) {
+  if (!unref(isManual)) {
     const toggleState = () => {
       if (unref(visibility)) {
         hide();
@@ -401,7 +406,7 @@ export function usePopper(
       emit('before-leave');
     },
     initializePopper,
-    isManualMode,
+    isManual,
     arrowRef,
     events,
     popperInstance,
