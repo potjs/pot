@@ -7,15 +7,19 @@ const external = [
   'vue',
   'vue-router',
   'lodash.clonedeep',
-  'axios'
+  'axios',
+  '@potjs/vue-popper',
+  '@potjs/vue-layout',
+  '@potjs/vue-router',
 ];
 
-const presets = () => {
+const presets = (tsOpt) => {
   const extensions = ['.ts', '.tsx'];
 
   return [
     typescript({
       noEmitOnError: true,
+      ...tsOpt,
     }),
     nodeResolve({ extensions }),
     babel({
@@ -24,8 +28,8 @@ const presets = () => {
       plugins: ['@vue/babel-plugin-jsx'],
       babelHelpers: 'bundled',
     }),
-  ]
-}
+  ];
+};
 
 export default (...plugins) => {
   const base = [
@@ -57,6 +61,28 @@ export default (...plugins) => {
       plugins: [...presets(), ...plugins],
       external,
     },
+
+    // ✅ Split CommonJS
+    // {
+    //   input: 'src/index.ts',
+    //   output: {
+    //     format: 'cjs',
+    //     strict: false,
+    //     exports: 'named',
+    //     sourcemap: false,
+    //     dir: 'lib',
+    //     preserveModules: true,
+    //     preserveModulesRoot: 'src',
+    //   },
+    //   plugins: [
+    //     ...presets({
+    //       outDir: 'lib',
+    //       sourceMap: false,
+    //     }),
+    //     ...plugins,
+    //   ],
+    //   external,
+    // },
   ];
 
   // // UMD

@@ -4,6 +4,7 @@ import { MenuRaw } from '../../types';
 
 import { MenuItem } from './MenuItem';
 import { useInjectConfig } from '../../hooks';
+import Popper from '@potjs/vue-popper';
 
 export const Submenu = defineComponent({
   name: 'PotSubmenu',
@@ -30,15 +31,6 @@ export const Submenu = defineComponent({
       show.value = !show.value;
     };
 
-    const getContentStyles = computed((): CSSProperties => {
-      const getShow = !show.value || collapsed.value;
-      return {
-        ...(getShow && {
-          display: 'none',
-        }),
-      };
-    });
-
     const getProps = computed(() => {
       return {
         depth: depth.value + 1,
@@ -56,8 +48,8 @@ export const Submenu = defineComponent({
       };
     });
 
-    return () => (
-      <li class={className.value} data-submenu-index={index}>
+    const renderInner = () => {
+      return (
         <div
           class={[`pot-menu-submenu-item`, { [`active`]: getActive.value }]}
           style={getStyles.value}
@@ -67,6 +59,20 @@ export const Submenu = defineComponent({
           <span class={`pot-menu-item--label`}>{renderMenuLabel.value(menuInfo.value)}</span>
           <span class={`pot-menu-item--trigger`} />
         </div>
+      );
+    };
+
+    const renderContent = () => {
+      const getContentStyles = computed((): CSSProperties => {
+        const getShow = !show.value || collapsed.value;
+        return {
+          ...(getShow &&
+            {
+              // display: 'none',
+            }),
+        };
+      });
+      return (
         <ul class={[`pot-menu`]} style={getContentStyles.value}>
           {children.value.map((item) => {
             return (
@@ -77,6 +83,32 @@ export const Submenu = defineComponent({
             );
           })}
         </ul>
+      );
+    };
+
+    return () => (
+      <li class={className.value} data-submenu-index={index}>
+        {/*{renderInner()}*/}
+        {/*{renderContent()}*/}
+        {collapsed.value && (
+          <Popper
+            class={'pot-menu-popper'}
+            trigger={'hover'}
+            placement={'right-start'}
+            appendToBody={depth.value === 0}
+          >
+            {{
+              default: () => renderInner(),
+              content: () => renderContent(),
+            }}
+          </Popper>
+        )}
+        {!collapsed.value && (
+          <>
+            {renderInner()}
+            {renderContent()}
+          </>
+        )}
       </li>
     );
   },

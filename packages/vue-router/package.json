@@ -31,7 +31,7 @@
   },
   "homepage": "https://github.com/potjs/pot/tree/master/packages/vue-router#readme",
   "devDependencies": {
-    "vue": "^3.2.6",
-    "vue-router": "^4.0.11"
+    "vue": "^3.2.22",
+    "vue-router": "^4.0.12"
   }
 }

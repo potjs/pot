@@ -9,7 +9,8 @@
   "scripts": {
     "preinstall": "node scripts/preinstall",
     "dev": "vite",
-    "build": "run-s build-layout build-router build-docs",
+    "build": "run-s build-popper build-layout build-router build-docs",
+    "build-popper": "cd packages/vue-popper && npm run build",
     "build-layout": "cd packages/vue-layout && npm run build",
     "build-router": "cd packages/vue-router && npm run build",
     "build-docs": "vite build --mode production",
@@ -28,12 +29,13 @@
   },
   "homepage": "https://github.com/potjs/pot#readme",
   "dependencies": {
+    "@potjs/vue-popper": "workspace:*",
     "@potjs/vue-layout": "workspace:*",
     "@potjs/vue-router": "workspace:*",
     "@ant-design/icons-vue": "^6.0.1",
-    "ant-design-vue": "^2.2.6",
-    "vue": "^3.2.6",
-    "vue-router": "^4.0.11",
+    "ant-design-vue": "^2.2.8",
+    "vue": "^3.2.22",
+    "vue-router": "^4.0.12",
     "vuex": "^4.0.2"
   },
   "devDependencies": {
@@ -70,10 +72,10 @@
     "rollup-plugin-terser": "^7.0.2",
     "semver": "^7.3.5",
     "tslib": "^2.3.1",
-    "typescript": "^4.3.5",
-    "vite": "^2.5.4",
+    "typescript": "^4.4.4",
+    "vite": "^2.6.14",
     "vue-eslint-parser": "^7.11.0",
-    "vue-tsc": "^0.2.2",
+    "vue-tsc": "^0.29.5",
     "yorkie": "^2.0.0"
   },
   "gitHooks": {

@@ -1,3 +1,6 @@
+//
+export type Nullable<T> = T | null;
+
 export enum MenuMode {
   // left menu
   SIDE = 'side',
