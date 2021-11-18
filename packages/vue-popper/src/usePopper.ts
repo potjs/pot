@@ -1,38 +1,36 @@
-/**
- * modified from https://github.com/element-plus/element-plus/blob/master/packages/components/popper/src/use-popper/index.ts
- */
-import { computed, ref, reactive, watch, unref } from 'vue';
-import { createPopper } from '@popperjs/core';
-import { isBool, isHTMLElement, isArray, isString, generateId } from './utils';
+import type { Instance as PopperInstance } from '@popperjs/core';
+import type { CSSProperties, WritableComputedRef, Ref } from 'vue';
+import type { Nullable, IPopperOptions, RefElement } from './defaultSetting';
 
-import type {
-  ComponentPublicInstance,
-  SetupContext,
-  Ref,
-  WritableComputedRef,
-  ComputedRef,
+import {
+  computed,
+  onActivated,
+  onBeforeUnmount,
+  onDeactivated,
+  onMounted,
+  reactive,
+  ref,
+  unref,
+  watch,
 } from 'vue';
-import type {
-  StrictModifiers,
-  Placement,
-  Options,
-  Instance as PopperInstance,
-} from '@popperjs/core';
-import type {
-  TimeoutHandle,
-  Nullable,
-  IPopperOptions,
-  RefElement,
-  TriggerType,
-} from './defaultSetting';
+import { createPopper } from '@popperjs/core';
+import usePopperOptions from './popperOptions';
+import { TimeoutHandle, TriggerType } from './defaultSetting';
+import { isArray, isString } from './utils';
 
-export type ElementType = ComponentPublicInstance | HTMLElement;
-export type EmitType =
-  | 'update:visible'
-  | 'after-enter'
-  | 'after-leave'
-  | 'before-enter'
-  | 'before-leave';
+type Attributes = {
+  [key: string]: { [key: string]: string };
+};
+
+type Styles = {
+  [key: string]: CSSProperties;
+};
+
+type State = {
+  styles: Styles;
+  attributes: Attributes;
+  visible: boolean;
+};
 
 export interface PopperEvents {
   onClick?: (e: Event) => void;
@@ -42,164 +40,57 @@ export interface PopperEvents {
   onBlur?: (e: Event) => void;
 }
 
-interface ModifierProps {
-  offset?: number;
-  arrow?: HTMLElement;
-  arrowOffset?: number;
-  gpuAcceleration?: boolean;
-  fallbackPlacements?: Array<Placement>;
-}
-
-interface IUsePopperProps {
-  popperOptions: Partial<Options>;
-  arrowOffset: number;
-  offset: number;
-  placement: Placement;
-  gpuAcceleration: boolean;
-  fallbackPlacements: Array<Placement>;
+export interface UsePopperResult {
+  state: any;
+  styles: Styles;
+  attributes: Attributes;
+  update: () => void;
+  forceUpdate: () => void;
+  events: PopperEvents;
+  visibility: WritableComputedRef<boolean>;
+  onPopperMouseEnter: () => void;
+  onPopperMouseLeave: () => void;
 }
 
 interface IUsePopperState {
   arrow: Ref<HTMLElement>;
 }
 
-export const DEFAULT_TRIGGER = ['hover'];
-export const UPDATE_VISIBLE_EVENT = 'update:visible';
-
-export function buildModifiers(props: ModifierProps, externalModifiers: StrictModifiers[] = []) {
-  const { arrow, arrowOffset, offset, gpuAcceleration, fallbackPlacements } = props;
-
-  const modifiers: Array<StrictModifiers> = [
-    {
-      name: 'offset',
-      options: {
-        offset: [0, offset ?? 12],
-      },
-    },
-    {
-      name: 'preventOverflow',
-      options: {
-        padding: {
-          top: 2,
-          bottom: 2,
-          left: 5,
-          right: 5,
-        },
-      },
-    },
-    {
-      name: 'flip',
-      options: {
-        padding: 5,
-        fallbackPlacements: fallbackPlacements ?? [],
-      },
-    },
-    {
-      name: 'computeStyles',
-      options: {
-        gpuAcceleration,
-        adaptive: gpuAcceleration,
-      },
-    },
-  ];
-
-  if (arrow) {
-    modifiers.push({
-      name: 'arrow',
-      options: {
-        element: arrow,
-        // the arrow size is an equailateral triangle with 10px side length, the 3rd side length ~ 14.1px
-        // adding a offset to the ceil of 4.1 should be 5 this resolves the problem of arrow overflowing out of popper.
-        padding: arrowOffset ?? 5,
-      },
-    });
-  }
-
-  modifiers.push(...externalModifiers);
-  return modifiers;
-}
-
-export function usePopperOptions(props: IUsePopperProps, state: IUsePopperState) {
-  return computed(() => {
-    return {
-      placement: props.placement,
-      ...props.popperOptions,
-      // Avoiding overriding modifiers.
-      modifiers: buildModifiers(
-        {
-          arrow: state.arrow.value,
-          arrowOffset: props.arrowOffset,
-          offset: props.offset,
-          gpuAcceleration: props.gpuAcceleration,
-          fallbackPlacements: props.fallbackPlacements,
-        },
-        props.popperOptions?.modifiers,
-      ),
-    };
-  });
-}
-
-export interface IUsePopperReturns {
-  update: () => void;
-  doDestroy: (_: boolean) => void;
-  show: () => void;
-  hide: () => void;
-  onPopperMouseEnter: () => void;
-  onPopperMouseLeave: () => void;
-  onAfterEnter: () => void;
-  onAfterLeave: () => void;
-  onBeforeEnter: () => void;
-  onBeforeLeave: () => void;
-  initializePopper: () => void;
-  isManual: ComputedRef<boolean>;
-  arrowRef: Ref<RefElement>;
-  events: PopperEvents;
-  popperInstance: Nullable<PopperInstance>;
-  popperRef: Ref<RefElement>;
-  triggerRef: Ref<ElementType>;
-  visibility: WritableComputedRef<boolean>;
-  popperId: string;
-}
-
-export function usePopper(
+export default function usePopper(
+  referenceElement: Ref<Nullable<HTMLElement>>,
+  popperElement: Ref<Nullable<HTMLElement>>,
   props: IPopperOptions,
-  { emit }: SetupContext<EmitType[]>,
-): IUsePopperReturns {
+): UsePopperResult {
+  const popperInstance = ref<Nullable<PopperInstance>>(null);
+  const state = reactive(<State>{
+    styles: {
+      popper: {
+        position: 'absolute',
+        left: '0',
+        top: '0',
+      },
+      arrow: {
+        position: 'absolute',
+      },
+    },
+    attributes: {},
+    visible: props.visible,
+  });
   const arrowRef = ref<RefElement>(null);
-  // const triggerRef = ref(null) as Ref<ElementType>;
-  const triggerRef = ref<RefElement>(null) as Ref<ElementType>;
-  const popperRef = ref<RefElement>(null);
-
-  let popperInstance: Nullable<PopperInstance> = null;
-  let showTimer: Nullable<TimeoutHandle> = null;
-  let hideTimer: Nullable<TimeoutHandle> = null;
-  let triggerFocused = false;
-
-  const isManual = computed((): boolean => props.trigger === 'manual');
-
   const popperOptions = usePopperOptions(props, <IUsePopperState>{
     arrow: arrowRef,
   });
-
-  const state = reactive({
-    visible: props.visible,
-  });
-
-  // visible has been taken by props.visible, avoiding name collision
-  // Either marking type here or setter parameter
+  const events = {} as PopperEvents;
   const visibility = computed<boolean>({
     get() {
-      if (props.disabled) {
-        return false;
-      } else {
-        return isBool(props.visible) ? props.visible : state.visible;
-      }
+      return state.visible;
     },
     set(val) {
-      if (unref(isManual)) return;
-      isBool(props.visible) ? emit(UPDATE_VISIBLE_EVENT, val) : (state.visible = val);
+      state.visible = val;
     },
   });
+  let showTimer: Nullable<TimeoutHandle> = null;
+  let hideTimer: Nullable<TimeoutHandle> = null;
 
   function _show() {
     if (props.autoClose > 0) {
@@ -220,7 +111,7 @@ export function usePopper(
   }
 
   const show = () => {
-    if (unref(isManual) || props.disabled) return;
+    if (props.disabled) return;
     clearTimers();
     if (props.showAfter === 0) {
       _show();
@@ -232,7 +123,6 @@ export function usePopper(
   };
 
   const hide = () => {
-    if (unref(isManual)) return;
     clearTimers();
     if (props.hideAfter > 0) {
       hideTimer = setTimeout(() => {
@@ -249,6 +139,17 @@ export function usePopper(
       doDestroy(true);
     }
   };
+
+  function doDestroy(forceDestroy?: boolean) {
+    /* istanbul ignore if */
+    if (!popperInstance.value || (unref(visibility) && !forceDestroy)) return;
+    detachPopper();
+  }
+
+  function detachPopper() {
+    popperInstance.value?.destroy?.();
+    popperInstance.value = null;
+  }
 
   function onPopperMouseEnter() {
     // if trigger is click, user won't be able to close popper when
@@ -274,84 +175,36 @@ export function usePopper(
   }
 
   function initializePopper() {
-    if (!unref(visibility)) {
+    if (!state.visible) {
       return;
     }
-    const unwrappedTrigger = unref(triggerRef);
-    const _trigger = isHTMLElement(unwrappedTrigger)
-      ? unwrappedTrigger
-      : (unwrappedTrigger as ComponentPublicInstance).$el;
-    popperInstance = createPopper(_trigger, <HTMLElement>unref(popperRef), unref(popperOptions));
-
-    popperInstance.update();
-  }
-
-  function doDestroy(forceDestroy?: boolean) {
-    /* istanbul ignore if */
-    if (!popperInstance || (unref(visibility) && !forceDestroy)) return;
-    detachPopper();
-  }
-
-  function detachPopper() {
-    popperInstance?.destroy?.();
-    popperInstance = null;
-  }
-
-  const events = {} as PopperEvents;
-
-  function update() {
-    if (!unref(visibility)) {
+    if (!referenceElement.value || !popperElement.value) {
       return;
     }
-    if (popperInstance) {
-      popperInstance.update().then();
-    } else {
-      initializePopper();
-    }
+
+    popperInstance.value = createPopper(
+      referenceElement.value,
+      popperElement.value,
+      popperOptions.value,
+    );
   }
 
-  function onVisibilityChange(toState: boolean) {
-    if (toState) {
-      initializePopper();
-    }
-  }
+  const forceDestroy = () => doDestroy(true);
+  onMounted(initializePopper);
+  onBeforeUnmount(forceDestroy);
+  onActivated(initializePopper);
+  onDeactivated(forceDestroy);
 
-  if (!unref(isManual)) {
-    const toggleState = () => {
-      if (unref(visibility)) {
-        hide();
-      } else {
-        show();
-      }
-    };
-
+  {
+    // add trigger events
     const popperEventsHandler = (e: Event) => {
       e.stopPropagation();
       switch (e.type) {
-        case 'click': {
-          if (triggerFocused) {
-            // reset previous focus event
-            triggerFocused = false;
-          } else {
-            toggleState();
-          }
-          break;
-        }
         case 'mouseenter': {
           show();
           break;
         }
         case 'mouseleave': {
-          hide();
-          break;
-        }
-        case 'focus': {
-          triggerFocused = true;
-          show();
-          break;
-        }
-        case 'blur': {
-          triggerFocused = false;
           hide();
           break;
         }
@@ -377,42 +230,40 @@ export function usePopper(
     }
   }
 
+  watch(
+    () => popperInstance.value,
+    (val) => {
+      console.log('#watch popperInstance', val?.state);
+    },
+  );
+
   watch(popperOptions, async (val) => {
-    if (!popperInstance) return;
-    await popperInstance.setOptions(val);
-    await popperInstance.update();
+    if (!popperInstance.value) return;
+    await popperInstance.value.setOptions(val);
+    await popperInstance.value.update();
   });
 
-  watch(visibility, onVisibilityChange);
+  watch(
+    () => state.visible,
+    (toState) => {
+      if (toState) {
+        initializePopper();
+      }
+    },
+  );
+
+  const update = () => {};
+  const forceUpdate = () => {};
 
   return {
+    state: undefined,
+    styles: state.styles,
+    attributes: state.attributes,
     update,
-    doDestroy,
-    show,
-    hide,
+    forceUpdate,
+    events,
+    visibility,
     onPopperMouseEnter,
     onPopperMouseLeave,
-    onAfterEnter: () => {
-      emit('after-enter');
-    },
-    onAfterLeave: () => {
-      detachPopper();
-      emit('after-leave');
-    },
-    onBeforeEnter: () => {
-      emit('before-enter');
-    },
-    onBeforeLeave: () => {
-      emit('before-leave');
-    },
-    initializePopper,
-    isManual,
-    arrowRef,
-    events,
-    popperInstance,
-    popperRef,
-    triggerRef,
-    visibility,
-    popperId: generateId(),
   };
 }

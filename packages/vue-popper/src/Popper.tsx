@@ -1,109 +1,56 @@
 import {
   defineComponent,
-  createVNode,
+  // createVNode,
   Teleport,
-  Fragment,
-  onMounted,
-  onBeforeUnmount,
-  onActivated,
-  onDeactivated,
-  renderSlot,
-  toDisplayString,
-  withDirectives,
+  // Fragment,
+  // onMounted,
+  // withDirectives,
+  // vShow,
+  // computed,
+  // reactive,
+  ref,
 } from 'vue';
-import { defaultPopperProps } from './defaultSetting';
-import { usePopper } from './usePopper';
-import { renderPopper, renderTrigger } from './renderers';
-import clickOutside from './clickOutside';
-
 import type { IPopperOptions } from './defaultSetting';
+import { defaultPopperProps } from './defaultSetting';
+// import { renderTrigger } from './renderers';
+import usePopper from './usePopper';
 
 export default defineComponent({
   name: 'PotPopper',
   props: defaultPopperProps,
   emits: ['update:visible', 'after-enter', 'after-leave', 'before-enter', 'before-leave'],
-  setup(props, ctx) {
-    const popperStates = usePopper(props as IPopperOptions, ctx);
+  setup(props, { slots }) {
+    const triggerRef = ref(null);
+    const popperRef = ref(null);
 
-    const forceDestroy = () => popperStates.doDestroy(true);
-    onMounted(popperStates.initializePopper);
-    onBeforeUnmount(forceDestroy);
-    onActivated(popperStates.initializePopper);
-    onDeactivated(forceDestroy);
+    const { styles, attributes, events, visibility, onPopperMouseEnter, onPopperMouseLeave } =
+      usePopper(triggerRef, popperRef, props as IPopperOptions);
 
-    return popperStates;
-  },
+    return () => (
+      <>
+        {/*{slots.default &&*/}
+        {/*  renderTrigger(slots.default(), {*/}
+        {/*    ref: 'triggerRef',*/}
+        {/*    ...events,*/}
+        {/*  })}*/}
+        <span ref={triggerRef} {...events}>
+          {slots.default?.()}
+        </span>
 
-  render() {
-    const {
-      $slots,
-      appendToBody,
-      style,
-      class: kls,
-      effect,
-      transition,
-      pure,
-      stopPopperMouseEvent,
-      hide,
-      onPopperMouseEnter,
-      onPopperMouseLeave,
-      onAfterEnter,
-      onAfterLeave,
-      onBeforeEnter,
-      onBeforeLeave,
-      visibility,
-      popperId,
-      isManual,
-    } = this;
-
-    const popper = renderPopper(
-      {
-        effect,
-        name: transition,
-        popperClass: kls,
-        popperId,
-        pure,
-        stopPopperMouseEvent,
-        onMouseenter: onPopperMouseEnter,
-        onMouseleave: onPopperMouseLeave,
-        onAfterEnter,
-        onAfterLeave,
-        onBeforeEnter,
-        onBeforeLeave,
-        visibility,
-      },
-      [
-        renderSlot($slots, 'content', {}, () => {
-          return [toDisplayString(this.content)];
-        }),
-      ],
+        <Teleport to={'body'} disabled={!props.appendToBody}>
+          <div
+            ref={popperRef}
+            style={styles.popper}
+            class={props.class}
+            {...attributes.popper}
+            v-show={visibility.value}
+            onMouseenter={onPopperMouseEnter}
+            onMouseleave={onPopperMouseLeave}
+          >
+            {slots.content?.()}
+          </div>
+        </Teleport>
+      </>
     );
-
-    const _t = $slots.default?.();
-    if (!_t) {
-      throw new Error('#PotPopper: Trigger must be provided');
-    }
-    const triggerProps = {
-      'aria-describedby': popperId,
-      style,
-      ref: 'triggerRef',
-      ...this.events,
-    };
-
-    const trigger = isManual
-      ? renderTrigger(_t, triggerProps)
-      : withDirectives(renderTrigger(_t, triggerProps), [[clickOutside, hide]]);
-
-    return createVNode(Fragment, null, [
-      trigger,
-      createVNode(
-        Teleport as any,
-        {
-          to: 'body',
-          disabled: !appendToBody,
-        },
-        [popper],
-      ),
-    ]);
   },
 });

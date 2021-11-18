@@ -1,6 +1,6 @@
 <template>
   <div class="tmp-container">
-    <div v-for="i in 100" :key="i">
+    <div v-for="i in 50" :key="i">
       <Popper class="demo-popper" :placement="placements[i % placements.length]">
         <Button type="primary" style="margin-bottom: 20px; width: 120px">
           {{ placements[i % placements.length] }}
