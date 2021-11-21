@@ -11,7 +11,7 @@ export const Submenu = defineComponent({
   props: {
     menuInfo: {
       type: Object as PropType<MenuRaw>,
-      default: () => {},
+      required: true,
     },
     depth: {
       type: Number,
@@ -22,8 +22,8 @@ export const Submenu = defineComponent({
     const { collapsed, isMobile, menuIndent, menuKey, menuActivePaths, renderMenuLabel } =
       useInjectConfig();
     const { menuInfo, depth } = toRefs(props);
+    const getCollapsed = computed(() => !isMobile.value && collapsed.value);
 
-    const children = computed(() => menuInfo.value.children || []);
     const index = menuInfo.value[menuKey.value];
     const getActive = computed(() => menuActivePaths.value.includes(index));
     // show or hide submenu list
@@ -31,8 +31,6 @@ export const Submenu = defineComponent({
     const toggle = () => {
       show.value = !show.value;
     };
-
-    const getCollapsed = computed(() => !isMobile.value && collapsed.value);
 
     const getProps = computed(() => {
       return {
@@ -66,6 +64,7 @@ export const Submenu = defineComponent({
     };
 
     const renderMenu = () => {
+      const children = computed(() => menuInfo.value.children || []);
       const getShow = computed(() => getCollapsed.value || (show.value && !getCollapsed.value));
 
       return (
@@ -82,7 +81,7 @@ export const Submenu = defineComponent({
       );
     };
 
-    const renderContent = (children: VNode[]) => {
+    const renderContent = (childNodes: VNode[]) => {
       return getCollapsed.value
         ? createVNode(
             Popper,
@@ -93,11 +92,11 @@ export const Submenu = defineComponent({
               appendToBody: depth.value === 0,
             },
             {
-              default: () => children[0],
-              content: () => children[1],
+              default: () => childNodes[0],
+              content: () => childNodes[1],
             },
           )
-        : createVNode(Fragment, null, children);
+        : createVNode(Fragment, null, childNodes);
     };
 
     return () => (
