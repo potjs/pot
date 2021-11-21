@@ -1,5 +1,5 @@
-import type { CSSProperties, PropType } from 'vue';
-import { computed, defineComponent, ref, toRefs } from 'vue';
+import type { CSSProperties, PropType, VNode } from 'vue';
+import { computed, createVNode, defineComponent, ref, toRefs, Fragment } from 'vue';
 import { MenuRaw } from '../../types';
 
 import { MenuItem } from './MenuItem';
@@ -11,7 +11,7 @@ export const Submenu = defineComponent({
   props: {
     menuInfo: {
       type: Object as PropType<MenuRaw>,
-      default: () => {},
+      required: true,
     },
     depth: {
       type: Number,
@@ -19,10 +19,11 @@ export const Submenu = defineComponent({
     },
   },
   setup(props) {
-    const { collapsed, menuIndent, menuKey, menuActivePaths, renderMenuLabel } = useInjectConfig();
+    const { collapsed, isMobile, menuIndent, menuKey, menuActivePaths, renderMenuLabel } =
+      useInjectConfig();
     const { menuInfo, depth } = toRefs(props);
+    const getCollapsed = computed(() => !isMobile.value && collapsed.value);
 
-    const children = computed(() => menuInfo.value.children || []);
     const index = menuInfo.value[menuKey.value];
     const getActive = computed(() => menuActivePaths.value.includes(index));
     // show or hide submenu list
@@ -62,18 +63,12 @@ export const Submenu = defineComponent({
       );
     };
 
-    const renderContent = () => {
-      const getContentStyles = computed((): CSSProperties => {
-        const getShow = !show.value || collapsed.value;
-        return {
-          ...(getShow &&
-            {
-              // display: 'none',
-            }),
-        };
-      });
+    const renderMenu = () => {
+      const children = computed(() => menuInfo.value.children || []);
+      const getShow = computed(() => getCollapsed.value || (show.value && !getCollapsed.value));
+
       return (
-        <ul class={[`pot-menu`]} style={getContentStyles.value}>
+        <ul class={[`pot-menu`]} v-show={getShow.value}>
           {children.value.map((item) => {
             return (
               <>
@@ -86,29 +81,27 @@ export const Submenu = defineComponent({
       );
     };
 
+    const renderContent = (childNodes: VNode[]) => {
+      return getCollapsed.value
+        ? createVNode(
+            Popper,
+            {
+              class: 'pot-menu-popper',
+              trigger: 'hover',
+              placement: 'right-start',
+              appendToBody: depth.value === 0,
+            },
+            {
+              default: () => childNodes[0],
+              content: () => childNodes[1],
+            },
+          )
+        : createVNode(Fragment, null, childNodes);
+    };
+
     return () => (
       <li class={className.value} data-submenu-index={index}>
-        {/*{renderInner()}*/}
-        {/*{renderContent()}*/}
-        {collapsed.value && (
-          <Popper
-            class={'pot-menu-popper'}
-            trigger={'hover'}
-            placement={'right-start'}
-            appendToBody={depth.value === 0}
-          >
-            {{
-              default: () => renderInner(),
-              content: () => renderContent(),
-            }}
-          </Popper>
-        )}
-        {!collapsed.value && (
-          <>
-            {renderInner()}
-            {renderContent()}
-          </>
-        )}
+        {renderContent([renderInner(), renderMenu()])}
       </li>
     );
   },

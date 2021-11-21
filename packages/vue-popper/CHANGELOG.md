@@ -1,3 +1,12 @@
+## [0.0.2](https://github.com/potjs/pot/compare/vue-popper@0.0.1...vue-popper@0.0.2) (2021-11-21)
+
+
+### Bug Fixes
+
+* clean code on popper ([410bd60](https://github.com/potjs/pot/commit/410bd6099ca7e5beddee2128b03ce85e69814198))
+
+
+
 ## [0.0.1](https://github.com/potjs/pot/compare/vue-popper@0.0.1-beta.4...vue-popper@0.0.1) (2021-11-18)
 
 

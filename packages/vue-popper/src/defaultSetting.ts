@@ -20,7 +20,7 @@ export type TriggerType = 'click' | 'hover' | 'focus' | 'manual';
 
 export type Trigger = TriggerType | TriggerType[];
 
-export type IPopperOptions = {
+export type PopperOptions = {
   arrowOffset: number;
   autoClose: number;
   boundariesPadding: number;
@@ -116,7 +116,7 @@ export const defaultPopperProps = {
     default: () => null,
   },
   showArrow: {
-    type: Boolean,
+    type: [Boolean, String],
     default: false,
   },
   strategy: {

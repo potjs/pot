@@ -1,5 +1,5 @@
 import type { Plugin, App, ExtractPropTypes, PropType } from 'vue';
-import { computed, ref, defineComponent } from 'vue';
+import { computed, ref, defineComponent, reactive } from 'vue';
 
 import LayoutContainer from './Container';
 import { FullHeader as LayoutFullHeader, MultipleHeader as LayoutMultipleHeader } from './Header';
@@ -58,8 +58,22 @@ export type PotLayoutProps = Partial<ExtractPropTypes<typeof layoutProps>>;
 const Layout = defineComponent({
   name: 'PotLayout',
   props: layoutProps,
-  emits: ['menuSelect'],
+  emits: ['update:menuActive', 'menuSelect'],
   setup(props, { slots, emit }) {
+    const state = reactive({
+      menuActive: props.menuActive,
+    });
+
+    const activity = computed({
+      get() {
+        return state.menuActive;
+      },
+      set(val: string) {
+        state.menuActive = val;
+        emit('update:menuActive', val);
+      },
+    });
+
     const configProvider: PotConfigProviderProps = {
       prefixCls: computed(() => props.prefixCls + '-layout'),
       menuTheme: computed(() => props.menuTheme),
@@ -86,27 +100,38 @@ const Layout = defineComponent({
 
       renderMenuLabel: computed(() => props.renderMenuLabel),
 
-      onMenuSelect: (...args: any[]) => emit('menuSelect', ...args),
+      onMenuSelect: (active, ...args: any[]) => {
+        activity.value = active;
+        emit('menuSelect', active, ...args);
+      },
     };
-    useProvideConfig(configProvider);
 
-    useWindowResizeListener(({ width }) => {
-      // console.log('#on window resize', width);
-      configProvider.isMobile.value = width - 1 < 992;
-    });
+    {
+      useProvideConfig(configProvider);
+
+      useWindowResizeListener(({ width }) => {
+        // console.log('#on window resize', width);
+        configProvider.isMobile.value = width - 1 < 992;
+      });
+    }
 
     function render(slotNames: string[]) {
       const localSlots = extendSlots(slots, slotNames, configProvider);
 
-      return (BasicComponent: any) => {
+      return (BasicComponent: any, requiredSelf = true) => {
         const { default: currentSlot, ...scopeSlots } = localSlots;
-        return (
-          <>
-            {currentSlot && (
-              <BasicComponent>{{ default: currentSlot, ...scopeSlots }}</BasicComponent>
-            )}
-          </>
-        );
+
+        if (requiredSelf) {
+          return (
+            <>
+              {currentSlot && (
+                <BasicComponent>{{ default: currentSlot, ...scopeSlots }}</BasicComponent>
+              )}
+            </>
+          );
+        } else {
+          return <BasicComponent>{{ ...scopeSlots }}</BasicComponent>;
+        }
       };
     }
 
@@ -124,7 +149,7 @@ const Layout = defineComponent({
           {
             /* render sidebar */
             // render(['default:sidebar', 'logo', 'trigger'])(LayoutSidebar)
-            configProvider.hasSidebar.value && <LayoutSidebar />
+            configProvider.hasSidebar.value && render(['logo', 'trigger'])(LayoutSidebar, false)
           }
           <LayoutContainer>
             {

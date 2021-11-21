@@ -48,28 +48,3 @@ export const getFirstVNode = (nodes: VNodeChild, maxDepth = 3): ReturnType<typeo
 export function generateId(len = 10) {
   return Math.random().toString(36).substr(2, len);
 }
-
-export const NOOP = () => {};
-
-export const on = function (
-  element: HTMLElement | Document | Window,
-  event: string,
-  handler: EventListenerOrEventListenerObject,
-  useCapture = false,
-): void {
-  if (element && event && handler) {
-    element?.addEventListener(event, handler, useCapture);
-  }
-};
-
-/* istanbul ignore next */
-export const off = function (
-  element: HTMLElement | Document | Window,
-  event: string,
-  handler: EventListenerOrEventListenerObject,
-  useCapture = false,
-): void {
-  if (element && event && handler) {
-    element?.removeEventListener(event, handler, useCapture);
-  }
-};
