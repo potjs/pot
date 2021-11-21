@@ -1,7 +1,12 @@
 <template>
   <div class="tmp-container">
     <div v-for="i in 50" :key="i">
-      <Popper class="demo-popper" :placement="placements[i % placements.length]">
+      <Popper
+        class="demo-popper"
+        trigger="hover"
+        :placement="placements[i % placements.length]"
+        :append-to-body="false"
+      >
         <Button type="primary" style="margin-bottom: 20px; width: 120px">
           {{ placements[i % placements.length] }}
         </Button>

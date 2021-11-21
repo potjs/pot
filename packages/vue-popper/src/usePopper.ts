@@ -1,5 +1,5 @@
 import type { Instance as PopperInstance } from '@popperjs/core';
-import type { CSSProperties, WritableComputedRef, Ref } from 'vue';
+import type { WritableComputedRef, Ref } from 'vue';
 import type { Nullable, IPopperOptions, RefElement } from './defaultSetting';
 
 import {
@@ -18,17 +18,17 @@ import usePopperOptions from './popperOptions';
 import { TimeoutHandle, TriggerType } from './defaultSetting';
 import { isArray, isString } from './utils';
 
-type Attributes = {
-  [key: string]: { [key: string]: string };
-};
-
-type Styles = {
-  [key: string]: CSSProperties;
-};
+// type Attributes = {
+//   [key: string]: { [key: string]: string };
+// };
+//
+// type Styles = {
+//   [key: string]: CSSProperties;
+// };
 
 type State = {
-  styles: Styles;
-  attributes: Attributes;
+  // styles: Styles;
+  // attributes: Attributes;
   visible: boolean;
 };
 
@@ -41,9 +41,6 @@ export interface PopperEvents {
 }
 
 export interface UsePopperResult {
-  state: any;
-  styles: Styles;
-  attributes: Attributes;
   update: () => void;
   forceUpdate: () => void;
   events: PopperEvents;
@@ -63,24 +60,15 @@ export default function usePopper(
 ): UsePopperResult {
   const popperInstance = ref<Nullable<PopperInstance>>(null);
   const state = reactive(<State>{
-    styles: {
-      popper: {
-        position: 'absolute',
-        left: '0',
-        top: '0',
-      },
-      arrow: {
-        position: 'absolute',
-      },
-    },
-    attributes: {},
     visible: props.visible,
   });
   const arrowRef = ref<RefElement>(null);
   const popperOptions = usePopperOptions(props, <IUsePopperState>{
     arrow: arrowRef,
   });
-  const events = {} as PopperEvents;
+  let showTimer: Nullable<TimeoutHandle> = null;
+  let hideTimer: Nullable<TimeoutHandle> = null;
+
   const visibility = computed<boolean>({
     get() {
       return state.visible;
@@ -89,8 +77,6 @@ export default function usePopper(
       state.visible = val;
     },
   });
-  let showTimer: Nullable<TimeoutHandle> = null;
-  let hideTimer: Nullable<TimeoutHandle> = null;
 
   function _show() {
     if (props.autoClose > 0) {
@@ -187,6 +173,8 @@ export default function usePopper(
       popperElement.value,
       popperOptions.value,
     );
+
+    popperInstance.value.forceUpdate();
   }
 
   const forceDestroy = () => doDestroy(true);
@@ -195,11 +183,24 @@ export default function usePopper(
   onActivated(initializePopper);
   onDeactivated(forceDestroy);
 
+  const events = {} as PopperEvents;
   {
     // add trigger events
+    const toggleState = () => {
+      if (unref(visibility)) {
+        hide();
+      } else {
+        show();
+      }
+    };
+
     const popperEventsHandler = (e: Event) => {
       e.stopPropagation();
       switch (e.type) {
+        case 'click': {
+          toggleState();
+          break;
+        }
         case 'mouseenter': {
           show();
           break;
@@ -230,13 +231,6 @@ export default function usePopper(
     }
   }
 
-  watch(
-    () => popperInstance.value,
-    (val) => {
-      console.log('#watch popperInstance', val?.state);
-    },
-  );
-
   watch(popperOptions, async (val) => {
     if (!popperInstance.value) return;
     await popperInstance.value.setOptions(val);
@@ -256,9 +250,6 @@ export default function usePopper(
   const forceUpdate = () => {};
 
   return {
-    state: undefined,
-    styles: state.styles,
-    attributes: state.attributes,
     update,
     forceUpdate,
     events,
