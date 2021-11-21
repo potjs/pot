@@ -5,7 +5,8 @@
         class="demo-popper"
         trigger="hover"
         :placement="placements[i % placements.length]"
-        :append-to-body="false"
+        :append-to-body="true"
+        :show-arrow="'demo-arrow'"
       >
         <Button type="primary" style="margin-bottom: 20px; width: 120px">
           {{ placements[i % placements.length] }}
@@ -48,5 +49,39 @@
     border-radius: 3px;
     color: #fff;
     z-index: 99999;
+
+    &[data-popper-placement^='top'] > .demo-arrow {
+      bottom: -4px;
+    }
+
+    &[data-popper-placement^='bottom'] > .demo-arrow {
+      top: -4px;
+    }
+
+    &[data-popper-placement^='left'] > .demo-arrow {
+      right: -4px;
+    }
+
+    &[data-popper-placement^='right'] > .demo-arrow {
+      left: -4px;
+    }
+  }
+
+  .demo-arrow,
+  .demo-arrow::before {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: inherit;
+  }
+
+  .demo-arrow {
+    visibility: hidden;
+  }
+
+  .demo-arrow::before {
+    visibility: visible;
+    content: '';
+    transform: rotate(45deg);
   }
 </style>

@@ -1,36 +1,29 @@
-import type { Instance as PopperInstance } from '@popperjs/core';
-import type { WritableComputedRef, Ref } from 'vue';
-import type { Nullable, IPopperOptions, RefElement } from './defaultSetting';
+/**
+ * modified from https://github.com/element-plus/element-plus/blob/master/packages/components/popper/src/use-popper/index.ts
+ */
+import type { Ref, WritableComputedRef, ComponentPublicInstance } from 'vue';
+import type { Instance as PopperInstance, StrictModifiers } from '@popperjs/core';
+import type {
+  PopperOptions,
+  Nullable,
+  TimeoutHandle,
+  TriggerType,
+  RefElement,
+} from './defaultSetting';
 
 import {
   computed,
-  onActivated,
-  onBeforeUnmount,
-  onDeactivated,
   onMounted,
+  onBeforeUnmount,
+  onActivated,
+  onDeactivated,
   reactive,
   ref,
-  unref,
   watch,
 } from 'vue';
 import { createPopper } from '@popperjs/core';
-import usePopperOptions from './popperOptions';
-import { TimeoutHandle, TriggerType } from './defaultSetting';
-import { isArray, isString } from './utils';
-
-// type Attributes = {
-//   [key: string]: { [key: string]: string };
-// };
-//
-// type Styles = {
-//   [key: string]: CSSProperties;
-// };
-
-type State = {
-  // styles: Styles;
-  // attributes: Attributes;
-  visible: boolean;
-};
+import { generateId, isArray, isHTMLElement, isString } from './utils';
+import usePopperOptions, { UsePopperState } from './popperOptions';
 
 export interface PopperEvents {
   onClick?: (e: Event) => void;
@@ -41,33 +34,26 @@ export interface PopperEvents {
 }
 
 export interface UsePopperResult {
-  update: () => void;
-  forceUpdate: () => void;
+  popperId: string;
   events: PopperEvents;
   visibility: WritableComputedRef<boolean>;
   onPopperMouseEnter: () => void;
   onPopperMouseLeave: () => void;
 }
 
-interface IUsePopperState {
-  arrow: Ref<HTMLElement>;
-}
-
 export default function usePopper(
-  referenceElement: Ref<Nullable<HTMLElement>>,
+  referenceElement: Ref<Nullable<HTMLElement | ComponentPublicInstance>>,
   popperElement: Ref<Nullable<HTMLElement>>,
-  props: IPopperOptions,
+  props: PopperOptions,
 ): UsePopperResult {
+  const arrowRef = ref<RefElement>(null);
   const popperInstance = ref<Nullable<PopperInstance>>(null);
-  const state = reactive(<State>{
+  const state = reactive({
     visible: props.visible,
   });
-  const arrowRef = ref<RefElement>(null);
-  const popperOptions = usePopperOptions(props, <IUsePopperState>{
+  const popperOptions = usePopperOptions(props, <UsePopperState>{
     arrow: arrowRef,
   });
-  let showTimer: Nullable<TimeoutHandle> = null;
-  let hideTimer: Nullable<TimeoutHandle> = null;
 
   const visibility = computed<boolean>({
     get() {
@@ -78,12 +64,28 @@ export default function usePopper(
     },
   });
 
+  let showTimer: Nullable<TimeoutHandle> = null;
+  let hideTimer: Nullable<TimeoutHandle> = null;
+
+  function initializePopper() {
+    if (!referenceElement.value || !popperElement.value) {
+      return;
+    }
+
+    const reference = isHTMLElement(referenceElement.value)
+      ? referenceElement.value
+      : (referenceElement.value as ComponentPublicInstance).$el;
+
+    popperInstance.value = createPopper(reference, popperElement.value, popperOptions.value);
+  }
+
   function _show() {
     if (props.autoClose > 0) {
       hideTimer = setTimeout(() => {
         _hide();
       }, props.autoClose);
     }
+
     visibility.value = true;
   }
 
@@ -97,7 +99,9 @@ export default function usePopper(
   }
 
   const show = () => {
-    if (props.disabled) return;
+    if (props.disabled) {
+      return;
+    }
     clearTimers();
     if (props.showAfter === 0) {
       _show();
@@ -128,7 +132,9 @@ export default function usePopper(
 
   function doDestroy(forceDestroy?: boolean) {
     /* istanbul ignore if */
-    if (!popperInstance.value || (unref(visibility) && !forceDestroy)) return;
+    if (!popperInstance.value || (visibility.value && !forceDestroy)) {
+      return;
+    }
     detachPopper();
   }
 
@@ -155,39 +161,34 @@ export default function usePopper(
       // so there will be no need to test if trigger is array type.
       (trigger.length === 1 && (trigger[0] === 'click' || trigger[0] === 'focus'));
 
-    if (shouldPrevent) return;
+    if (shouldPrevent) {
+      return;
+    }
 
     hide();
   }
 
-  function initializePopper() {
-    if (!state.visible) {
-      return;
-    }
-    if (!referenceElement.value || !popperElement.value) {
-      return;
-    }
+  function onVisibilityChange(visible: boolean) {
+    // Disable the event listeners
+    popperInstance.value?.setOptions((options) => ({
+      ...options,
+      modifiers: [
+        ...(options.modifiers as StrictModifiers[]),
+        { name: 'eventListeners', enabled: visible },
+      ],
+    }));
 
-    popperInstance.value = createPopper(
-      referenceElement.value,
-      popperElement.value,
-      popperOptions.value,
-    );
-
-    popperInstance.value.forceUpdate();
+    if (visible) {
+      // Update its position
+      popperInstance.value?.update();
+    }
   }
-
-  const forceDestroy = () => doDestroy(true);
-  onMounted(initializePopper);
-  onBeforeUnmount(forceDestroy);
-  onActivated(initializePopper);
-  onDeactivated(forceDestroy);
 
   const events = {} as PopperEvents;
   {
     // add trigger events
     const toggleState = () => {
-      if (unref(visibility)) {
+      if (visibility.value) {
         hide();
       } else {
         show();
@@ -231,29 +232,18 @@ export default function usePopper(
     }
   }
 
-  watch(popperOptions, async (val) => {
-    if (!popperInstance.value) return;
-    await popperInstance.value.setOptions(val);
-    await popperInstance.value.update();
-  });
+  const forceDestroy = () => doDestroy(true);
+  onMounted(initializePopper);
+  onBeforeUnmount(forceDestroy);
+  onActivated(initializePopper);
+  onDeactivated(forceDestroy);
 
-  watch(
-    () => state.visible,
-    (toState) => {
-      if (toState) {
-        initializePopper();
-      }
-    },
-  );
-
-  const update = () => {};
-  const forceUpdate = () => {};
+  watch(visibility, onVisibilityChange);
 
   return {
-    update,
-    forceUpdate,
-    events,
+    popperId: generateId(),
     visibility,
+    events,
     onPopperMouseEnter,
     onPopperMouseLeave,
   };

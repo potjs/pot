@@ -7,7 +7,7 @@ import buildModifiers from './buildModifiers';
 import type { Ref } from 'vue';
 import type { Options, Placement } from '@popperjs/core';
 
-interface IUsePopperProps {
+interface UsePopperProps {
   popperOptions: Partial<Options>;
   arrowOffset: number;
   offset: number;
@@ -16,11 +16,11 @@ interface IUsePopperProps {
   fallbackPlacements: Array<Placement>;
 }
 
-export interface IUsePopperState {
+export interface UsePopperState {
   arrow: Ref<HTMLElement>;
 }
 
-export default function usePopperOptions(props: IUsePopperProps, state: IUsePopperState) {
+export default function usePopperOptions(props: UsePopperProps, state: UsePopperState) {
   return computed(() => {
     return {
       placement: props.placement,

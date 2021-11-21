@@ -10,6 +10,7 @@ Popper.install = (app: App): App => {
 export default Popper as typeof Popper & Plugin;
 
 export * from './defaultSetting';
+export * from './renderers';
 export * from './usePopper';
 export type { Placement, Options, Instance as PopperInstance } from '@popperjs/core';
 // export type { EmitType } from './usePopper';

@@ -49,7 +49,6 @@ export default function buildModifier(
         adaptive: gpuAcceleration,
       },
     },
-    // tippyModifier,
   ];
 
   if (arrow) {
@@ -57,7 +56,7 @@ export default function buildModifier(
       name: 'arrow',
       options: {
         element: arrow,
-        // the arrow size is an equailateral triangle with 10px side length, the 3rd side length ~ 14.1px
+        // the arrow size is an equilateral triangle with 10px side length, the 3rd side length ~ 14.1px
         // adding a offset to the ceil of 4.1 should be 5 this resolves the problem of arrow overflowing out of popper.
         padding: arrowOffset ?? 5,
       },
