@@ -98,15 +98,20 @@ const Layout = defineComponent({
     function render(slotNames: string[]) {
       const localSlots = extendSlots(slots, slotNames, configProvider);
 
-      return (BasicComponent: any) => {
+      return (BasicComponent: any, requiredSelf = true) => {
         const { default: currentSlot, ...scopeSlots } = localSlots;
-        return (
-          <>
-            {currentSlot && (
-              <BasicComponent>{{ default: currentSlot, ...scopeSlots }}</BasicComponent>
-            )}
-          </>
-        );
+
+        if (requiredSelf) {
+          return (
+            <>
+              {currentSlot && (
+                <BasicComponent>{{ default: currentSlot, ...scopeSlots }}</BasicComponent>
+              )}
+            </>
+          );
+        } else {
+          return <BasicComponent>{{ ...scopeSlots }}</BasicComponent>;
+        }
       };
     }
 
@@ -124,7 +129,7 @@ const Layout = defineComponent({
           {
             /* render sidebar */
             // render(['default:sidebar', 'logo', 'trigger'])(LayoutSidebar)
-            configProvider.hasSidebar.value && <LayoutSidebar />
+            configProvider.hasSidebar.value && render(['logo', 'trigger'])(LayoutSidebar, false)
           }
           <LayoutContainer>
             {

@@ -1,5 +1,5 @@
-import type { CSSProperties, PropType } from 'vue';
-import { computed, defineComponent, ref, toRefs } from 'vue';
+import type { CSSProperties, PropType, VNode } from 'vue';
+import { computed, createVNode, defineComponent, ref, toRefs, Fragment } from 'vue';
 import { MenuRaw } from '../../types';
 
 import { MenuItem } from './MenuItem';
@@ -19,7 +19,8 @@ export const Submenu = defineComponent({
     },
   },
   setup(props) {
-    const { collapsed, menuIndent, menuKey, menuActivePaths, renderMenuLabel } = useInjectConfig();
+    const { collapsed, isMobile, menuIndent, menuKey, menuActivePaths, renderMenuLabel } =
+      useInjectConfig();
     const { menuInfo, depth } = toRefs(props);
 
     const children = computed(() => menuInfo.value.children || []);
@@ -30,6 +31,8 @@ export const Submenu = defineComponent({
     const toggle = () => {
       show.value = !show.value;
     };
+
+    const getCollapsed = computed(() => !isMobile.value && collapsed.value);
 
     const getProps = computed(() => {
       return {
@@ -62,18 +65,11 @@ export const Submenu = defineComponent({
       );
     };
 
-    const renderContent = () => {
-      const getContentStyles = computed((): CSSProperties => {
-        const getShow = !show.value || collapsed.value;
-        return {
-          ...(getShow &&
-            {
-              // display: 'none',
-            }),
-        };
-      });
+    const renderMenu = () => {
+      const getShow = computed(() => getCollapsed.value || (show.value && !getCollapsed.value));
+
       return (
-        <ul class={[`pot-menu`]} style={getContentStyles.value}>
+        <ul class={[`pot-menu`]} v-show={getShow.value}>
           {children.value.map((item) => {
             return (
               <>
@@ -86,29 +82,27 @@ export const Submenu = defineComponent({
       );
     };
 
+    const renderContent = (children: VNode[]) => {
+      return getCollapsed.value
+        ? createVNode(
+            Popper,
+            {
+              class: 'pot-menu-popper',
+              trigger: 'hover',
+              placement: 'right-start',
+              appendToBody: depth.value === 0,
+            },
+            {
+              default: () => children[0],
+              content: () => children[1],
+            },
+          )
+        : createVNode(Fragment, null, children);
+    };
+
     return () => (
       <li class={className.value} data-submenu-index={index}>
-        {/*{renderInner()}*/}
-        {/*{renderContent()}*/}
-        {collapsed.value && (
-          <Popper
-            class={'pot-menu-popper'}
-            trigger={'hover'}
-            placement={'right-start'}
-            appendToBody={depth.value === 0}
-          >
-            {{
-              default: () => renderInner(),
-              content: () => renderContent(),
-            }}
-          </Popper>
-        )}
-        {!collapsed.value && (
-          <>
-            {renderInner()}
-            {renderContent()}
-          </>
-        )}
+        {renderContent([renderInner(), renderMenu()])}
       </li>
     );
   },
