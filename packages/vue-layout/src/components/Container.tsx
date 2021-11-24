@@ -1,6 +1,6 @@
 import type { PropType } from 'vue';
 import { defineComponent, computed } from 'vue';
-import { useInjectConfig } from '../hooks';
+import { useInjectSettings } from '../hooks/injection';
 
 export default defineComponent({
   name: 'PotContainer',
@@ -11,7 +11,7 @@ export default defineComponent({
     },
   },
   setup(props, { slots }) {
-    const { prefixCls } = useInjectConfig();
+    const { prefixCls } = useInjectSettings();
 
     const className = computed(() => ({
       [`${prefixCls.value}`]: true,

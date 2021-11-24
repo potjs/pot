@@ -1,10 +1,10 @@
 import type { CSSProperties, PropType, VNode } from 'vue';
 import { computed, createVNode, defineComponent, ref, toRefs, Fragment } from 'vue';
-import { MenuRaw } from '../../types';
+import { MenuRaw } from '../../defaultSettings';
 
 import { MenuItem } from './MenuItem';
-import { useInjectConfig } from '../../hooks';
 import Popper from '@potjs/vue-popper';
+import { useInjectSettings, useInjectShared } from '../../hooks/injection';
 
 export const Submenu = defineComponent({
   name: 'PotSubmenu',
@@ -19,13 +19,13 @@ export const Submenu = defineComponent({
     },
   },
   setup(props) {
-    const { collapsed, isMobile, menuIndent, menuKey, menuActivePaths, renderMenuLabel } =
-      useInjectConfig();
+    const { prefixCls, menuIndent, menuKey, renderMenuLabel } = useInjectSettings();
+    const { isMobile, isCollapsed, getMenuActivePaths } = useInjectShared();
     const { menuInfo, depth } = toRefs(props);
-    const getCollapsed = computed(() => !isMobile.value && collapsed.value);
+    const getCollapsed = computed(() => !isMobile.value && isCollapsed.value);
 
     const index = menuInfo.value[menuKey.value];
-    const getActive = computed(() => menuActivePaths.value.includes(index));
+    const getActive = computed(() => getMenuActivePaths.value.includes(index));
     // show or hide submenu list
     const show = ref(getActive.value);
     const toggle = () => {
@@ -39,7 +39,7 @@ export const Submenu = defineComponent({
     });
 
     const className = computed(() => ({
-      [`pot-menu-submenu`]: true,
+      [`${prefixCls.value}-menu-submenu`]: true,
       [`active`]: getActive.value,
     }));
 
@@ -52,13 +52,15 @@ export const Submenu = defineComponent({
     const renderInner = () => {
       return (
         <div
-          class={[`pot-menu-submenu-item`, { [`active`]: getActive.value }]}
+          class={[`${prefixCls.value}-menu-submenu-item`, { [`active`]: getActive.value }]}
           style={getStyles.value}
           onClick={toggle}
         >
-          <span class={`pot-menu-item--icon`}>🙄</span>
-          <span class={`pot-menu-item--label`}>{renderMenuLabel.value(menuInfo.value)}</span>
-          <span class={`pot-menu-item--trigger`} />
+          <span class={`${prefixCls.value}-menu-item--icon`}>🙄</span>
+          <span class={`${prefixCls.value}-menu-item--label`}>
+            {renderMenuLabel.value(menuInfo.value)}
+          </span>
+          <span class={`${prefixCls.value}-menu-item--trigger`} />
         </div>
       );
     };
@@ -68,7 +70,7 @@ export const Submenu = defineComponent({
       const getShow = computed(() => getCollapsed.value || (show.value && !getCollapsed.value));
 
       return (
-        <ul class={[`pot-menu`]} v-show={getShow.value}>
+        <ul class={[`${prefixCls.value}-menu`]} v-show={getShow.value}>
           {children.value.map((item) => {
             return (
               <>
@@ -86,7 +88,7 @@ export const Submenu = defineComponent({
         ? createVNode(
             Popper,
             {
-              class: 'pot-menu-popper',
+              class: `${prefixCls.value}-menu-popper`,
               trigger: 'hover',
               placement: 'right-start',
               appendToBody: depth.value === 0,

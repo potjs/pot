@@ -1,6 +1,41 @@
-import type { InjectionKey, PropType, ComputedRef } from 'vue';
-import { MenuMode, MenuRaw, RenderLabelWithMenu, Theme, TriggerPlacement } from './types';
-import { ExtractPropTypes, inject } from 'vue';
+import type { ExtractPropTypes, PropType, ComputedRef } from 'vue';
+
+export enum MenuMode {
+  // left menu
+  SIDE = 'side',
+  MIX_SIDE = 'mix-side',
+  MIX = 'mix',
+  // top menu
+  TOP = 'top',
+}
+
+export enum TriggerPlacement {
+  TOP = 'top',
+  BOTTOM = 'bottom',
+  NONE = 'none',
+}
+
+export enum Theme {
+  DARK = 'dark',
+  LIGHT = 'light',
+}
+
+export interface MenuRaw {
+  label: string;
+  icon?: string;
+  key?: string;
+  disabled?: boolean;
+  children?: MenuRaw[];
+  [s: string]: any;
+}
+
+export interface RenderLabelWithMenu {
+  (item: MenuRaw): string | HTMLElement;
+}
+
+export interface MenuSelectHandler {
+  (index: string, menu: MenuRaw): void;
+}
 
 export interface LayoutSettings {
   prefixCls: string;
@@ -66,11 +101,6 @@ export const defaultLayoutProps = {
 };
 export type LayoutProps = Partial<ExtractPropTypes<typeof defaultLayoutProps>>;
 
-export const InjectSettingsKey: InjectionKey<LayoutSettings> = Symbol('PotInjectSettingsKey');
-export const useInjectSettings = () => {
-  return inject(InjectSettingsKey) as LayoutSettings;
-};
-
 export interface LayoutShared {
   hasSidebar: ComputedRef<boolean>;
   isFullHeader: ComputedRef<boolean>;
@@ -78,11 +108,6 @@ export interface LayoutShared {
   isMobile: ComputedRef<boolean>;
   getMenuActivePaths: ComputedRef<string[]>;
 
-  onMenuSelect: (index: string, menu: MenuRaw) => void;
+  onMenuSelect: MenuSelectHandler;
   toggleSidebar: () => void;
 }
-
-export const InjectSharedKey: InjectionKey<LayoutShared> = Symbol('PotInjectSharedKey');
-export const useInjectShared = () => {
-  return inject(InjectSharedKey) as LayoutShared;
-};

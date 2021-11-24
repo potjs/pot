@@ -1,19 +1,17 @@
 import { defineComponent, unref, computed, CSSProperties } from 'vue';
 import LayoutLogo from './Logo';
-import { useInjectConfig, useInjectHooks } from '../hooks';
 import LayoutTrigger from './Trigger';
-import { TriggerPlacement } from '../types';
+import { TriggerPlacement } from '../defaultSettings';
 import { extendSlots } from '../utils';
 import { Menu } from './Menu';
+import { useInjectSettings, useInjectShared } from '../hooks/injection';
 
 export default defineComponent({
   name: 'PotSidebar',
   emits: ['menu-select'],
   setup(props, { slots }) {
-    const { collapsed } = useInjectConfig();
-    const { prefixCls, isMobile, hasSidebar, triggerPlacement, isFullHeader, menuData } =
-      useInjectConfig();
-    const { toggleSidebar } = useInjectHooks();
+    const { prefixCls, triggerPlacement, menuData } = useInjectSettings();
+    const { isCollapsed, isMobile, hasSidebar, isFullHeader, toggleSidebar } = useInjectShared();
 
     const renderLogo = () => {
       return (
@@ -37,11 +35,11 @@ export default defineComponent({
       const sidebarClassName = computed(() => ({
         [`${prefixCls.value}-sidebar`]: true,
         [`${prefixCls.value}-sidebar--mix`]: isFullHeader.value,
-        [`collapsed`]: collapsed.value,
+        [`collapsed`]: isCollapsed.value,
       }));
       const placeholderClassName = computed(() => ({
         [`${prefixCls.value}-sidebar--placeholder`]: true,
-        [`collapsed`]: collapsed.value,
+        [`collapsed`]: isCollapsed.value,
       }));
 
       return (
@@ -64,12 +62,12 @@ export default defineComponent({
     const renderMobileSidebar = () => {
       const className = computed(() => ({
         [`${prefixCls.value}-drawer`]: true,
-        [`${prefixCls.value}-drawer--open`]: !collapsed.value,
+        [`${prefixCls.value}-drawer--open`]: !isCollapsed.value,
       }));
 
       const getStyles = computed(
         (): CSSProperties => ({
-          ...(collapsed.value && {
+          ...(isCollapsed.value && {
             width: '0',
           }),
         }),

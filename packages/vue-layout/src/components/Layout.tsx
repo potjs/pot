@@ -1,5 +1,5 @@
 import type { Plugin, App } from 'vue';
-import { computed, defineComponent, provide, reactive } from 'vue';
+import { computed, defineComponent, reactive } from 'vue';
 
 import LayoutContainer from './Container';
 import { FullHeader as LayoutFullHeader, MultipleHeader as LayoutMultipleHeader } from './Header';
@@ -8,21 +8,19 @@ import LayoutFooter from './Footer';
 import LayoutContent from './Content';
 
 import { extendSlots, treeFindPath } from '../utils';
-import type { LayoutSettings } from '../defaultSettings';
-import { defaultLayoutProps, InjectSettingsKey, InjectSharedKey } from '../defaultSettings';
-import { MenuMode } from '../types';
-import { useWindowResizeListener } from '../hooks';
+import type { LayoutSettings, MenuSelectHandler } from '../defaultSettings';
+import { defaultLayoutProps, MenuMode } from '../defaultSettings';
+import { useProvideSettings, useProvideShared } from '../hooks/injection';
+import useWindowResizeListener from '../hooks/windowResize';
 
 const Layout = defineComponent({
   name: 'PotLayout',
   props: defaultLayoutProps,
-  setup(props: LayoutSettings, { slots }) {
+  setup(props: LayoutSettings, { slots, emit }) {
     const state = reactive({
       collapsed: false,
       mobile: false,
     });
-
-    provide(InjectSettingsKey, props);
 
     const hasSidebar = computed((): boolean => props.menuMode !== MenuMode.TOP);
     const isFullHeader = computed(
@@ -37,27 +35,30 @@ const Layout = defineComponent({
         props.menuKey,
       );
     });
-    const onMenuSelect = () => {
-      console.log('#onMenuSelect');
+    const onMenuSelect: MenuSelectHandler = (index, menu) => {
+      emit('menuSelect', index, menu);
     };
     const toggleSidebar = () => {
       state.collapsed = !state.collapsed;
     };
 
-    provide(InjectSharedKey, {
-      hasSidebar,
-      isFullHeader,
-      isCollapsed,
-      isMobile,
-      getMenuActivePaths,
-      onMenuSelect,
-      toggleSidebar,
-    });
+    {
+      useProvideSettings(props);
+      useProvideShared({
+        hasSidebar,
+        isFullHeader,
+        isCollapsed,
+        isMobile,
+        getMenuActivePaths,
+        onMenuSelect,
+        toggleSidebar,
+      });
 
-    useWindowResizeListener(({ width }) => {
-      // console.log('#on window resize', width);
-      state.mobile = width - 1 < 992;
-    });
+      useWindowResizeListener(({ width }) => {
+        // console.log('#on window resize', width);
+        state.mobile = width - 1 < 992;
+      });
+    }
 
     function render(slotNames: string[]) {
       const localSlots = extendSlots(slots, slotNames, {});

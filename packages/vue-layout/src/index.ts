@@ -1,5 +1,4 @@
 import './styles/index.less';
 
-export * from './types';
-export type { PotLayoutProps } from './components/Layout';
+export * from './defaultSettings';
 export { default as PotLayout } from './components/Layout';

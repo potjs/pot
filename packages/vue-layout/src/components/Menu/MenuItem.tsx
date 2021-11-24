@@ -1,7 +1,7 @@
 import type { PropType } from 'vue';
 import { computed, CSSProperties, defineComponent, toRefs } from 'vue';
-import { MenuRaw } from '../../types';
-import { useInjectConfig } from '../../hooks';
+import { MenuRaw } from '../../defaultSettings';
+import { useInjectSettings, useInjectShared } from '../../hooks/injection';
 
 export const MenuItem = defineComponent({
   name: 'PotMenuItem',
@@ -16,7 +16,8 @@ export const MenuItem = defineComponent({
     },
   },
   setup(props) {
-    const { menuIndent, menuKey, menuActive, renderMenuLabel, onMenuSelect } = useInjectConfig();
+    const { prefixCls, menuIndent, menuKey, menuActive, renderMenuLabel } = useInjectSettings();
+    const { onMenuSelect } = useInjectShared();
     const { menuInfo, depth } = toRefs(props);
 
     const index = menuInfo.value[menuKey.value];
@@ -30,13 +31,15 @@ export const MenuItem = defineComponent({
     return () => (
       <>
         <li
-          class={[`pot-menu-item`, { [`active`]: menuActive.value === index }]}
+          class={[`${prefixCls.value}-menu-item`, { [`active`]: menuActive.value === index }]}
           style={getStyles.value}
           data-menu-index={index}
           onClick={() => onMenuSelect(index, menuInfo.value)}
         >
-          <span class={`pot-menu-item--icon`}>🙄</span>
-          <span class={`pot-menu-item--label`}>{renderMenuLabel.value(menuInfo.value)}</span>
+          <span class={`${prefixCls.value}-menu-item--icon`}>🙄</span>
+          <span class={`${prefixCls.value}-menu-item--label`}>
+            {renderMenuLabel.value(menuInfo.value)}
+          </span>
         </li>
       </>
     );

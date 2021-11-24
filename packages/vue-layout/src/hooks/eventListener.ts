@@ -10,7 +10,7 @@ export interface UseEventParams {
   delay?: number;
 }
 
-export function useEventListener({
+export default function useEventListener({
   el = window,
   name,
   listener,

@@ -1,10 +1,10 @@
 import { defineComponent } from 'vue';
-import { useInjectConfig } from '../hooks';
+import { useInjectSettings } from '../hooks/injection';
 
 export default defineComponent({
   name: 'PotContent',
   setup(props, { slots }) {
-    const { prefixCls } = useInjectConfig();
+    const { prefixCls } = useInjectSettings();
 
     return () => (
       <main class={`${prefixCls.value}-content`}>

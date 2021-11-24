@@ -1,14 +1,15 @@
 import { defineComponent, unref } from 'vue';
 import LayoutLogo from './Logo';
 import LayoutTrigger from './Trigger';
-import { useInjectConfig } from '../hooks';
-import { TriggerPlacement } from '../types';
+import { TriggerPlacement } from '../defaultSettings';
 import { extendSlots } from '../utils';
+import { useInjectSettings, useInjectShared } from '../hooks/injection';
 
 const Header = defineComponent({
   name: 'PotHeader',
   setup(props, { slots }) {
-    const { prefixCls, hasSidebar, triggerPlacement, isFullHeader } = useInjectConfig();
+    const { prefixCls, triggerPlacement } = useInjectSettings();
+    const { hasSidebar, isFullHeader } = useInjectShared();
 
     const renderLogo = () => {
       return (
@@ -48,7 +49,7 @@ const Header = defineComponent({
 const FullHeader = defineComponent({
   name: 'PotFullHeader',
   setup(props, { slots }) {
-    const { isFullHeader } = useInjectConfig();
+    const { isFullHeader } = useInjectShared();
     return () => <>{unref(isFullHeader) && <Header>{{ ...slots }}</Header>}</>;
   },
 });
@@ -56,7 +57,8 @@ const FullHeader = defineComponent({
 const MultipleHeader = defineComponent({
   name: 'PotMultipleHeader',
   setup(props, { slots }) {
-    const { prefixCls, isFullHeader } = useInjectConfig();
+    const { prefixCls } = useInjectSettings();
+    const { isFullHeader } = useInjectShared();
     return () => (
       <>
         <div class={`${prefixCls.value}-header--placeholder`} />
