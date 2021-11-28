@@ -8,7 +8,7 @@ import { useInjectSettings, useInjectShared } from '../hooks/injection';
 const Header = defineComponent({
   name: 'PotHeader',
   setup(props, { slots }) {
-    const { prefixCls, triggerPlacement } = useInjectSettings();
+    const { prefixCls, trigger } = useInjectSettings();
     const { hasSidebar, isFullHeader } = useInjectShared();
 
     const renderLogo = () => {
@@ -30,7 +30,7 @@ const Header = defineComponent({
         {
           <div class={`${prefixCls.value}-header--left`}>
             {unref(isFullHeader) && renderLogo()}
-            {unref(hasSidebar) && TriggerPlacement.TOP === triggerPlacement.value && (
+            {unref(hasSidebar) && TriggerPlacement.TOP === trigger.value && (
               <LayoutTrigger>{{ ...extendSlots(slots, ['default:trigger']) }}</LayoutTrigger>
             )}
           </div>

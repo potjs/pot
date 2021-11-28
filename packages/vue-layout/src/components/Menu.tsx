@@ -22,7 +22,7 @@ export const Menu = defineComponent({
 
     const className = computed(() => ({
       [`${prefixCls.value}-menu`]: true,
-      [`collapsed`]: isCollapsed.value,
+      [`${prefixCls.value}-menu-collapsed`]: isCollapsed.value,
     }));
 
     return () => (

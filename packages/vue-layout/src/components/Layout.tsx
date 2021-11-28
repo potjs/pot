@@ -9,17 +9,21 @@ import LayoutContent from './Content';
 
 import { extendSlots, treeFindPath } from '../utils';
 import type { LayoutSettings, MenuSelectHandler } from '../defaultSettings';
-import { defaultLayoutProps, MenuMode } from '../defaultSettings';
+import { defaultLayoutProps, MenuMode, MenuOpenHandler } from '../defaultSettings';
 import { useProvideSettings, useProvideShared } from '../hooks/injection';
 import useWindowResizeListener from '../hooks/windowResize';
 
 const Layout = defineComponent({
   name: 'PotLayout',
   props: defaultLayoutProps,
+  emits: ['menuSelect'],
   setup(props: LayoutSettings, { slots, emit }) {
     const state = reactive({
       collapsed: false,
       mobile: false,
+      menuOpened: new Set<string>(
+        treeFindPath(props.menuData, (t) => t[props.menuKey] === props.menuActive, props.menuKey),
+      ),
     });
 
     const hasSidebar = computed((): boolean => props.menuMode !== MenuMode.TOP);
@@ -35,8 +39,20 @@ const Layout = defineComponent({
         props.menuKey,
       );
     });
+    const getMenuOpened = computed(() => [...state.menuOpened]);
     const onMenuSelect: MenuSelectHandler = (index, menu) => {
+      const paths = treeFindPath(props.menuData, (t) => t[props.menuKey] === index, props.menuKey);
+      paths.forEach((p) => {
+        state.menuOpened.add(p);
+      });
       emit('menuSelect', index, menu);
+    };
+    const onMenuOpen: MenuOpenHandler = (index) => {
+      if (state.menuOpened.has(index)) {
+        state.menuOpened.delete(index);
+      } else {
+        state.menuOpened.add(index);
+      }
     };
     const toggleSidebar = () => {
       state.collapsed = !state.collapsed;
@@ -50,7 +66,9 @@ const Layout = defineComponent({
         isCollapsed,
         isMobile,
         getMenuActivePaths,
+        getMenuOpened,
         onMenuSelect,
+        onMenuOpen,
         toggleSidebar,
       });
 

@@ -48,7 +48,7 @@ import { PotLayout } from '@potjs/vue-layout';
 | menuKey | - | - | - |
 | menuActive | - | - | - |
 | renderMenuLabel | - | - | - |
-| triggerPlacement | - | - | - |
+| trigger | - | - | - |
 
 ### Events
 | Event Name            | Description                                      |

@@ -10,7 +10,7 @@ export default defineComponent({
   name: 'PotSidebar',
   emits: ['menu-select'],
   setup(props, { slots }) {
-    const { prefixCls, triggerPlacement, menuData } = useInjectSettings();
+    const { prefixCls, trigger, menuData } = useInjectSettings();
     const { isCollapsed, isMobile, hasSidebar, isFullHeader, toggleSidebar } = useInjectShared();
 
     const renderLogo = () => {
@@ -51,7 +51,7 @@ export default defineComponent({
             {/*  <div class={`${prefixCls.value}-sidebar--wrapper`}>{slots.default?.({})}</div>*/}
             {/*)}*/}
             <div class={`${prefixCls.value}-sidebar--wrapper`}>{renderMenu()}</div>
-            {unref(hasSidebar) && TriggerPlacement.BOTTOM === triggerPlacement.value && (
+            {unref(hasSidebar) && TriggerPlacement.BOTTOM === trigger.value && (
               <LayoutTrigger>{{ ...extendSlots(slots, ['default:trigger']) }}</LayoutTrigger>
             )}
           </aside>

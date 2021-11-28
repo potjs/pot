@@ -1,5 +1,5 @@
 import type { PropType } from 'vue';
-import { computed, CSSProperties, defineComponent, toRefs } from 'vue';
+import { computed, createVNode, defineComponent, toRefs } from 'vue';
 import { MenuRaw } from '../../defaultSettings';
 import { useInjectSettings, useInjectShared } from '../../hooks/injection';
 
@@ -17,31 +17,33 @@ export const MenuItem = defineComponent({
   },
   setup(props) {
     const { prefixCls, menuIndent, menuKey, menuActive, renderMenuLabel } = useInjectSettings();
-    const { onMenuSelect } = useInjectShared();
+    const { onMenuSelect, isMobile, isCollapsed } = useInjectShared();
     const { menuInfo, depth } = toRefs(props);
 
     const index = menuInfo.value[menuKey.value];
+    const getCollapsed = computed(() => !isMobile.value && isCollapsed.value);
 
-    const getStyles = computed((): CSSProperties => {
-      return {
-        paddingLeft: menuIndent.value * depth.value + 'px',
-      };
-    });
+    const className = `${prefixCls.value}-menu-item`;
 
-    return () => (
-      <>
-        <li
-          class={[`${prefixCls.value}-menu-item`, { [`active`]: menuActive.value === index }]}
-          style={getStyles.value}
-          data-menu-index={index}
-          onClick={() => onMenuSelect(index, menuInfo.value)}
-        >
-          <span class={`${prefixCls.value}-menu-item--icon`}>🙄</span>
-          <span class={`${prefixCls.value}-menu-item--label`}>
-            {renderMenuLabel.value(menuInfo.value)}
-          </span>
-        </li>
-      </>
-    );
+    return () =>
+      createVNode(
+        'li',
+        {
+          class: [className, { [`${className}-active`]: menuActive.value === index }],
+          'data-menu-index': index,
+          ...(!getCollapsed.value && {
+            style: {
+              paddingLeft: menuIndent.value * depth.value + 'px',
+            },
+          }),
+          onClick: () => onMenuSelect(index, menuInfo.value),
+        },
+        [
+          createVNode('span', { class: `${prefixCls.value}-menu-item--icon` }, ['🙄']),
+          createVNode('span', { class: `${prefixCls.value}-menu-item--label` }, [
+            renderMenuLabel.value(menuInfo.value),
+          ]),
+        ],
+      );
   },
 });

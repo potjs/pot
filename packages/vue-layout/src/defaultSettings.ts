@@ -37,6 +37,10 @@ export interface MenuSelectHandler {
   (index: string, menu: MenuRaw): void;
 }
 
+export interface MenuOpenHandler {
+  (index: string, menu: MenuRaw): void;
+}
+
 export interface LayoutSettings {
   prefixCls: string;
   menuTheme: Theme | undefined;
@@ -46,7 +50,7 @@ export interface LayoutSettings {
   menuKey: string;
   menuActive: string;
   renderMenuLabel: RenderLabelWithMenu;
-  triggerPlacement: TriggerPlacement;
+  trigger: TriggerPlacement;
 }
 
 export const defaultLayoutSettings: LayoutSettings = {
@@ -58,7 +62,7 @@ export const defaultLayoutSettings: LayoutSettings = {
   menuKey: 'key',
   menuActive: '',
   renderMenuLabel: (menu) => menu.label,
-  triggerPlacement: TriggerPlacement.TOP,
+  trigger: TriggerPlacement.TOP,
 };
 
 export const defaultLayoutProps = {
@@ -94,9 +98,9 @@ export const defaultLayoutProps = {
     type: Function as PropType<RenderLabelWithMenu>,
     default: defaultLayoutSettings.renderMenuLabel,
   },
-  triggerPlacement: {
+  trigger: {
     type: String as PropType<TriggerPlacement>,
-    default: defaultLayoutSettings.triggerPlacement,
+    default: defaultLayoutSettings.trigger,
   },
 };
 export type LayoutProps = Partial<ExtractPropTypes<typeof defaultLayoutProps>>;
@@ -107,7 +111,9 @@ export interface LayoutShared {
   isCollapsed: ComputedRef<boolean>;
   isMobile: ComputedRef<boolean>;
   getMenuActivePaths: ComputedRef<string[]>;
+  getMenuOpened: ComputedRef<string[]>;
 
   onMenuSelect: MenuSelectHandler;
+  onMenuOpen: MenuOpenHandler;
   toggleSidebar: () => void;
 }
