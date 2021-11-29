@@ -1,3 +1,30 @@
+## [0.0.2](https://github.com/potjs/pot/compare/vue-layout@0.0.2-beta.0...vue-layout@0.0.2) (2021-11-29)
+
+
+### Bug Fixes
+
+* add menu popover ([94c48b8](https://github.com/potjs/pot/commit/94c48b8a9440e08967863d1b89c7f9a27cc3dd8c))
+* add popper to layout's menu ([e1f5dde](https://github.com/potjs/pot/commit/e1f5dde876dcdd12e310a89714da8366efacd855))
+* add use popper ([7f471a5](https://github.com/potjs/pot/commit/7f471a535a6f424ef4fa6909d849b06e739d34a7))
+* add use popper ([7cf1055](https://github.com/potjs/pot/commit/7cf1055655064823f08220051c81d759ce9021bd))
+* clean global provider ([535817c](https://github.com/potjs/pot/commit/535817c70ecb988a0d9f7c4879be621f9f1cd134))
+* clear layout ([b6c39e4](https://github.com/potjs/pot/commit/b6c39e4f02222dd0ce5451561fe9c05d89882a08))
+* fix menu state ([f39650f](https://github.com/potjs/pot/commit/f39650f65f94b45120d6b8571d0bf12907ed12f6))
+* fix sidebar logo ([65a613c](https://github.com/potjs/pot/commit/65a613c001bc5b4369255643591caea322ff59ab))
+* fix submenu collapse transition ([985c5de](https://github.com/potjs/pot/commit/985c5de8a73795201e280964b89ad30545743306))
+* remove popover on layout ([7a32a38](https://github.com/potjs/pot/commit/7a32a381906d13f2b07d7724f7f98e15991a86fd))
+* small fix ([078b8df](https://github.com/potjs/pot/commit/078b8df4b5abf1eb2eedef444ab88415f1014a6b))
+* small fix ([a7c68e6](https://github.com/potjs/pot/commit/a7c68e62fe6731b60315901541acd0be4cda2ed2))
+* small fix ([1c826dc](https://github.com/potjs/pot/commit/1c826dcf32f7643df5d60b8502103a6ef80254db))
+* upgrade dependencies ([05410b1](https://github.com/potjs/pot/commit/05410b1a594662dedfc9c529e9af5ffadbe5b9bc))
+
+
+### Features
+
+* add popper component ([1d4e255](https://github.com/potjs/pot/commit/1d4e2553c83dc720bce7c74865a449ae4a4d3a25))
+
+
+
 ## [0.0.2-beta.0](https://github.com/potjs/pot/compare/vue-layout@0.0.1-beta.3...vue-layout@0.0.2-beta.0) (2021-11-13)
 
 
