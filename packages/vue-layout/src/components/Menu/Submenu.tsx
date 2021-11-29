@@ -1,10 +1,11 @@
-import type { CSSProperties, PropType, VNode } from 'vue';
-import { computed, createVNode, defineComponent, ref, toRefs, Fragment } from 'vue';
-import { MenuRaw } from '../../types';
+import type { PropType, VNode } from 'vue';
+import { computed, createVNode, defineComponent, toRefs, Fragment, Transition, ref } from 'vue';
+import { MenuRaw } from '../../defaultSettings';
 
 import { MenuItem } from './MenuItem';
-import { useInjectConfig } from '../../hooks';
 import Popper from '@potjs/vue-popper';
+import { useInjectSettings, useInjectShared } from '../../hooks/injection';
+import { useCollapseTransition } from '../../hooks/transition';
 
 export const Submenu = defineComponent({
   name: 'PotSubmenu',
@@ -19,65 +20,68 @@ export const Submenu = defineComponent({
     },
   },
   setup(props) {
-    const { collapsed, isMobile, menuIndent, menuKey, menuActivePaths, renderMenuLabel } =
-      useInjectConfig();
+    const { prefixCls, menuIndent, menuKey, renderMenuLabel } = useInjectSettings();
+    const { isMobile, isCollapsed, getMenuActivePaths, getMenuOpened, onMenuOpen } =
+      useInjectShared();
     const { menuInfo, depth } = toRefs(props);
-    const getCollapsed = computed(() => !isMobile.value && collapsed.value);
+    const getCollapsed = computed(() => !isMobile.value && isCollapsed.value);
 
     const index = menuInfo.value[menuKey.value];
-    const getActive = computed(() => menuActivePaths.value.includes(index));
+    const getActive = computed(() => getMenuActivePaths.value.includes(index));
     // show or hide submenu list
-    const show = ref(getActive.value);
-    const toggle = () => {
-      show.value = !show.value;
-    };
-
-    const getProps = computed(() => {
-      return {
-        depth: depth.value + 1,
-      };
-    });
-
-    const className = computed(() => ({
-      [`pot-menu-submenu`]: true,
-      [`active`]: getActive.value,
-    }));
-
-    const getStyles = computed((): CSSProperties => {
-      return {
-        paddingLeft: menuIndent.value * props.depth + 'px',
-      };
-    });
+    const show = computed(() => getMenuOpened.value.includes(index));
 
     const renderInner = () => {
-      return (
-        <div
-          class={[`pot-menu-submenu-item`, { [`active`]: getActive.value }]}
-          style={getStyles.value}
-          onClick={toggle}
-        >
-          <span class={`pot-menu-item--icon`}>🙄</span>
-          <span class={`pot-menu-item--label`}>{renderMenuLabel.value(menuInfo.value)}</span>
-          <span class={`pot-menu-item--trigger`} />
-        </div>
+      return createVNode(
+        'div',
+        {
+          class: `${prefixCls.value}-submenu-item`,
+          ...(!getCollapsed.value && {
+            style: {
+              paddingLeft: menuIndent.value * depth.value + 'px',
+            },
+            onClick: () => onMenuOpen(index, menuInfo.value),
+          }),
+        },
+        [
+          createVNode('span', { class: `${prefixCls.value}-menu-item--icon` }, ['🙄']),
+          createVNode('span', { class: `${prefixCls.value}-menu-item--label` }, [
+            renderMenuLabel.value(menuInfo.value),
+          ]),
+          createVNode('i', { class: `${prefixCls.value}-submenu-trigger` }),
+        ],
       );
     };
 
     const renderMenu = () => {
+      const getProps = computed(() => {
+        return {
+          depth: depth.value + 1,
+        };
+      });
+
       const children = computed(() => menuInfo.value.children || []);
       const getShow = computed(() => getCollapsed.value || (show.value && !getCollapsed.value));
 
+      const style = ref({});
+      const className = ref('');
       return (
-        <ul class={[`pot-menu`]} v-show={getShow.value}>
-          {children.value.map((item) => {
-            return (
-              <>
-                {!item.children && <MenuItem menuInfo={item} {...getProps.value} />}
-                {item.children && <Submenu menuInfo={item} {...getProps.value} />}
-              </>
-            );
-          })}
-        </ul>
+        <Transition {...useCollapseTransition(style, className)}>
+          <ul
+            v-show={getShow.value}
+            class={[`${prefixCls.value}-menu`, className.value]}
+            style={style.value}
+          >
+            {children.value.map((item) => {
+              return (
+                <>
+                  {!item.children && <MenuItem menuInfo={item} {...getProps.value} />}
+                  {item.children && <Submenu menuInfo={item} {...getProps.value} />}
+                </>
+              );
+            })}
+          </ul>
+        </Transition>
       );
     };
 
@@ -86,7 +90,7 @@ export const Submenu = defineComponent({
         ? createVNode(
             Popper,
             {
-              class: 'pot-menu-popper',
+              class: `${prefixCls.value}-menu-popper`,
               trigger: 'hover',
               placement: 'right-start',
               appendToBody: depth.value === 0,
@@ -99,10 +103,19 @@ export const Submenu = defineComponent({
         : createVNode(Fragment, null, childNodes);
     };
 
-    return () => (
-      <li class={className.value} data-submenu-index={index}>
-        {renderContent([renderInner(), renderMenu()])}
-      </li>
-    );
+    return () =>
+      createVNode(
+        'li',
+        {
+          class: [
+            `${prefixCls.value}-submenu`,
+            {
+              [`${prefixCls.value}-submenu-active`]: getActive.value,
+              [`${prefixCls.value}-submenu-opened`]: show.value,
+            },
+          ],
+        },
+        [renderContent([renderInner(), renderMenu()])],
+      );
   },
 });

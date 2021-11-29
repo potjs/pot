@@ -1,10 +1,10 @@
 import { defineComponent } from 'vue';
-import { useInjectConfig } from '../hooks';
+import { useInjectSettings } from '../hooks/injection';
 
 export default defineComponent({
   name: 'PotLogo',
   setup(props, { slots }) {
-    const { prefixCls } = useInjectConfig();
+    const { prefixCls } = useInjectSettings();
 
     const renderLogo = () => {
       return <div class={`${prefixCls.value}-logo`}>{slots.default?.({})}</div>;

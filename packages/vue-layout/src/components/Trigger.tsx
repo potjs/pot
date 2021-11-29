@@ -1,15 +1,15 @@
 import { computed, defineComponent } from 'vue';
-import { useInjectConfig, useInjectHooks } from '../hooks';
+import { useInjectSettings, useInjectShared } from '../hooks/injection';
 
 export default defineComponent({
   name: 'PotTrigger',
   setup(props, { slots }) {
-    const { prefixCls, collapsed } = useInjectConfig();
-    const { toggleSidebar } = useInjectHooks();
+    const { prefixCls } = useInjectSettings();
+    const { isCollapsed, toggleSidebar } = useInjectShared();
 
     const hamburgerClass = computed(() => ({
       [`${prefixCls.value}-hamburger`]: true,
-      [`active`]: collapsed.value,
+      [`active`]: isCollapsed.value,
     }));
 
     const renderIcon = () => {

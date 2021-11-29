@@ -1,11 +1,11 @@
 import type { PropType } from 'vue';
 import { defineComponent, toRefs, computed } from 'vue';
 
-import type { MenuRaw } from '../types';
+import type { MenuRaw } from '../defaultSettings';
 
 import { MenuItem } from './Menu/MenuItem';
 import { Submenu } from './Menu/Submenu';
-import { useInjectConfig } from '../hooks';
+import { useInjectSettings, useInjectShared } from '../hooks/injection';
 
 export const Menu = defineComponent({
   name: 'PotMenu',
@@ -15,14 +15,14 @@ export const Menu = defineComponent({
       default: () => [],
     },
   },
-  emits: ['click'],
   setup(props) {
     const { options } = toRefs(props);
-    const { collapsed } = useInjectConfig();
+    const { prefixCls } = useInjectSettings();
+    const { isCollapsed } = useInjectShared();
 
     const className = computed(() => ({
-      [`pot-menu`]: true,
-      [`collapsed`]: collapsed.value,
+      [`${prefixCls.value}-menu`]: true,
+      [`${prefixCls.value}-menu-collapsed`]: isCollapsed.value,
     }));
 
     return () => (

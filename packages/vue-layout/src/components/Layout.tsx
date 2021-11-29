@@ -1,5 +1,5 @@
-import type { Plugin, App, ExtractPropTypes, PropType } from 'vue';
-import { computed, ref, defineComponent, reactive } from 'vue';
+import type { Plugin, App } from 'vue';
+import { computed, defineComponent, reactive } from 'vue';
 
 import LayoutContainer from './Container';
 import { FullHeader as LayoutFullHeader, MultipleHeader as LayoutMultipleHeader } from './Header';
@@ -7,116 +7,79 @@ import LayoutSidebar from './Sidebar';
 import LayoutFooter from './Footer';
 import LayoutContent from './Content';
 
-import type { PotConfigProviderProps } from '../hooks';
-import { useProvideConfig, useWindowResizeListener } from '../hooks';
-import { MenuMode, MenuRaw, RenderLabelWithMenu, TriggerPlacement, Theme } from '../types';
 import { extendSlots, treeFindPath } from '../utils';
-
-const labelRenderer: RenderLabelWithMenu = (menu) => menu.label;
-
-export const layoutProps = {
-  prefixCls: {
-    type: String,
-    default: 'pot',
-  },
-  menuTheme: {
-    type: String as PropType<Theme>,
-    default: '',
-  },
-  menuMode: {
-    type: String as PropType<MenuMode>,
-    default: MenuMode.SIDE,
-  },
-  menuData: {
-    type: Array as PropType<MenuRaw[]>,
-    default: () => [],
-  },
-  menuIndent: {
-    type: Number,
-    default: 24,
-  },
-  menuKey: {
-    type: String,
-    default: 'key',
-  },
-  menuActive: {
-    type: String,
-    default: '',
-  },
-  renderMenuLabel: {
-    type: Function as PropType<RenderLabelWithMenu>,
-    default: labelRenderer,
-  },
-  triggerPlacement: {
-    type: String as PropType<TriggerPlacement>,
-    default: TriggerPlacement.TOP,
-  },
-};
-
-export type PotLayoutProps = Partial<ExtractPropTypes<typeof layoutProps>>;
+import type { LayoutSettings, MenuSelectHandler } from '../defaultSettings';
+import { defaultLayoutProps, MenuMode, MenuOpenHandler } from '../defaultSettings';
+import { useProvideSettings, useProvideShared } from '../hooks/injection';
+import useWindowResizeListener from '../hooks/windowResize';
 
 const Layout = defineComponent({
   name: 'PotLayout',
-  props: layoutProps,
-  emits: ['update:menuActive', 'menuSelect'],
-  setup(props, { slots, emit }) {
+  props: defaultLayoutProps,
+  emits: ['menuSelect'],
+  setup(props: LayoutSettings, { slots, emit }) {
     const state = reactive({
-      menuActive: props.menuActive,
-    });
-
-    const activity = computed({
-      get() {
-        return state.menuActive;
-      },
-      set(val: string) {
-        state.menuActive = val;
-        emit('update:menuActive', val);
-      },
-    });
-
-    const configProvider: PotConfigProviderProps = {
-      prefixCls: computed(() => props.prefixCls + '-layout'),
-      menuTheme: computed(() => props.menuTheme),
-      menuMode: computed(() => props.menuMode),
-      menuData: computed(() => props.menuData),
-      menuIndent: computed(() => props.menuIndent),
-      menuKey: computed(() => props.menuKey),
-      menuActive: computed(() => props.menuActive),
-      menuActivePaths: computed(() => {
-        return treeFindPath(
-          props.menuData,
-          (t) => t[props.menuKey] === props.menuActive,
-          props.menuKey,
-        );
-      }),
-      triggerPlacement: computed(() => props.triggerPlacement),
-      collapsed: ref(false),
-      isMobile: ref(false),
-
-      hasSidebar: computed((): boolean => props.menuMode !== MenuMode.TOP),
-      isFullHeader: computed(
-        (): boolean => props.menuMode === MenuMode.MIX || props.menuMode === MenuMode.MIX_SIDE,
+      collapsed: false,
+      mobile: false,
+      menuOpened: new Set<string>(
+        treeFindPath(props.menuData, (t) => t[props.menuKey] === props.menuActive, props.menuKey),
       ),
+    });
 
-      renderMenuLabel: computed(() => props.renderMenuLabel),
-
-      onMenuSelect: (active, ...args: any[]) => {
-        activity.value = active;
-        emit('menuSelect', active, ...args);
-      },
+    const hasSidebar = computed((): boolean => props.menuMode !== MenuMode.TOP);
+    const isFullHeader = computed(
+      (): boolean => props.menuMode === MenuMode.MIX || props.menuMode === MenuMode.MIX_SIDE,
+    );
+    const isCollapsed = computed((): boolean => state.collapsed);
+    const isMobile = computed((): boolean => state.mobile);
+    const getMenuActivePaths = computed(() => {
+      return treeFindPath(
+        props.menuData,
+        (t) => t[props.menuKey] === props.menuActive,
+        props.menuKey,
+      );
+    });
+    const getMenuOpened = computed(() => [...state.menuOpened]);
+    const onMenuSelect: MenuSelectHandler = (index, menu) => {
+      const paths = treeFindPath(props.menuData, (t) => t[props.menuKey] === index, props.menuKey);
+      paths.forEach((p) => {
+        state.menuOpened.add(p);
+      });
+      emit('menuSelect', index, menu);
+    };
+    const onMenuOpen: MenuOpenHandler = (index) => {
+      if (state.menuOpened.has(index)) {
+        state.menuOpened.delete(index);
+      } else {
+        state.menuOpened.add(index);
+      }
+    };
+    const toggleSidebar = () => {
+      state.collapsed = !state.collapsed;
     };
 
     {
-      useProvideConfig(configProvider);
+      useProvideSettings(props);
+      useProvideShared({
+        hasSidebar,
+        isFullHeader,
+        isCollapsed,
+        isMobile,
+        getMenuActivePaths,
+        getMenuOpened,
+        onMenuSelect,
+        onMenuOpen,
+        toggleSidebar,
+      });
 
       useWindowResizeListener(({ width }) => {
         // console.log('#on window resize', width);
-        configProvider.isMobile.value = width - 1 < 992;
+        state.mobile = width - 1 < 992;
       });
     }
 
     function render(slotNames: string[]) {
-      const localSlots = extendSlots(slots, slotNames, configProvider);
+      const localSlots = extendSlots(slots, slotNames, {});
 
       return (BasicComponent: any, requiredSelf = true) => {
         const { default: currentSlot, ...scopeSlots } = localSlots;
@@ -149,7 +112,7 @@ const Layout = defineComponent({
           {
             /* render sidebar */
             // render(['default:sidebar', 'logo', 'trigger'])(LayoutSidebar)
-            configProvider.hasSidebar.value && render(['logo', 'trigger'])(LayoutSidebar, false)
+            hasSidebar.value && render(['logo', 'trigger'])(LayoutSidebar, false)
           }
           <LayoutContainer>
             {
