@@ -1,14 +1,8 @@
-// TODO: it's not done
-.pot-collapse-enter-active {
-  transition: all 0.3s ease-out;
-}
-
-.pot-collapse-leave-active {
-  transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
-}
-
-.pot-collapse-enter-from,
-.pot-collapse-leave-to {
-  transform: translateX(20px);
-  opacity: 0;
+/**
+ * Transition
+ * -----------------------------------
+ *
+ */
+.pot-collapse-transition {
+  transition: 0.2s height ease-in-out, 0.2s padding-top ease-in-out, 0.2s padding-bottom ease-in-out;
 }

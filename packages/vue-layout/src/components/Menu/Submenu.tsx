@@ -1,10 +1,11 @@
 import type { PropType, VNode } from 'vue';
-import { computed, createVNode, defineComponent, toRefs, Fragment, Transition } from 'vue';
+import { computed, createVNode, defineComponent, toRefs, Fragment, Transition, ref } from 'vue';
 import { MenuRaw } from '../../defaultSettings';
 
 import { MenuItem } from './MenuItem';
 import Popper from '@potjs/vue-popper';
 import { useInjectSettings, useInjectShared } from '../../hooks/injection';
+import { useCollapseTransition } from '../../hooks/transition';
 
 export const Submenu = defineComponent({
   name: 'PotSubmenu',
@@ -62,9 +63,15 @@ export const Submenu = defineComponent({
       const children = computed(() => menuInfo.value.children || []);
       const getShow = computed(() => getCollapsed.value || (show.value && !getCollapsed.value));
 
+      const style = ref({});
+      const className = ref('');
       return (
-        <Transition name={'pot-collapse'}>
-          <ul class={[`${prefixCls.value}-menu`]} v-show={getShow.value}>
+        <Transition {...useCollapseTransition(style, className)}>
+          <ul
+            v-show={getShow.value}
+            class={[`${prefixCls.value}-menu`, className.value]}
+            style={style.value}
+          >
             {children.value.map((item) => {
               return (
                 <>
