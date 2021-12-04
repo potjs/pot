@@ -40,6 +40,7 @@ const Layout = defineComponent({
       );
     });
     const getMenuOpened = computed(() => [...state.menuOpened]);
+    const getSlots = (slotNames: string[]) => extendSlots(slots, slotNames);
     const onMenuSelect: MenuSelectHandler = (index, menu) => {
       const paths = treeFindPath(props.menuData, (t) => t[props.menuKey] === index, props.menuKey);
       paths.forEach((p) => {
@@ -67,6 +68,7 @@ const Layout = defineComponent({
         isMobile,
         getMenuActivePaths,
         getMenuOpened,
+        getSlots,
         onMenuSelect,
         onMenuOpen,
         toggleSidebar,

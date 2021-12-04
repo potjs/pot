@@ -1,34 +1,71 @@
+// The prefix to use on all css classes from pot-layout.
 @pot-prefix: pot-layout;
 
+@layout: @{pot-prefix};
+@layout-header: @{layout}-header;
+@layout-footer: @{layout}-footer;
+@layout-sidebar: @{layout}-sidebar;
+@layout-drawer: @{layout}-drawer;
+@layout-logo: @{layout}-logo;
+@layout-trigger: @{layout}-trigger;
+@layout-hamburger: @{layout}-hamburger;
+
+@layout-menu: @{layout}-menu;
+@layout-submenu: @{layout}-submenu;
+
+// transition
+@ease-in-out: cubic-bezier(0.645, 0.045, 0.355, 1);
+
 // layout
-@pot-layout-background-color: #f0f2f5;
+@pot-layout-bg: #f0f2f5;
 
 // header
-@pot-header-background-color: #fff;
+@pot-header-bg: #fff;
 @pot-header-height: 60px;
 @pot-header-z-index: 100;
 
 // footer
-@pot-footer-background-color: transparent;
+@pot-footer-bg: transparent;
 @pot-footer-height: 60px;
 
 // sidebar
-@pot-sidebar-background-color: #001529;
-@pot-sidebar-font-color: #fff;
-@pot-sidebar-width: 210px;
-@pot-sidebar-collapsed-width: 48px;
+@pot-sidebar-bg: #fff;
+@pot-sidebar-color: inherit;
+@pot-sidebar-width: 256px;
+@pot-sidebar-collapsed-width: 62px;
 @pot-sidebar-z-index: 200;
 
 // drawer
 @pot-drawer-z-index: 1000;
-@pot-drawer-mask-background: rgba(0, 0, 0, .4);
+@pot-drawer-mask-bg: rgba(0, 0, 0, .4);
 
 // content
-@pot-content-background-color: transparent;
+@pot-content-bg: transparent;
 
 // logo
 @pot-logo-height: @{pot-header-height};
 @pot-logo-width: @{pot-sidebar-width};
 
-//
-@ease-in-out: cubic-bezier(0.645, 0.045, 0.355, 1);
+// menu
+@pot-menu-item-height: 40px;
+@pot-menu-collapsed-width: @pot-sidebar-collapsed-width;
+@pot-menu-bg: #fff;
+@pot-menu-popup-bg: @pot-menu-bg;
+@pot-menu-popup-width: @pot-sidebar-width;
+@pot-menu-item-font-size: 14px;
+@pot-menu-item-padding-horizontal: 24px;
+@pot-menu-item-padding: 0 @pot-menu-item-padding-horizontal;
+@pot-menu-item-color: fade(#000, 85%);
+@pot-menu-item-active-color: #1890ff;
+@pot-menu-item-active-bg: #e6f7ff;
+@pot-menu-item-highlight-color: #1890ff;
+@pot-menu-item-highlight-bg: inherit;
+@pot-menu-item-active-border-width: 3px;
+@pot-submenu-item-active-color: #1890ff;
+@pot-submenu-item-active-bg: inherit;
+@pot-submenu-item-highlight-color: #1890ff;
+@pot-submenu-item-highlight-bg: inherit;
+@pot-menu-icon-margin-right: 10px;
+@pot-menu-icon-size: @pot-menu-item-font-size;
+@pot-menu-icon-width: @pot-menu-collapsed-width;
+@pot-menu-trigger-width: 10px;

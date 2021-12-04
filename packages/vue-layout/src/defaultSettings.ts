@@ -1,4 +1,4 @@
-import type { ExtractPropTypes, PropType, ComputedRef } from 'vue';
+import type { ExtractPropTypes, PropType, ComputedRef, Slots } from 'vue';
 
 export enum MenuMode {
   // left menu
@@ -49,7 +49,6 @@ export interface LayoutSettings {
   menuIndent: number;
   menuKey: string;
   menuActive: string;
-  renderMenuLabel: RenderLabelWithMenu;
   trigger: TriggerPlacement;
 }
 
@@ -61,7 +60,6 @@ export const defaultLayoutSettings: LayoutSettings = {
   menuIndent: 24,
   menuKey: 'key',
   menuActive: '',
-  renderMenuLabel: (menu) => menu.label,
   trigger: TriggerPlacement.TOP,
 };
 
@@ -94,15 +92,12 @@ export const defaultLayoutProps = {
     type: String,
     default: defaultLayoutSettings.menuActive,
   },
-  renderMenuLabel: {
-    type: Function as PropType<RenderLabelWithMenu>,
-    default: defaultLayoutSettings.renderMenuLabel,
-  },
   trigger: {
     type: String as PropType<TriggerPlacement>,
     default: defaultLayoutSettings.trigger,
   },
 };
+
 export type LayoutProps = Partial<ExtractPropTypes<typeof defaultLayoutProps>>;
 
 export interface LayoutShared {
@@ -112,6 +107,7 @@ export interface LayoutShared {
   isMobile: ComputedRef<boolean>;
   getMenuActivePaths: ComputedRef<string[]>;
   getMenuOpened: ComputedRef<string[]>;
+  getSlots: (slotNames: string[]) => Slots;
 
   onMenuSelect: MenuSelectHandler;
   onMenuOpen: MenuOpenHandler;

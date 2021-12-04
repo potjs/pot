@@ -37,12 +37,12 @@ export function treeFindPath<T extends Record<string, any>>(
   return [];
 }
 
-export function extendSlots(slots: Slots, extendKeys: string[] = [], data?: any) {
+export function extendSlots(slots: Slots, extendKeys: string[] = [], data?: any): Slots {
   return extendKeys.reduce((obj: Record<string, any>, name: string) => {
     // from <alias> to <key>
     const [key, alias = key] = name.split(':');
     if (slots[alias]) {
-      obj[key] = () => slots[alias]?.(data);
+      obj[key] = (args: any) => slots[alias]?.(Object.assign({}, data, args));
     }
     return obj;
   }, {});

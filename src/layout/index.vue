@@ -5,7 +5,6 @@
     :menu-data="permissionRoutes"
     :menu-active="$route.path"
     menu-key="path"
-    :render-menu-label="renderMenuLabel"
     @menu-select="handleMenuClick"
   >
     <template #default><router-view /></template>
@@ -26,6 +25,9 @@
     <template #footer><LayoutFooter /></template>
 
     <template #logo>Logo Slot</template>
+
+    <template #renderMenuIcon><RobotOutlined /></template>
+    <template #renderMenuLabel="{ meta }">{{ meta.title }}</template>
     <!--<template #trigger>Trigger</template>-->
   </PotLayout>
 </template>
@@ -34,7 +36,7 @@
   import { computed, ref } from 'vue';
   import { PotLayout } from '@potjs/vue-layout';
   import { LayoutHeader, LayoutFooter } from './components';
-  import { BellOutlined, FullscreenOutlined } from '@ant-design/icons-vue';
+  import { BellOutlined, FullscreenOutlined, RobotOutlined } from '@ant-design/icons-vue';
   import { RadioGroup, RadioButton } from 'ant-design-vue';
   import { useStore } from 'vuex';
   import { useRouter } from 'vue-router';
@@ -47,6 +49,7 @@
       LayoutFooter,
       BellOutlined,
       FullscreenOutlined,
+      RobotOutlined,
       RadioGroup,
       RadioButton,
     },
@@ -59,12 +62,10 @@
       const handleMenuClick = (index) => {
         router.push(index);
       };
-      const renderMenuLabel = (item) => item.meta.title;
 
       return {
         mode,
         permissionRoutes,
-        renderMenuLabel,
         handleMenuClick,
       };
     },
