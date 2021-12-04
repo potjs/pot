@@ -12,13 +12,14 @@ export const MenuItem = defineComponent({
     },
     depth: {
       type: Number,
-      default: 0,
+      default: 1,
     },
   },
   setup(props) {
-    const { prefixCls, menuIndent, menuKey, menuActive, renderMenuLabel } = useInjectSettings();
-    const { onMenuSelect, isMobile, isCollapsed } = useInjectShared();
+    const { prefixCls, menuIndent, menuKey, menuActive } = useInjectSettings();
+    const { onMenuSelect, isMobile, isCollapsed, getSlots } = useInjectShared();
     const { menuInfo, depth } = toRefs(props);
+    const slots = getSlots(['renderMenuIcon', 'renderMenuLabel']);
 
     const index = menuInfo.value[menuKey.value];
     const getCollapsed = computed(() => !isMobile.value && isCollapsed.value);
@@ -39,9 +40,12 @@ export const MenuItem = defineComponent({
           onClick: () => onMenuSelect(index, menuInfo.value),
         },
         [
-          createVNode('span', { class: `${prefixCls.value}-menu-item--icon` }, ['🙄']),
-          createVNode('span', { class: `${prefixCls.value}-menu-item--label` }, [
-            renderMenuLabel.value(menuInfo.value),
+          slots.renderMenuIcon &&
+            createVNode('span', { class: `${prefixCls.value}-menu-icon` }, [
+              slots.renderMenuIcon(menuInfo.value),
+            ]),
+          createVNode('span', { class: `${prefixCls.value}-menu-label` }, [
+            slots.renderMenuLabel?.(menuInfo.value),
           ]),
         ],
       );

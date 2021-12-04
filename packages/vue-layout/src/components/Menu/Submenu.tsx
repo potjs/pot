@@ -16,15 +16,16 @@ export const Submenu = defineComponent({
     },
     depth: {
       type: Number,
-      default: 0,
+      default: 1,
     },
   },
   setup(props) {
-    const { prefixCls, menuIndent, menuKey, renderMenuLabel } = useInjectSettings();
-    const { isMobile, isCollapsed, getMenuActivePaths, getMenuOpened, onMenuOpen } =
+    const { prefixCls, menuIndent, menuKey } = useInjectSettings();
+    const { isMobile, isCollapsed, getMenuActivePaths, getMenuOpened, onMenuOpen, getSlots } =
       useInjectShared();
     const { menuInfo, depth } = toRefs(props);
     const getCollapsed = computed(() => !isMobile.value && isCollapsed.value);
+    const slots = getSlots(['renderMenuIcon', 'renderMenuLabel']);
 
     const index = menuInfo.value[menuKey.value];
     const getActive = computed(() => getMenuActivePaths.value.includes(index));
@@ -44,9 +45,12 @@ export const Submenu = defineComponent({
           }),
         },
         [
-          createVNode('span', { class: `${prefixCls.value}-menu-item--icon` }, ['🙄']),
-          createVNode('span', { class: `${prefixCls.value}-menu-item--label` }, [
-            renderMenuLabel.value(menuInfo.value),
+          slots.renderMenuIcon &&
+            createVNode('span', { class: `${prefixCls.value}-menu-icon` }, [
+              slots.renderMenuIcon(menuInfo.value),
+            ]),
+          createVNode('span', { class: `${prefixCls.value}-menu-label` }, [
+            slots.renderMenuLabel?.(menuInfo.value),
           ]),
           createVNode('i', { class: `${prefixCls.value}-submenu-trigger` }),
         ],
@@ -93,7 +97,8 @@ export const Submenu = defineComponent({
               class: `${prefixCls.value}-menu-popper`,
               trigger: 'hover',
               placement: 'right-start',
-              appendToBody: depth.value === 0,
+              appendToBody: depth.value === 1,
+              transition: 'pot-fade-in-linear',
             },
             {
               default: () => childNodes[0],

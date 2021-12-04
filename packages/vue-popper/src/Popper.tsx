@@ -49,7 +49,7 @@ export default defineComponent({
           })}
 
         <Teleport to={'body'} disabled={!props.appendToBody}>
-          <Transition name={'fade'} {...transitionEvents}>
+          <Transition name={props.transition} {...transitionEvents}>
             <div
               ref={popperRef}
               aria-hidden={!visibility.value}

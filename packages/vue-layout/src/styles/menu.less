@@ -1,0 +1,166 @@
+/**
+ * Menu styles
+ * -----------------------------------
+ * Menu & Submenu & MenuItem
+ */
+.@{layout-menu} {
+  position: relative;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  color: inherit;
+  background: @pot-menu-bg;
+  text-align: left;
+  list-style: none;
+  outline: none;
+  user-select: none;
+  transition: all .2s @ease-in-out;
+
+  &-item, .@{layout-submenu}-item {
+    position: relative;
+    margin: 0;
+    padding: @pot-menu-item-padding;
+    height: @pot-menu-item-height;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    font-size: @pot-menu-item-font-size;
+    cursor: pointer;
+    overflow: hidden;
+  }
+
+  &-icon {
+    font-size: @pot-menu-icon-size;
+  }
+
+  &-label {
+    flex: 1;
+  }
+
+  &-icon + &-label {
+    margin-left: @pot-menu-icon-margin-right;
+  }
+
+  &-popper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: @pot-menu-popup-width;
+    background: @pot-menu-popup-bg;
+    box-shadow: 0 2px 12px #0000001a;
+  }
+
+  // 折叠
+  &-collapsed {
+    .@{layout-menu}, .@{layout-submenu} {
+      &-item {
+        padding: 0;
+      }
+
+      &-icon {
+        width: @pot-menu-icon-width;
+        min-width: @pot-menu-icon-width;
+        text-align: center;
+      }
+
+      &-label {
+        display: none;
+      }
+
+      &-trigger {
+        display: none;
+      }
+    }
+  }
+
+  // 未折叠
+  &:not(&-collapsed) {
+    .@{layout-menu}-item, .@{layout-submenu}-item {
+      padding-right: @pot-menu-item-padding-horizontal + @pot-menu-trigger-width;
+    }
+  }
+}
+
+// trigger
+.@{layout-submenu} {
+  position: relative;
+
+  &-trigger {
+    position: absolute;
+    top: 50%;
+    right: 16px;
+    width: @pot-menu-trigger-width;
+    color: inherit;
+    transform: translateY(-50%);
+    transition: transform .3s @ease-in-out;
+
+    &::before,
+    &::after {
+      position: absolute;
+      content: '';
+      width: 6px;
+      height: 1.5px;
+      background-color: currentColor;
+      border-radius: 2px;
+      transition: background .3s @ease-in-out, transform .3s @ease-in-out, top .3s @ease-in-out, color .3s @ease-in-out;
+    }
+    &::before {
+      //transform: rotate(-45deg) translateY(2.5px);
+      //transform: rotate(45deg) translateY(-2.5px);
+      transform: rotate(-45deg) translate(2.5px);
+    }
+    &::after {
+      //transform: rotate(45deg) translateY(-2.5px);
+      //transform: rotate(-45deg) translateY(2.5px);
+      transform: rotate(45deg) translate(-2.5px);
+    }
+  }
+
+  &-opened {
+    >.@{layout-submenu}-item >.@{layout-submenu}-trigger {
+      transform: translateY(-2px);
+      &::before {
+        transform: rotate(45deg) translate(2.5px);
+      }
+      &::after {
+        transform: rotate(-45deg) translate(-2.5px);
+      }
+    }
+  }
+}
+
+// theme
+.@{layout-menu} {
+  &-item {
+    color: @pot-menu-item-color;
+    border-right: @pot-menu-item-active-border-width transparent solid;
+
+    &:not(&-active):hover, &:not(&-active):focus {
+      color: @pot-menu-item-highlight-color;
+      background: @pot-menu-item-highlight-bg;
+    }
+
+    &-active {
+      color: @pot-menu-item-active-color;
+      background: @pot-menu-item-active-bg;
+      border-right-color: @pot-menu-item-active-color;
+    }
+  }
+}
+
+.@{layout-submenu} {
+  &-item {
+    color: @pot-menu-item-color;
+
+    &:hover, &:focus {
+      color: @pot-submenu-item-highlight-color;
+      background: @pot-submenu-item-highlight-bg;
+    }
+  }
+
+  &-active > &-item {
+    color: @pot-submenu-item-active-color;
+    background: @pot-submenu-item-active-bg;
+  }
+}

@@ -6,3 +6,12 @@
 .pot-collapse-transition {
   transition: 0.2s height ease-in-out, 0.2s padding-top ease-in-out, 0.2s padding-bottom ease-in-out;
 }
+
+.pot-fade-in-linear-enter-active,
+.pot-fade-in-linear-leave-active {
+  transition: 0.2s opacity ease-in-out;
+}
+.pot-fade-in-linear-enter-from,
+.pot-fade-in-linear-leave-to {
+  opacity: 0;
+}
