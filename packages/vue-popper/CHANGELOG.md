@@ -1,3 +1,12 @@
+## [0.0.3](https://github.com/potjs/pot/compare/vue-popper@0.0.2...vue-popper@0.0.3) (2021-12-04)
+
+
+### Bug Fixes
+
+* 优化菜单样式 ([09260c0](https://github.com/potjs/pot/commit/09260c0f16404a8a812734d48ab9d89f0bc80cd8))
+
+
+
 ## [0.0.2](https://github.com/potjs/pot/compare/vue-popper@0.0.1...vue-popper@0.0.2) (2021-11-21)
 
 
