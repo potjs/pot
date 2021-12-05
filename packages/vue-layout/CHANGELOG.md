@@ -1,3 +1,12 @@
+## [0.0.4](https://github.com/potjs/pot/compare/vue-layout@0.0.3...vue-layout@0.0.4) (2021-12-05)
+
+
+### Features
+
+* add horizontal menu on header ([3fcb838](https://github.com/potjs/pot/commit/3fcb838f08301141e4a1d022c7861a4704a1bbeb))
+
+
+
 ## [0.0.3](https://github.com/potjs/pot/compare/vue-layout@0.0.2...vue-layout@0.0.3) (2021-12-04)
 
 
