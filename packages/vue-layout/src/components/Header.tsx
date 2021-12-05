@@ -1,68 +1,79 @@
-import { defineComponent, unref } from 'vue';
+import { defineComponent, unref, createVNode, Fragment } from 'vue';
 import LayoutLogo from './Logo';
 import LayoutTrigger from './Trigger';
 import { TriggerPlacement } from '../defaultSettings';
 import { extendSlots } from '../utils';
 import { useInjectSettings, useInjectShared } from '../hooks/injection';
+import { Menu } from './Menu';
 
 const Header = defineComponent({
   name: 'PotHeader',
-  setup(props, { slots }) {
-    const { prefixCls, trigger } = useInjectSettings();
-    const { hasSidebar, isFullHeader } = useInjectShared();
+  setup() {
+    const { prefixCls, trigger, menuData } = useInjectSettings();
+    const { hasSidebar, isFullHeader, isMenuInHeader, isMobile, getSlots } = useInjectShared();
 
-    const renderLogo = () => {
-      return (
-        <>
-          {slots.logo && (
-            <LayoutLogo>
-              {{
-                default: () => slots.logo?.({}),
-              }}
-            </LayoutLogo>
-          )}
-        </>
-      );
+    const slots = getSlots(['default:header', 'logo', 'action', 'trigger']);
+
+    const renderContent = () => {
+      if (slots.default) {
+        return createVNode(Fragment, null, [slots.default?.({})]);
+      }
+      // show menu with PC
+      if (isMenuInHeader.value && !isMobile.value) {
+        return createVNode(Menu, { options: menuData.value, horizontal: true });
+      }
+      return null;
     };
 
-    return () => (
-      <header class={`${prefixCls.value}-header`}>
-        {
-          <div class={`${prefixCls.value}-header--left`}>
-            {unref(isFullHeader) && renderLogo()}
-            {unref(hasSidebar) && TriggerPlacement.TOP === trigger.value && (
-              <LayoutTrigger>{{ ...extendSlots(slots, ['default:trigger']) }}</LayoutTrigger>
-            )}
-          </div>
-        }
-        {slots.default && (
-          <div class={`${prefixCls.value}-header--wrapper`}>{slots.default?.({})}</div>
-        )}
-        {slots.action && (
-          <div class={`${prefixCls.value}-header--action`}>{slots.action?.({})}</div>
-        )}
-      </header>
-    );
+    const renderTrigger = () => {
+      // show trigger with mobile or has sidebar
+      if (!(hasSidebar.value || isMobile.value)) {
+        return null;
+      }
+      if (TriggerPlacement.TOP !== trigger.value) {
+        return null;
+      }
+      return createVNode(LayoutTrigger, null, { ...extendSlots(slots, ['default:trigger']) });
+    };
+
+    const renderLogo = () => {
+      // show logo with full header and mobile
+      if (!(isFullHeader.value || isMenuInHeader.value || isMobile.value)) {
+        return null;
+      }
+      return createVNode(LayoutLogo, { collapsed: isMobile.value });
+    };
+
+    return () =>
+      createVNode('header', { class: `${prefixCls.value}-header` }, [
+        createVNode('div', { class: `${prefixCls.value}-header--left` }, [
+          renderLogo(),
+          renderTrigger(),
+        ]),
+        createVNode('div', { class: `${prefixCls.value}-header--wrapper` }, [renderContent()]),
+        slots.action &&
+          createVNode('div', { class: `${prefixCls.value}-header--action` }, [slots.action?.({})]),
+      ]);
   },
 });
 
 const FullHeader = defineComponent({
   name: 'PotFullHeader',
-  setup(props, { slots }) {
+  setup() {
     const { isFullHeader } = useInjectShared();
-    return () => <>{unref(isFullHeader) && <Header>{{ ...slots }}</Header>}</>;
+    return () => <>{unref(isFullHeader) && <Header />}</>;
   },
 });
 
 const MultipleHeader = defineComponent({
   name: 'PotMultipleHeader',
-  setup(props, { slots }) {
+  setup() {
     const { prefixCls } = useInjectSettings();
     const { isFullHeader } = useInjectShared();
     return () => (
       <>
         <div class={`${prefixCls.value}-header--placeholder`} />
-        {!unref(isFullHeader) && <Header>{{ ...slots }}</Header>}
+        {!unref(isFullHeader) && <Header />}
       </>
     );
   },

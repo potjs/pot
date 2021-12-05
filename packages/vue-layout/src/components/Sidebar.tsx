@@ -1,4 +1,4 @@
-import { defineComponent, unref, computed, CSSProperties } from 'vue';
+import { defineComponent, unref, createVNode, Fragment } from 'vue';
 import LayoutLogo from './Logo';
 import LayoutTrigger from './Trigger';
 import { TriggerPlacement } from '../defaultSettings';
@@ -9,80 +9,97 @@ import { useInjectSettings, useInjectShared } from '../hooks/injection';
 export default defineComponent({
   name: 'PotSidebar',
   emits: ['menu-select'],
-  setup(props, { slots }) {
+  setup() {
     const { prefixCls, trigger, menuData } = useInjectSettings();
-    const { isCollapsed, isMobile, hasSidebar, isFullHeader, toggleSidebar } = useInjectShared();
+    const { isCollapsed, isMobile, hasSidebar, isFullHeader, getSlots, toggleSidebar } =
+      useInjectShared();
 
-    const renderLogo = () => {
-      return (
-        <>
-          {slots.logo && (
-            <LayoutLogo>
-              {{
-                default: () => slots.logo?.({}),
-              }}
-            </LayoutLogo>
-          )}
-        </>
-      );
-    };
+    const slots = getSlots(['default:sidebar', 'trigger']);
 
-    const renderMenu = () => {
+    const renderContent = () => {
       return <>{menuData.value && <Menu options={menuData.value} />}</>;
     };
 
-    const renderSidebar = () => {
-      const sidebarClassName = computed(() => ({
-        [`${prefixCls.value}-sidebar`]: true,
-        [`${prefixCls.value}-sidebar--mix`]: isFullHeader.value,
-        [`collapsed`]: isCollapsed.value,
-      }));
-      const placeholderClassName = computed(() => ({
-        [`${prefixCls.value}-sidebar--placeholder`]: true,
-        [`collapsed`]: isCollapsed.value,
-      }));
+    const renderTrigger = () => {
+      if (TriggerPlacement.BOTTOM !== trigger.value) {
+        return null;
+      }
+      return createVNode(LayoutTrigger, null, { ...extendSlots(slots, ['default:trigger']) });
+    };
 
-      return (
-        <>
-          <aside class={placeholderClassName.value} />
-          <aside class={sidebarClassName.value}>
-            {!unref(isFullHeader) && renderLogo()}
-            {/*{slots.default && (*/}
-            {/*  <div class={`${prefixCls.value}-sidebar--wrapper`}>{slots.default?.({})}</div>*/}
-            {/*)}*/}
-            <div class={`${prefixCls.value}-sidebar--wrapper`}>{renderMenu()}</div>
-            {unref(hasSidebar) && TriggerPlacement.BOTTOM === trigger.value && (
-              <LayoutTrigger>{{ ...extendSlots(slots, ['default:trigger']) }}</LayoutTrigger>
-            )}
-          </aside>
-        </>
-      );
+    const renderLogo = () => {
+      // show logo with full sidebar and mobile
+      if (!(!isFullHeader.value || isMobile.value)) {
+        return null;
+      }
+      return createVNode(LayoutLogo, { collapsed: isCollapsed.value });
+    };
+
+    const renderSidebar = () => {
+      if (!hasSidebar.value) {
+        return null;
+      }
+
+      return createVNode(Fragment, null, [
+        createVNode('aside', {
+          class: [`${prefixCls.value}-sidebar--placeholder`, { collapsed: isCollapsed.value }],
+        }),
+        createVNode(
+          'aside',
+          {
+            class: [
+              `${prefixCls.value}-sidebar`,
+              {
+                collapsed: isCollapsed.value,
+                [`${prefixCls.value}-sidebar--mix`]: isFullHeader.value,
+              },
+            ],
+          },
+          [
+            renderLogo(),
+            createVNode('div', { class: `${prefixCls.value}-sidebar--wrapper` }, [renderContent()]),
+            renderTrigger(),
+          ],
+        ),
+      ]);
     };
 
     const renderMobileSidebar = () => {
-      const className = computed(() => ({
-        [`${prefixCls.value}-drawer`]: true,
-        [`${prefixCls.value}-drawer--open`]: !isCollapsed.value,
-      }));
+      if (!menuData.value) {
+        return null;
+      }
 
-      const getStyles = computed(
-        (): CSSProperties => ({
-          ...(isCollapsed.value && {
-            width: '0',
+      return createVNode(
+        'div',
+        {
+          class: [
+            `${prefixCls.value}-drawer`,
+            { [`${prefixCls.value}-drawer--open`]: !isCollapsed.value },
+          ],
+        },
+        [
+          createVNode('aside', {
+            class: `${prefixCls.value}-drawer--mask`,
+            onClick: toggleSidebar,
           }),
-        }),
-      );
-      return (
-        <div class={className.value}>
-          <aside class={`${prefixCls.value}-drawer--mask`} onClick={toggleSidebar} />
-          <aside class={`${prefixCls.value}-sidebar`} style={getStyles.value}>
-            {renderLogo()}
-            {/*{slots.default && (*/}
-            {/*  <div class={`${prefixCls.value}-sidebar--wrapper`}>{slots.default?.({})}</div>*/}
-            {/*)}*/}
-            <div class={`${prefixCls.value}-sidebar--wrapper`}>{renderMenu()}</div>
-          </aside>
-        </div>
+          createVNode(
+            'aside',
+            {
+              class: `${prefixCls.value}-sidebar`,
+              ...(isCollapsed.value && {
+                style: {
+                  transform: 'translateX(-100%)',
+                },
+              }),
+            },
+            [
+              renderLogo(),
+              createVNode('div', { class: `${prefixCls.value}-sidebar--wrapper` }, [
+                renderContent(),
+              ]),
+            ],
+          ),
+        ],
       );
     };
 

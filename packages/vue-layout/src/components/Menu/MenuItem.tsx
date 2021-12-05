@@ -1,5 +1,5 @@
 import type { PropType } from 'vue';
-import { computed, createVNode, defineComponent, toRefs } from 'vue';
+import { createVNode, defineComponent, toRefs, computed } from 'vue';
 import { MenuRaw } from '../../defaultSettings';
 import { useInjectSettings, useInjectShared } from '../../hooks/injection';
 
@@ -17,22 +17,23 @@ export const MenuItem = defineComponent({
   },
   setup(props) {
     const { prefixCls, menuIndent, menuKey, menuActive } = useInjectSettings();
-    const { onMenuSelect, isMobile, isCollapsed, getSlots } = useInjectShared();
+    const { onMenuSelect, isMenuInHeader, isCollapsed, getSlots } = useInjectShared();
     const { menuInfo, depth } = toRefs(props);
     const slots = getSlots(['renderMenuIcon', 'renderMenuLabel']);
+    const hasMenuIndent = computed(() => !isMenuInHeader.value && !isCollapsed.value);
 
     const index = menuInfo.value[menuKey.value];
-    const getCollapsed = computed(() => !isMobile.value && isCollapsed.value);
-
-    const className = `${prefixCls.value}-menu-item`;
 
     return () =>
       createVNode(
         'li',
         {
-          class: [className, { [`${className}-active`]: menuActive.value === index }],
+          class: [
+            `${prefixCls.value}-menu-item`,
+            { [`${prefixCls.value}-menu-item-active`]: menuActive.value === index },
+          ],
           'data-menu-index': index,
-          ...(!getCollapsed.value && {
+          ...(hasMenuIndent.value && {
             style: {
               paddingLeft: menuIndent.value * depth.value + 'px',
             },

@@ -9,13 +9,13 @@
   >
     <template #default><router-view /></template>
 
-    <template #header><LayoutHeader /></template>
+    <!--<template #header><LayoutHeader /></template>-->
 
     <template #action>
       <RadioGroup v-model:value="mode" button-style="solid">
         <RadioButton value="side">Side</RadioButton>
         <RadioButton value="mix-side">MixSide</RadioButton>
-        <RadioButton value="mix">Mix</RadioButton>
+        <!--<RadioButton value="mix">Mix</RadioButton>-->
         <RadioButton value="top">Top</RadioButton>
       </RadioGroup>
       <BellOutlined :style="{ fontSize: '16px', padding: '8px' }" />

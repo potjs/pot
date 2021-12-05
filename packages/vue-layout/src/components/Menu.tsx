@@ -1,5 +1,5 @@
 import type { PropType } from 'vue';
-import { defineComponent, toRefs, computed } from 'vue';
+import { defineComponent, toRefs, createVNode, Fragment } from 'vue';
 
 import type { MenuRaw } from '../defaultSettings';
 
@@ -14,28 +14,34 @@ export const Menu = defineComponent({
       type: Array as PropType<MenuRaw[]>,
       default: () => [],
     },
+    horizontal: {
+      type: Boolean,
+      default: false,
+    },
   },
   setup(props) {
     const { options } = toRefs(props);
     const { prefixCls } = useInjectSettings();
     const { isCollapsed } = useInjectShared();
 
-    const className = computed(() => ({
-      [`${prefixCls.value}-menu`]: true,
-      [`${prefixCls.value}-menu-collapsed`]: isCollapsed.value,
-    }));
-
-    return () => (
-      <ul class={className.value}>
-        {options.value.map((item) => {
-          return (
-            <>
-              {!item.children && <MenuItem menuInfo={item} />}
-              {item.children && <Submenu menuInfo={item} />}
-            </>
-          );
-        })}
-      </ul>
-    );
+    return () =>
+      createVNode(
+        'ul',
+        {
+          class: [
+            `${prefixCls.value}-menu`,
+            {
+              [`${prefixCls.value}-menu-horizontal`]: props.horizontal,
+              [`${prefixCls.value}-menu-collapsed`]: isCollapsed.value,
+            },
+          ],
+        },
+        options.value.map((item) =>
+          createVNode(Fragment, null, [
+            !item.children && createVNode(MenuItem, { menuInfo: item }),
+            item.children && createVNode(Submenu, { menuInfo: item }),
+          ]),
+        ),
+      );
   },
 });

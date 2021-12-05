@@ -7,6 +7,8 @@
         :placement="placements[i % placements.length]"
         :append-to-body="true"
         :show-arrow="'demo-arrow'"
+        :show-after="200"
+        transition="fade"
       >
         <Button type="primary" style="margin-bottom: 20px; width: 120px">
           {{ placements[i % placements.length] }}
@@ -83,5 +85,14 @@
     visibility: visible;
     content: '';
     transform: rotate(45deg);
+  }
+
+  .fade-enter-active,
+  .fade-leave-active {
+    transition: opacity 0.2s ease;
+  }
+  .fade-enter-from,
+  .fade-leave-to {
+    opacity: 0;
   }
 </style>
