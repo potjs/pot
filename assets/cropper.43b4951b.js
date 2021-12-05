@@ -1,0 +1,1 @@
+import{_ as r}from"./index.c72f2ba4.js";import{o as e,z as o}from"./vendor.51646b91.js";const c={};function t(n,p,s,a,_,f){return e(),o("div",null,"cropper")}var l=r(c,[["render",t]]);export{l as default};
