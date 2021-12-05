@@ -32,6 +32,7 @@
 
   &-icon {
     font-size: @pot-menu-icon-size;
+    line-height: 1;
   }
 
   &-label {
@@ -51,7 +52,7 @@
     box-shadow: 0 2px 12px #0000001a;
   }
 
-  // 折叠
+  // collapsed
   &-collapsed {
     .@{layout-menu}, .@{layout-submenu} {
       &-item {
@@ -74,10 +75,66 @@
     }
   }
 
-  // 未折叠
-  &:not(&-collapsed) {
+  // not collapsed
+  &:not(&-collapsed):not(&-horizontal) {
     .@{layout-menu}-item, .@{layout-submenu}-item {
       padding-right: @pot-menu-item-padding-horizontal + @pot-menu-trigger-width;
+    }
+  }
+
+  &-horizontal {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: @pot-menu-horizontal-align;
+    height: 100%;
+
+    .@{layout-menu}, .@{layout-submenu} {
+      &-item {
+        height: 100%;
+      }
+      &-content {
+        height: 100%;
+        display: flex;
+        align-items: center;
+
+        i[class$="-trigger"] {
+          display: none;
+        }
+      }
+    }
+  }
+
+  // theme
+  &-item {
+    color: @pot-menu-item-color;
+    border-right: @pot-menu-item-active-border-width transparent solid;
+
+    &:not(&-active):hover, &:not(&-active):focus {
+      color: @pot-menu-item-highlight-color;
+      background: @pot-menu-item-highlight-bg;
+    }
+
+    &-active {
+      color: @pot-menu-item-active-color;
+      background: @pot-menu-item-active-bg;
+      border-right-color: @pot-menu-item-active-color;
+    }
+  }
+
+  .@{layout-submenu} {
+    &-item {
+      color: @pot-menu-item-color;
+
+      &:hover, &:focus {
+        color: @pot-submenu-item-highlight-color;
+        background: @pot-submenu-item-highlight-bg;
+      }
+    }
+
+    &-active > .@{layout-submenu}-item {
+      color: @pot-submenu-item-active-color;
+      background: @pot-submenu-item-active-bg;
     }
   }
 }
@@ -127,40 +184,5 @@
         transform: rotate(-45deg) translate(-2.5px);
       }
     }
-  }
-}
-
-// theme
-.@{layout-menu} {
-  &-item {
-    color: @pot-menu-item-color;
-    border-right: @pot-menu-item-active-border-width transparent solid;
-
-    &:not(&-active):hover, &:not(&-active):focus {
-      color: @pot-menu-item-highlight-color;
-      background: @pot-menu-item-highlight-bg;
-    }
-
-    &-active {
-      color: @pot-menu-item-active-color;
-      background: @pot-menu-item-active-bg;
-      border-right-color: @pot-menu-item-active-color;
-    }
-  }
-}
-
-.@{layout-submenu} {
-  &-item {
-    color: @pot-menu-item-color;
-
-    &:hover, &:focus {
-      color: @pot-submenu-item-highlight-color;
-      background: @pot-submenu-item-highlight-bg;
-    }
-  }
-
-  &-active > &-item {
-    color: @pot-submenu-item-active-color;
-    background: @pot-submenu-item-active-bg;
   }
 }

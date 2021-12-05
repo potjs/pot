@@ -7,11 +7,12 @@
   transition: 0.2s height ease-in-out, 0.2s padding-top ease-in-out, 0.2s padding-bottom ease-in-out;
 }
 
-.pot-fade-in-linear-enter-active,
-.pot-fade-in-linear-leave-active {
+.pot-fade-enter-active,
+.pot-fade-leave-active {
   transition: 0.2s opacity ease-in-out;
+  //transition: opacity 0.2s ease;
 }
-.pot-fade-in-linear-enter-from,
-.pot-fade-in-linear-leave-to {
+.pot-fade-enter-from,
+.pot-fade-leave-to {
   opacity: 0;
 }

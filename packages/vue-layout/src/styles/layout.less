@@ -67,10 +67,6 @@
       padding: 0 10px;
     }
 
-    .@{layout-logo} {
-      width: @pot-logo-width;
-    }
-
     .@{layout-trigger} {
       padding: 0 10px;
     }
@@ -165,7 +161,6 @@
     left: 0;
     width: 0;
     height: 100%;
-    //transition: transform .3s cubic-bezier(.7,.3,.1,1),height 0s ease .3s,width 0s ease .3s;
 
     // layout-drawer--mask
     &--mask {
@@ -173,15 +168,18 @@
       top: 0;
       left: 0;
       width: 100%;
-      height: 100%;
+      height: 0;
+      opacity: 0;
       background: @pot-drawer-mask-bg;
+      transition: opacity .3s cubic-bezier(.7,.3,.1,1);
     }
 
     &.@{layout-drawer}--open {
       width: 100%;
 
       .@{layout-drawer}--mask {
-
+        height: 100%;
+        opacity: 1;
       }
     }
   }
@@ -193,9 +191,13 @@
     align-items: center;
     justify-content: center;
     height: @pot-logo-height;
-    width: 100%;
+    width: @pot-logo-width;
 
     transition: all .2s linear;
+
+    &-collapsed {
+      width: @pot-logo-collapsed-width;
+    }
   }
 
   // layout-content

@@ -100,8 +100,11 @@ export const defaultLayoutProps = {
 
 export type LayoutProps = Partial<ExtractPropTypes<typeof defaultLayoutProps>>;
 
+export type EmitType = 'menuSelect' | 'update:collapsed';
+
 export interface LayoutShared {
   hasSidebar: ComputedRef<boolean>;
+  isMenuInHeader: ComputedRef<boolean>;
   isFullHeader: ComputedRef<boolean>;
   isCollapsed: ComputedRef<boolean>;
   isMobile: ComputedRef<boolean>;

@@ -21,29 +21,31 @@ export const Submenu = defineComponent({
   },
   setup(props) {
     const { prefixCls, menuIndent, menuKey } = useInjectSettings();
-    const { isMobile, isCollapsed, getMenuActivePaths, getMenuOpened, onMenuOpen, getSlots } =
-      useInjectShared();
+    const {
+      isMobile,
+      isCollapsed,
+      isMenuInHeader,
+      getMenuActivePaths,
+      getMenuOpened,
+      onMenuOpen,
+      getSlots,
+    } = useInjectShared();
     const { menuInfo, depth } = toRefs(props);
-    const getCollapsed = computed(() => !isMobile.value && isCollapsed.value);
     const slots = getSlots(['renderMenuIcon', 'renderMenuLabel']);
+    const getCollapsed = computed(() => !isMobile.value && isCollapsed.value);
+    const hasMenuIndent = computed(() => !isMenuInHeader.value && !isCollapsed.value);
+    const hasCollapseMotion = computed(() => !isMenuInHeader.value && !isCollapsed.value);
+    const firstNode = computed(() => depth.value === 1);
 
     const index = menuInfo.value[menuKey.value];
     const getActive = computed(() => getMenuActivePaths.value.includes(index));
     // show or hide submenu list
     const show = computed(() => getMenuOpened.value.includes(index));
 
-    const renderInner = () => {
+    const renderItemInner = () => {
       return createVNode(
-        'div',
-        {
-          class: `${prefixCls.value}-submenu-item`,
-          ...(!getCollapsed.value && {
-            style: {
-              paddingLeft: menuIndent.value * depth.value + 'px',
-            },
-            onClick: () => onMenuOpen(index, menuInfo.value),
-          }),
-        },
+        isMenuInHeader.value ? 'div' : Fragment,
+        { class: `${prefixCls.value}-submenu-content` },
         [
           slots.renderMenuIcon &&
             createVNode('span', { class: `${prefixCls.value}-menu-icon` }, [
@@ -57,6 +59,24 @@ export const Submenu = defineComponent({
       );
     };
 
+    const renderItem = (inner: VNode) => {
+      return createVNode(
+        'div',
+        {
+          class: `${prefixCls.value}-submenu-item`,
+          ...(hasMenuIndent.value && {
+            style: {
+              paddingLeft: menuIndent.value * depth.value + 'px',
+            },
+          }),
+          ...(hasCollapseMotion.value && {
+            onClick: () => onMenuOpen(index, menuInfo.value),
+          }),
+        },
+        [inner],
+      );
+    };
+
     const renderMenu = () => {
       const getProps = computed(() => {
         return {
@@ -65,7 +85,9 @@ export const Submenu = defineComponent({
       });
 
       const children = computed(() => menuInfo.value.children || []);
-      const getShow = computed(() => getCollapsed.value || (show.value && !getCollapsed.value));
+      const getShow = computed(
+        () => getCollapsed.value || isMenuInHeader.value || (show.value && !getCollapsed.value),
+      );
 
       const style = ref({});
       const className = ref('');
@@ -90,22 +112,24 @@ export const Submenu = defineComponent({
     };
 
     const renderContent = (childNodes: VNode[]) => {
-      return getCollapsed.value
-        ? createVNode(
-            Popper,
-            {
-              class: `${prefixCls.value}-menu-popper`,
-              trigger: 'hover',
-              placement: 'right-start',
-              appendToBody: depth.value === 1,
-              transition: 'pot-fade-in-linear',
-            },
-            {
-              default: () => childNodes[0],
-              content: () => childNodes[1],
-            },
-          )
-        : createVNode(Fragment, null, childNodes);
+      if (getCollapsed.value || isMenuInHeader.value) {
+        return createVNode(
+          Popper,
+          {
+            class: `${prefixCls.value}-menu-popper`,
+            trigger: 'hover',
+            placement: isMenuInHeader.value && firstNode.value ? 'bottom-start' : 'right-start',
+            appendToBody: firstNode.value,
+            transition: 'pot-fade',
+            showAfter: 200,
+          },
+          {
+            default: () => childNodes[0],
+            content: () => childNodes[1],
+          },
+        );
+      }
+      return createVNode(Fragment, null, childNodes);
     };
 
     return () =>
@@ -120,7 +144,11 @@ export const Submenu = defineComponent({
             },
           ],
         },
-        [renderContent([renderInner(), renderMenu()])],
+        [
+          isMenuInHeader.value && firstNode.value
+            ? renderItem(renderContent([renderItemInner(), renderMenu()]))
+            : renderContent([renderItem(renderItemInner()), renderMenu()]),
+        ],
       );
   },
 });
