@@ -54,7 +54,6 @@ export const useProvideShared = (
       emit('menuSelect', index, menu);
     },
     onMenuOpen: (index) => {
-      console.log('#onMenuOpen');
       if (state.menuOpened.has(index)) {
         state.menuOpened.delete(index);
       } else {

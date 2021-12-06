@@ -3,6 +3,17 @@
  * -----------------------------------
  * Layout & Header & Footer & Sidebar
  */
+@import "variables";
+
+@layout: ~'@{pot-prefix}';
+@layout-header: ~'@{layout}-header';
+@layout-footer: ~'@{layout}-footer';
+@layout-sidebar: ~'@{layout}-sidebar';
+@layout-drawer: ~'@{layout}-drawer';
+@layout-logo: ~'@{layout}-logo';
+@layout-trigger: ~'@{layout}-trigger';
+@layout-hamburger: ~'@{layout}-hamburger';
+
 .@{layout} {
   position: relative;
   display: flex;

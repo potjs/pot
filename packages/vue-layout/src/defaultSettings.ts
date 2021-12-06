@@ -57,7 +57,7 @@ export const defaultLayoutSettings: LayoutSettings = {
   menuTheme: undefined,
   menuMode: MenuMode.SIDE,
   menuData: [],
-  menuIndent: 24,
+  menuIndent: 16,
   menuKey: 'key',
   menuActive: '',
   trigger: TriggerPlacement.TOP,

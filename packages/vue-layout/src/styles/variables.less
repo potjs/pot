@@ -1,18 +1,6 @@
 // The prefix to use on all css classes from pot-layout.
 @pot-prefix: pot-layout;
 
-@layout: @{pot-prefix};
-@layout-header: @{layout}-header;
-@layout-footer: @{layout}-footer;
-@layout-sidebar: @{layout}-sidebar;
-@layout-drawer: @{layout}-drawer;
-@layout-logo: @{layout}-logo;
-@layout-trigger: @{layout}-trigger;
-@layout-hamburger: @{layout}-hamburger;
-
-@layout-menu: @{layout}-menu;
-@layout-submenu: @{layout}-submenu;
-
 // transition
 @ease-in-out: cubic-bezier(0.645, 0.045, 0.355, 1);
 
@@ -21,18 +9,18 @@
 
 // header
 @pot-header-bg: #fff;
-@pot-header-height: 60px;
+@pot-header-height: 48px;
 @pot-header-z-index: 100;
 
 // footer
 @pot-footer-bg: transparent;
-@pot-footer-height: 60px;
+@pot-footer-height: 48px;
 
 // sidebar
 @pot-sidebar-bg: #fff;
 @pot-sidebar-color: inherit;
-@pot-sidebar-width: 256px;
-@pot-sidebar-collapsed-width: 62px;
+@pot-sidebar-width: 208px;
+@pot-sidebar-collapsed-width: 46px;
 @pot-sidebar-z-index: 200;
 
 // drawer
@@ -43,18 +31,18 @@
 @pot-content-bg: transparent;
 
 // logo
-@pot-logo-height: @{pot-header-height};
-@pot-logo-width: @{pot-sidebar-width};
-@pot-logo-collapsed-width: @{pot-sidebar-collapsed-width};
+@pot-logo-height: @pot-header-height;
+@pot-logo-width: @pot-sidebar-width;
+@pot-logo-collapsed-width: @pot-sidebar-collapsed-width;
 
-// menu
+// ------------------------------menu------------------------------
 @pot-menu-item-height: 40px;
 @pot-menu-collapsed-width: @pot-sidebar-collapsed-width;
 @pot-menu-bg: #fff;
 @pot-menu-popup-bg: @pot-menu-bg;
 @pot-menu-popup-width: @pot-sidebar-width;
 @pot-menu-item-font-size: 14px;
-@pot-menu-item-padding-horizontal: 24px;
+@pot-menu-item-padding-horizontal: 16px;
 @pot-menu-item-padding: 0 @pot-menu-item-padding-horizontal;
 @pot-menu-item-color: fade(#000, 85%);
 @pot-menu-item-active-color: #1890ff;
