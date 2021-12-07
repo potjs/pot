@@ -1,3 +1,10 @@
+## <small>0.0.1 (2021-12-07)</small>
+
+* fix: update ajs to pot ([c466d0e](https://github.com/potjs/pot/commit/c466d0e))
+* fix: upgrade dependencies ([05410b1](https://github.com/potjs/pot/commit/05410b1))
+
+
+
 ## 0.0.1-beta.0 (2021-11-03)
 
 
