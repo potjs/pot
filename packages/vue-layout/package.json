@@ -1,6 +1,6 @@
 {
   "name": "@potjs/vue-layout",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "license": "MIT",
   "author": "Anguer",
   "files": [
@@ -35,6 +35,6 @@
     "vue": "^3.2.22"
   },
   "dependencies": {
-    "@potjs/vue-popper": "workspace:*"
+    "@potjs/vue-popper": "^0.0.3"
   }
 }

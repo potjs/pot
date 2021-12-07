@@ -1,3 +1,10 @@
+## <small>0.0.5 (2021-12-07)</small>
+
+* fix: fix popper version on dependencies ([7b9f0c3](https://github.com/potjs/pot/commit/7b9f0c3))
+* style: fix something styles ([2de4a39](https://github.com/potjs/pot/commit/2de4a39))
+
+
+
 ## [0.0.4](https://github.com/potjs/pot/compare/vue-layout@0.0.3...vue-layout@0.0.4) (2021-12-05)
 
 
