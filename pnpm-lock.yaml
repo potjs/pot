@@ -112,7 +112,7 @@ importers:
 
   packages/vue-layout:
     specifiers:
-      '@potjs/vue-popper': workspace:*
+      '@potjs/vue-popper': ^0.0.3
       vue: ^3.2.22
     dependencies:
       '@potjs/vue-popper': link:../vue-popper
