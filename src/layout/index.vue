@@ -24,7 +24,7 @@
 
     <template #footer><LayoutFooter /></template>
 
-    <template #logo>Logo Slot</template>
+    <template #logo><img src="/@/assets/logo.png" height="32" alt="logo" />Logo Slot</template>
 
     <template #renderMenuIcon><RobotOutlined /></template>
     <template #renderMenuLabel="{ meta }">{{ meta.title }}</template>

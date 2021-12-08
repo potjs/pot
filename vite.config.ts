@@ -36,8 +36,9 @@ export default ({ mode }): UserConfig => {
       preprocessorOptions: {
         less: {
           modifyVars: {
-            'pot-menu-item-active-color': '#e37171',
-            'pot-submenu-item-active-color': '#e37171',
+            // custom theme
+            // 'pot-menu-item-active-color': '#e37171',
+            // 'pot-submenu-item-active-color': '#e37171',
           },
           javascriptEnabled: true,
         },

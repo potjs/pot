@@ -53,7 +53,7 @@ export interface LayoutSettings {
 }
 
 export const defaultLayoutSettings: LayoutSettings = {
-  prefixCls: 'pot-layout',
+  prefixCls: 'pot',
   menuTheme: undefined,
   menuMode: MenuMode.SIDE,
   menuData: [],
