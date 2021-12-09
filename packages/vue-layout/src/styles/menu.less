@@ -5,10 +5,9 @@
  */
 @import "variables";
 
-@layout-menu: ~'@{pot-prefix}-menu';
-@layout-submenu: ~'@{pot-prefix}-submenu';
+@menu: ~'@{pot-prefix}-menu';
 
-.@{layout-menu} {
+.@{menu} {
   position: relative;
   box-sizing: border-box;
   margin: 0;
@@ -22,171 +21,164 @@
   user-select: none;
   transition: all .2s @ease-in-out;
 
-  &-item, .@{layout-submenu}-item {
-    position: relative;
-    margin: 0;
-    padding: @pot-menu-item-padding;
-    height: @pot-menu-item-height;
-    display: flex;
-    align-items: center;
-    white-space: nowrap;
-    font-size: @pot-menu-item-font-size;
-    cursor: pointer;
-    overflow: hidden;
-  }
+  & {
+    &-item, &-submenu-title {
+      position: relative;
+      margin: 0;
+      padding: @pot-menu-item-padding;
+      height: @pot-menu-item-height;
+      display: flex;
+      align-items: center;
+      white-space: nowrap;
+      font-size: @pot-menu-item-font-size;
+      cursor: pointer;
+      overflow: hidden;
+    }
 
-  &-icon {
-    font-size: @pot-menu-icon-size;
-    line-height: 1;
-  }
+    &-item {
+      color: @pot-menu-item-color;
+      border-right: @pot-menu-item-active-border-width transparent solid;
 
-  &-label {
-    flex: 1;
-  }
+      &:not(&-active):hover, &:not(&-active):focus {
+        color: @pot-menu-item-highlight-color;
+        background: @pot-menu-item-highlight-bg;
+      }
 
-  &-icon + &-label {
-    margin-left: @pot-menu-icon-margin-right;
-  }
+      &&-active {
+        color: @pot-menu-item-active-color;
+        background: @pot-menu-item-active-bg;
+        border-right-color: @pot-menu-item-active-color;
+      }
+    }
 
-  &-popper {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: @pot-menu-popup-width;
-    background: @pot-menu-popup-bg;
-    box-shadow: 0 2px 12px #0000001a;
+    &-submenu {
+      position: relative;
+
+      & &-title {
+        color: @pot-menu-item-color;
+
+        &:hover, &:focus {
+          color: @pot-submenu-title-highlight-color;
+          background: @pot-submenu-title-highlight-bg;
+        }
+      }
+
+      &&-active > &-title {
+        color: @pot-submenu-title-active-color;
+        background: @pot-submenu-title-active-bg;
+      }
+
+      & &-arrow {
+        position: absolute;
+        top: 50%;
+        right: 16px;
+        width: @pot-submenu-arrow-width;
+        color: inherit;
+        transform: translateY(-50%);
+        transition: transform .3s @ease-in-out;
+
+        &::before,
+        &::after {
+          position: absolute;
+          content: '';
+          width: 6px;
+          height: 1.5px;
+          background-color: currentColor;
+          border-radius: 2px;
+          transition: background .3s @ease-in-out, transform .3s @ease-in-out, top .3s @ease-in-out, color .3s @ease-in-out;
+        }
+        &::before {
+          transform: rotate(45deg) translateY(-2.5px);
+        }
+        &::after {
+          transform: rotate(-45deg) translateY(2.5px);
+        }
+      }
+
+      &-closed > .@{menu}-submenu-title .@{menu}-submenu-arrow {
+        transform: translateY(-2px);
+        &::before {
+          transform: rotate(-45deg) translate(2.5px);
+        }
+        &::after {
+          transform: rotate(45deg) translate(-2.5px);
+        }
+      }
+      &-opened > .@{menu}-submenu-title .@{menu}-submenu-arrow {
+        transform: translateY(-2px);
+        &::before {
+          transform: rotate(45deg) translate(2.5px);
+        }
+        &::after {
+          transform: rotate(-45deg) translate(-2.5px);
+        }
+      }
+    }
+
+    &-icon {
+      margin-right: @pot-menu-icon-margin-right;
+      font-size: @pot-menu-icon-size;
+      line-height: 1;
+    }
+
+    &-label {
+      flex: 1;
+    }
+
+    &-popper {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: @pot-menu-popup-width;
+      background: @pot-menu-popup-bg;
+      box-shadow: 0 2px 12px #0000001a;
+    }
   }
 
   // collapsed
-  &-collapsed {
-    .@{layout-menu}, .@{layout-submenu} {
-      &-item {
-        padding: 0;
-      }
-
-      &-icon {
-        width: @pot-menu-icon-width;
-        min-width: @pot-menu-icon-width;
-        text-align: center;
-      }
-
-      &-label {
-        display: none;
-      }
-
-      &-trigger {
-        display: none;
-      }
+  &&-collapsed & {
+    &-item, &-submenu-title {
+      padding: 0;
+    }
+    &-icon {
+      width: @pot-menu-icon-width;
+      min-width: @pot-menu-icon-width;
+      text-align: center;
+    }
+    &-label {
+      display: none;
+    }
+    &-submenu-arrow {
+      display: none;
     }
   }
 
   // not collapsed
-  &:not(&-collapsed):not(&-horizontal) {
-    .@{layout-menu}-item, .@{layout-submenu}-item {
-      padding-right: @pot-menu-item-padding-horizontal + @pot-menu-trigger-width;
+  &:not(&-collapsed):not(&-horizontal) & {
+    &-item, &-submenu-title {
+      padding-right: @pot-menu-item-padding-horizontal + @pot-submenu-arrow-width;
     }
   }
 
-  &-horizontal {
+  &&-horizontal {
     display: flex;
     flex-direction: row;
     align-items: stretch;
     justify-content: @pot-menu-horizontal-align;
     height: 100%;
-
-    .@{layout-menu}, .@{layout-submenu} {
-      &-item {
-        height: 100%;
-      }
-      &-content {
-        height: 100%;
-        display: flex;
-        align-items: center;
-
-        i[class$="-trigger"] {
-          display: none;
-        }
-      }
-    }
   }
 
-  // theme
-  &-item {
-    color: @pot-menu-item-color;
-    border-right: @pot-menu-item-active-border-width transparent solid;
-
-    &:not(&-active):hover, &:not(&-active):focus {
-      color: @pot-menu-item-highlight-color;
-      background: @pot-menu-item-highlight-bg;
+  &&-horizontal & {
+    &-item, &-submenu-title {
+      height: 100%;
     }
+    &-submenu-content {
+      height: 100%;
+      display: flex;
+      align-items: center;
 
-    &-active {
-      color: @pot-menu-item-active-color;
-      background: @pot-menu-item-active-bg;
-      border-right-color: @pot-menu-item-active-color;
-    }
-  }
-
-  .@{layout-submenu} {
-    &-item {
-      color: @pot-menu-item-color;
-
-      &:hover, &:focus {
-        color: @pot-submenu-item-highlight-color;
-        background: @pot-submenu-item-highlight-bg;
-      }
-    }
-
-    &-active > .@{layout-submenu}-item {
-      color: @pot-submenu-item-active-color;
-      background: @pot-submenu-item-active-bg;
-    }
-  }
-}
-
-// trigger
-.@{layout-submenu} {
-  position: relative;
-
-  &-trigger {
-    position: absolute;
-    top: 50%;
-    right: 16px;
-    width: @pot-menu-trigger-width;
-    color: inherit;
-    transform: translateY(-50%);
-    transition: transform .3s @ease-in-out;
-
-    &::before,
-    &::after {
-      position: absolute;
-      content: '';
-      width: 6px;
-      height: 1.5px;
-      background-color: currentColor;
-      border-radius: 2px;
-      transition: background .3s @ease-in-out, transform .3s @ease-in-out, top .3s @ease-in-out, color .3s @ease-in-out;
-    }
-    &::before {
-      //transform: rotate(-45deg) translateY(2.5px);
-      //transform: rotate(45deg) translateY(-2.5px);
-      transform: rotate(-45deg) translate(2.5px);
-    }
-    &::after {
-      //transform: rotate(45deg) translateY(-2.5px);
-      //transform: rotate(-45deg) translateY(2.5px);
-      transform: rotate(45deg) translate(-2.5px);
-    }
-  }
-
-  &-opened {
-    >.@{layout-submenu}-item >.@{layout-submenu}-trigger {
-      transform: translateY(-2px);
-      &::before {
-        transform: rotate(45deg) translate(2.5px);
-      }
-      &::after {
-        transform: rotate(-45deg) translate(-2.5px);
+      i[class$="-arrow"] {
+        display: none;
       }
     }
   }

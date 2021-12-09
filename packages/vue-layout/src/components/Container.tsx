@@ -14,8 +14,8 @@ export default defineComponent({
     const { prefixCls } = useInjectSettings();
 
     const className = computed(() => ({
-      [`${prefixCls.value}`]: true,
-      [`${prefixCls.value}-${props.direction}`]: true,
+      [`${prefixCls.value}-layout`]: true,
+      [`${prefixCls.value}-layout-${props.direction}`]: true,
     }));
 
     return () => (

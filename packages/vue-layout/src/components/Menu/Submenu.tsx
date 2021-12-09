@@ -40,12 +40,12 @@ export const Submenu = defineComponent({
     const index = menuInfo.value[menuKey.value];
     const getActive = computed(() => getMenuActivePaths.value.includes(index));
     // show or hide submenu list
-    const show = computed(() => getMenuOpened.value.includes(index));
+    const isOpened = computed(() => getMenuOpened.value.includes(index));
 
     const renderItemInner = () => {
       return createVNode(
         isMenuInHeader.value ? 'div' : Fragment,
-        { class: `${prefixCls.value}-submenu-content` },
+        { class: `${prefixCls.value}-menu-submenu-content` },
         [
           slots.renderMenuIcon &&
             createVNode('span', { class: `${prefixCls.value}-menu-icon` }, [
@@ -54,7 +54,7 @@ export const Submenu = defineComponent({
           createVNode('span', { class: `${prefixCls.value}-menu-label` }, [
             slots.renderMenuLabel?.(menuInfo.value),
           ]),
-          createVNode('i', { class: `${prefixCls.value}-submenu-trigger` }),
+          createVNode('i', { class: `${prefixCls.value}-menu-submenu-arrow` }),
         ],
       );
     };
@@ -63,7 +63,7 @@ export const Submenu = defineComponent({
       return createVNode(
         'div',
         {
-          class: `${prefixCls.value}-submenu-item`,
+          class: `${prefixCls.value}-menu-submenu-title`,
           ...(hasMenuIndent.value && {
             style: {
               paddingLeft: menuIndent.value * depth.value + 'px',
@@ -86,7 +86,7 @@ export const Submenu = defineComponent({
 
       const children = computed(() => menuInfo.value.children || []);
       const getShow = computed(
-        () => getCollapsed.value || isMenuInHeader.value || (show.value && !getCollapsed.value),
+        () => getCollapsed.value || isMenuInHeader.value || (isOpened.value && !getCollapsed.value),
       );
 
       const style = ref({});
@@ -137,10 +137,11 @@ export const Submenu = defineComponent({
         'li',
         {
           class: [
-            `${prefixCls.value}-submenu`,
+            `${prefixCls.value}-menu-submenu`,
             {
-              [`${prefixCls.value}-submenu-active`]: getActive.value,
-              [`${prefixCls.value}-submenu-opened`]: show.value,
+              [`${prefixCls.value}-menu-submenu-active`]: getActive.value,
+              [`${prefixCls.value}-menu-submenu-opened`]: !getCollapsed.value && isOpened.value,
+              [`${prefixCls.value}-menu-submenu-closed`]: !getCollapsed.value && !isOpened.value,
             },
           ],
         },
