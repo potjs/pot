@@ -1,3 +1,9 @@
+## <small>0.0.1-beta.2 (2021-12-10)</small>
+
+* fix: optimize http package ([3b3d785](https://github.com/potjs/pot/commit/3b3d785))
+
+
+
 ## <small>0.0.1-beta.1 (2021-12-09)</small>
 
 * fix: update ajs to pot ([c466d0e](https://github.com/potjs/pot/commit/c466d0e))
