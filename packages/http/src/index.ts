@@ -5,7 +5,7 @@ import cloneDeep from 'lodash.clonedeep';
 import { AxiosCanceler } from './cancel';
 import { isFunction, isUndefined } from './helpers';
 
-export type ErrorMessageMode = 'none' | 'modal' | 'message' | undefined;
+export type ErrorMode = 'none' | 'modal' | 'message' | undefined;
 
 export interface RequestOptions {
   // Splicing request parameters to url
@@ -22,7 +22,7 @@ export interface RequestOptions {
   // Interface address, use the default apiUrl if you leave it blank
   apiUrl?: string;
   // Error message prompt type
-  errorMessageMode?: ErrorMessageMode;
+  errorMode?: ErrorMode;
   // Whether to add a timestamp
   joinTime?: boolean;
   ignoreCancelToken?: boolean;
@@ -37,44 +37,41 @@ export interface Result<T = any> {
   result: T;
 }
 
-export interface CreateAxiosOptions extends AxiosRequestConfig {
+export interface Options<Res = any> extends AxiosRequestConfig {
   authenticationScheme?: string;
   urlPrefix?: string;
-  transform?: AxiosTransform;
+  transform?: HttpTransform<Res>;
   requestOptions?: RequestOptions;
 }
 
-export abstract class AxiosTransform {
-  // Process configuration before request
-  beforeRequestHook?: (config: AxiosRequestConfig, options: RequestOptions) => AxiosRequestConfig;
-
-  // Request successfully processed
-  transformRequestHook?: (res: AxiosResponse<Result>, options: RequestOptions) => any;
-
-  // 请求失败处理
-  requestCatchHook?: (e: Error, options: RequestOptions) => Promise<any>;
+export abstract class HttpTransform<R = any> {
+  // 处理请求之前的配置
+  beforeRequest?: (config: AxiosRequestConfig, options: RequestOptions) => AxiosRequestConfig;
 
   // 请求之前的拦截器
-  requestInterceptors?: (
-    config: AxiosRequestConfig,
-    options: CreateAxiosOptions,
-  ) => AxiosRequestConfig;
+  requestInterceptors?: (config: AxiosRequestConfig, options: Options<R>) => AxiosRequestConfig;
 
   // 请求之后的拦截器
-  responseInterceptors?: (res: AxiosResponse) => AxiosResponse;
+  responseInterceptors?: (res: AxiosResponse<R>) => AxiosResponse;
+
+  // 处理响应体
+  transformResponse?: (res: AxiosResponse<R>, options: RequestOptions) => any;
 
   // 请求之前的拦截器错误处理
   requestInterceptorsCatch?: (error: Error) => void;
 
   // 请求之后的拦截器错误处理
   responseInterceptorsCatch?: (error: Error) => void;
+
+  // 处理异常
+  transformCatch?: (e: Error, options: RequestOptions) => Promise<any>;
 }
 
-export class PotHttp {
+export class Http<R = Result> {
   private readonly axiosInstance: AxiosInstance;
-  private readonly options: CreateAxiosOptions;
+  private readonly options: Options<R>;
 
-  constructor(options: CreateAxiosOptions) {
+  constructor(options: Options<R>) {
     this.options = options;
     this.axiosInstance = axios.create(options);
     this.setupInterceptors();
@@ -122,7 +119,7 @@ export class PotHttp {
     }, requestInterceptorsCatch);
 
     // Add a response interceptor
-    this.axiosInstance.interceptors.response.use((res: AxiosResponse<any>) => {
+    this.axiosInstance.interceptors.response.use((res: AxiosResponse<R>) => {
       res && axiosCanceler.removePending(res.config);
       if (isFunction(responseInterceptors)) {
         res = responseInterceptors(res);
@@ -148,26 +145,26 @@ export class PotHttp {
   }
 
   request<T = any>(config: AxiosRequestConfig, options?: RequestOptions): Promise<T> {
-    let conf: CreateAxiosOptions = cloneDeep(config);
+    let conf: Options<R> = cloneDeep(config);
     const transform = this.getTransform();
 
     const { requestOptions } = this.options;
 
     const opt: RequestOptions = Object.assign({}, requestOptions, options);
 
-    const { beforeRequestHook, requestCatchHook, transformRequestHook } = transform || {};
-    if (isFunction(beforeRequestHook)) {
-      conf = beforeRequestHook(conf, opt);
+    const { beforeRequest, transformCatch, transformResponse } = transform || {};
+    if (isFunction(beforeRequest)) {
+      conf = beforeRequest(conf, opt);
     }
     conf.requestOptions = opt;
 
     return new Promise((resolve, reject) => {
       this.axiosInstance
-        .request<any, AxiosResponse<Result>>(conf)
-        .then((res: AxiosResponse<Result>) => {
-          if (isFunction(transformRequestHook)) {
+        .request<any, AxiosResponse<R>>(conf)
+        .then((res: AxiosResponse<R>) => {
+          if (isFunction(transformResponse)) {
             try {
-              const ret = transformRequestHook(res, opt);
+              const ret = transformResponse(res, opt);
               resolve(ret);
             } catch (err) {
               reject(err || new Error('request error!'));
@@ -177,8 +174,8 @@ export class PotHttp {
           resolve(res as unknown as Promise<T>);
         })
         .catch((e: Error) => {
-          if (isFunction(requestCatchHook)) {
-            reject(requestCatchHook(e, opt));
+          if (isFunction(transformCatch)) {
+            reject(transformCatch(e, opt));
             return;
           }
           reject(e);
