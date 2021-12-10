@@ -1,10 +1,11 @@
 {
   "name": "@potjs/http",
-  "version": "0.0.1-beta.0",
+  "version": "0.0.1",
   "files": [
     "dist"
   ],
-  "main": "dist/index.js",
+  "main": "dist/index.common.js",
+  "module": "dist/index.esm.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "rimraf dist && run-s build-bundle build-types",
