@@ -30,7 +30,7 @@
   },
   "homepage": "https://github.com/potjs/pot/tree/master/packages/cache#readme",
   "dependencies": {
-    "@potjs/shared": "workspace:*",
-    "@potjs/cipher": "workspace:*"
+    "@potjs/shared": "^0.0.1",
+    "@potjs/cipher": "^0.0.1"
   }
 }

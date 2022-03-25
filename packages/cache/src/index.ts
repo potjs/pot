@@ -29,4 +29,4 @@ export const createLocalStorage = (options: Options = {}) => {
   return createStorage(localStorage, { timeout: DEFAULT_CACHE_TIME, ...options });
 };
 
-export default WebStorage;
+export * from './storageCache';

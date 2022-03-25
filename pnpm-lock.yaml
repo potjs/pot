@@ -101,8 +101,8 @@ importers:
 
   packages/cache:
     specifiers:
-      '@potjs/cipher': workspace:*
-      '@potjs/shared': workspace:*
+      '@potjs/cipher': ^0.0.1
+      '@potjs/shared': ^0.0.1
     dependencies:
       '@potjs/cipher': link:../cipher
       '@potjs/shared': link:../shared
