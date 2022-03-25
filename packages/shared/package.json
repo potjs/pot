@@ -1,5 +1,5 @@
 {
-  "name": "@potjs/http",
+  "name": "@potjs/shared",
   "version": "0.0.1",
   "files": [
     "dist",
@@ -12,7 +12,7 @@
     "build-bundle": "rollup -c",
     "build-types": "tsc -p tsconfig.type.json --outDir temp && api-extractor run && rimraf temp",
     "rollup-types": "tsc -p tsconfig.type.json --outDir dist",
-    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s --commit-path . --lerna-package http",
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s --commit-path . --lerna-package shared",
     "release": "node ../../scripts/release.js"
   },
   "author": "Anguer",
@@ -23,18 +23,13 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/potjs/pot.git",
-    "directory": "packages/http"
+    "directory": "packages/shared"
   },
   "bugs": {
     "url": "https://github.com/potjs/pot/issues"
   },
-  "homepage": "https://github.com/potjs/pot/tree/master/packages/http#readme",
+  "homepage": "https://github.com/potjs/pot/tree/master/packages/shared#readme",
   "dependencies": {
-    "@potjs/shared": "workspace:*",
-    "axios": "^0.26.1",
-    "lodash.clonedeep": "^4.5.0"
-  },
-  "devDependencies": {
-    "@types/lodash.clonedeep": "^4.5.6"
+    "@vue/shared": "^3.2.31"
   }
 }
