@@ -1,6 +1,6 @@
 {
   "name": "@potjs/http",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "files": [
     "dist",
     "src"
@@ -30,7 +30,7 @@
   },
   "homepage": "https://github.com/potjs/pot/tree/master/packages/http#readme",
   "dependencies": {
-    "@potjs/shared": "workspace:*",
+    "@potjs/shared": "^0.0.1",
     "axios": "^0.26.1",
     "lodash.clonedeep": "^4.5.0"
   },
