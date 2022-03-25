@@ -109,9 +109,12 @@ importers:
 
   packages/cipher:
     specifiers:
+      '@types/crypto-js': ^4.1.1
       crypto-js: ^4.1.1
     dependencies:
       crypto-js: registry.npmjs.org/crypto-js/4.1.1
+    devDependencies:
+      '@types/crypto-js': registry.npmjs.org/@types/crypto-js/4.1.1
 
   packages/http:
     specifiers:
@@ -1861,6 +1864,12 @@ packages:
     resolution: {integrity: sha512-ebDJ9b0e702Yr7pWgB0jzm+CX4Srzz8RcXtLJDJB+BSccqMa36uyH/zUsSYao5+BD1ytv3k3rPYCq4mAE1hsXA==, registry: https://registry.yarnpkg.com/, tarball: https://registry.npmjs.org/@types/argparse/-/argparse-1.0.38.tgz}
     name: '@types/argparse'
     version: 1.0.38
+    dev: true
+
+  registry.npmjs.org/@types/crypto-js/4.1.1:
+    resolution: {integrity: sha512-BG7fQKZ689HIoc5h+6D2Dgq1fABRa0RbBWKBd9SP/MVRVXROflpm5fhwyATX5duFmbStzyzyycPB8qUYKDH3NA==, registry: https://registry.yarnpkg.com/, tarball: https://registry.npmjs.org/@types/crypto-js/-/crypto-js-4.1.1.tgz}
+    name: '@types/crypto-js'
+    version: 4.1.1
     dev: true
 
   registry.npmjs.org/@types/estree/0.0.39:
