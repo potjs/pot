@@ -5,7 +5,8 @@
     "dist",
     "src"
   ],
-  "main": "dist/index.js",
+  "main": "dist/index.common.js",
+  "module": "dist/index.esm.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "rimraf dist && run-s build-bundle build-types",
