@@ -1,6 +1,6 @@
 {
   "name": "@potjs/cache",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "files": [
     "dist",
     "src"
@@ -31,7 +31,7 @@
   },
   "homepage": "https://github.com/potjs/pot/tree/master/packages/cache#readme",
   "dependencies": {
-    "@potjs/shared": "^0.0.1",
-    "@potjs/cipher": "^0.0.1"
+    "@potjs/shared": "^0.0.2",
+    "@potjs/cipher": "^0.0.2"
   }
 }
