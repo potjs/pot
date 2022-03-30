@@ -104,22 +104,18 @@ export class Constant<T extends object> {
   }
 }
 
-export function createConstant<T extends object>(obj: T): IConstant<T> {
-  return new Constant(obj) as IConstant<T>;
-}
-
-export function createConstantRecord<T extends IParams>(
+export function createConstant<T extends IParams>(
   obj: T,
   options?: IConstantOptions,
 ): IConstant<ExtractValue<T>> {
-  return createConstant(
+  return new Constant(
     // use 'lodash/mapValues'
     mapValues(obj, (value, key) => {
       const val = value as IRecord;
       if (Array.isArray(val)) {
         return new ConstantRecord(key, val[0], val[1], options);
       } else {
-        return createConstantRecord(val, options);
+        return createConstant(val, options);
       }
     }) as ExtractValue<T>,
     // Object.fromEntries(
@@ -132,10 +128,10 @@ export function createConstantRecord<T extends IParams>(
     //     }
     //   }),
     // ) as ExtractValue<T>,
-  );
+  ) as IConstant<ExtractValue<T>>;
 }
 
-// const constant = createConstantRecord(
+// const constant = createConstant(
 //   {
 //     user: {
 //       admin: [1, 'admin'],
