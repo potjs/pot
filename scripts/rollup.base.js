@@ -7,10 +7,19 @@ const external = [
   'vue',
   'vue-router',
   'lodash.clonedeep',
+  'lodash.mapvalues',
   'axios',
   '@potjs/vue-popper',
+  '@popperjs/core',
   '@potjs/vue-layout',
   '@potjs/vue-router',
+  '@potjs/vue-table',
+  '@potjs/shared',
+  '@potjs/cipher',
+  'crypto-js',
+  '@potjs/cache',
+  '@potjs/http',
+  '@potjs/constant',
 ];
 
 const presets = (tsOpt) => {
