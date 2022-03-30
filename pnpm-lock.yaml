@@ -116,6 +116,15 @@ importers:
     devDependencies:
       '@types/crypto-js': registry.npmjs.org/@types/crypto-js/4.1.1
 
+  packages/constant:
+    specifiers:
+      '@types/lodash.mapvalues': ^4.6.6
+      lodash.mapvalues: ^4.6.0
+    dependencies:
+      lodash.mapvalues: registry.npmjs.org/lodash.mapvalues/4.6.0
+    devDependencies:
+      '@types/lodash.mapvalues': registry.npmjs.org/@types/lodash.mapvalues/4.6.6
+
   packages/http:
     specifiers:
       '@potjs/shared': ^0.0.2
@@ -1888,6 +1897,14 @@ packages:
     resolution: {integrity: sha512-cE1jYr2dEg1wBImvXlNtp0xDoS79rfEdGozQVgliDZj1uERH4k+rmEMTudP9b4VQ8O6nRb5gPqft0QzEQGMQgA==, registry: https://registry.yarnpkg.com/, tarball: https://registry.npmjs.org/@types/lodash.clonedeep/-/lodash.clonedeep-4.5.6.tgz}
     name: '@types/lodash.clonedeep'
     version: 4.5.6
+    dependencies:
+      '@types/lodash': registry.npmjs.org/@types/lodash/4.14.174
+    dev: true
+
+  registry.npmjs.org/@types/lodash.mapvalues/4.6.6:
+    resolution: {integrity: sha512-Mt9eg3AqwAt5HShuOu8taiIYg0sLl4w3vDi0++E0VtiOtj9DqQHaxVr3wicVop0eDEqr5ENbht7vsLJlkMHL+w==, registry: https://registry.yarnpkg.com/, tarball: https://registry.npmjs.org/@types/lodash.mapvalues/-/lodash.mapvalues-4.6.6.tgz}
+    name: '@types/lodash.mapvalues'
+    version: 4.6.6
     dependencies:
       '@types/lodash': registry.npmjs.org/@types/lodash/4.14.174
     dev: true
@@ -5105,6 +5122,12 @@ packages:
     name: lodash.ismatch
     version: 4.4.0
     dev: true
+
+  registry.npmjs.org/lodash.mapvalues/4.6.0:
+    resolution: {integrity: sha1-G6+lAF3p3W9PJmaMMMo3IwzJaJw=, registry: https://registry.yarnpkg.com/, tarball: https://registry.npmjs.org/lodash.mapvalues/-/lodash.mapvalues-4.6.0.tgz}
+    name: lodash.mapvalues
+    version: 4.6.0
+    dev: false
 
   registry.npmjs.org/lodash.memoize/4.1.2:
     resolution: {integrity: sha1-vMbEmkKihA7Zl/Mj6tpezRguC/4=, registry: https://registry.yarnpkg.com/, tarball: https://registry.npmjs.org/lodash.memoize/-/lodash.memoize-4.1.2.tgz}
