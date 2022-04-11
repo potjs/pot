@@ -26,8 +26,12 @@ export class Http<R = Result> {
     if (!transform) {
       return;
     }
-    const { requestInterceptors, requestInterceptorsCatch, responseInterceptors, responseInterceptorsCatch } =
-      transform;
+    const {
+      requestInterceptors,
+      requestInterceptorsCatch,
+      responseInterceptors,
+      responseInterceptorsCatch,
+    } = transform;
 
     const axiosCanceler = new AxiosCanceler();
 
