@@ -4,7 +4,9 @@ import type { Options, RequestOptions, Result } from './interface';
 import axios from 'axios';
 import cloneDeep from 'lodash.clonedeep';
 import { AxiosCanceler } from './canceler';
-import { isFunction, isUnDef } from '@potjs/shared';
+import { isFunction, isUnDef, awaitTo } from '@potjs/shared';
+
+export type AwaitToType<T> = [Error | undefined, undefined | T];
 
 export class Http<R = Result> {
   private readonly axiosInstance: AxiosInstance;
@@ -64,16 +66,48 @@ export class Http<R = Result> {
     return this.request({ ...config, method: 'GET', url }, options);
   }
 
+  getSync<T = any>(
+    url: string,
+    config?: AxiosRequestConfig,
+    options?: RequestOptions,
+  ): Promise<AwaitToType<T>> {
+    return awaitTo(this.get<T>(url, config, options));
+  }
+
   post<T = any>(url: string, config?: AxiosRequestConfig, options?: RequestOptions): Promise<T> {
     return this.request({ ...config, method: 'POST', url }, options);
+  }
+
+  postSync<T = any>(
+    url: string,
+    config?: AxiosRequestConfig,
+    options?: RequestOptions,
+  ): Promise<AwaitToType<T>> {
+    return awaitTo(this.post<T>(url, config, options));
   }
 
   put<T = any>(url: string, config?: AxiosRequestConfig, options?: RequestOptions): Promise<T> {
     return this.request({ ...config, method: 'PUT', url }, options);
   }
 
+  putSync<T = any>(
+    url: string,
+    config?: AxiosRequestConfig,
+    options?: RequestOptions,
+  ): Promise<AwaitToType<T>> {
+    return awaitTo(this.put<T>(url, config, options));
+  }
+
   delete<T = any>(url: string, config?: AxiosRequestConfig, options?: RequestOptions): Promise<T> {
     return this.request({ ...config, method: 'DELETE', url }, options);
+  }
+
+  deleteSync<T = any>(
+    url: string,
+    config?: AxiosRequestConfig,
+    options?: RequestOptions,
+  ): Promise<AwaitToType<T>> {
+    return awaitTo(this.delete<T>(url, config, options));
   }
 
   request<T = any>(config: AxiosRequestConfig, options?: RequestOptions): Promise<T> {
