@@ -71,7 +71,7 @@ export class Http<R = Result> {
     config?: AxiosRequestConfig,
     options?: RequestOptions,
   ): Promise<AwaitToType<T>> {
-    return awaitTo(this.get<T>(url, config, options));
+    return awaitTo<T>(this.get<T>(url, config, options));
   }
 
   post<T = any>(url: string, config?: AxiosRequestConfig, options?: RequestOptions): Promise<T> {
@@ -83,7 +83,7 @@ export class Http<R = Result> {
     config?: AxiosRequestConfig,
     options?: RequestOptions,
   ): Promise<AwaitToType<T>> {
-    return awaitTo(this.post<T>(url, config, options));
+    return awaitTo<T>(this.post<T>(url, config, options));
   }
 
   put<T = any>(url: string, config?: AxiosRequestConfig, options?: RequestOptions): Promise<T> {
@@ -95,7 +95,7 @@ export class Http<R = Result> {
     config?: AxiosRequestConfig,
     options?: RequestOptions,
   ): Promise<AwaitToType<T>> {
-    return awaitTo(this.put<T>(url, config, options));
+    return awaitTo<T>(this.put<T>(url, config, options));
   }
 
   delete<T = any>(url: string, config?: AxiosRequestConfig, options?: RequestOptions): Promise<T> {
@@ -107,7 +107,7 @@ export class Http<R = Result> {
     config?: AxiosRequestConfig,
     options?: RequestOptions,
   ): Promise<AwaitToType<T>> {
-    return awaitTo(this.delete<T>(url, config, options));
+    return awaitTo<T>(this.delete<T>(url, config, options));
   }
 
   request<T = any>(config: AxiosRequestConfig, options?: RequestOptions): Promise<T> {
