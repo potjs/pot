@@ -105,7 +105,7 @@ importers:
       '@potjs/shared': ^0.0.2
     dependencies:
       '@potjs/cipher': link:../cipher
-      '@potjs/shared': link:../shared
+      '@potjs/shared': registry.npmjs.org/@potjs/shared/0.0.2
 
   packages/cipher:
     specifiers:
@@ -127,7 +127,7 @@ importers:
 
   packages/http:
     specifiers:
-      '@potjs/shared': ^0.0.2
+      '@potjs/shared': ^0.0.3
       '@types/lodash.clonedeep': ^4.5.6
       axios: ^0.26.1
       lodash.clonedeep: ^4.5.0
@@ -1744,6 +1744,15 @@ packages:
     resolution: {integrity: sha512-IXf3XA7+XyN7CP9gGh/XB0UxVMlvARGEgGXLubFICsUMGz6Q+DU+i4gGlpOxTjKvXjkJDJC8YdqdKkDj9qZHEQ==, registry: https://registry.yarnpkg.com/, tarball: https://registry.npmjs.org/@popperjs/core/-/core-2.10.2.tgz}
     name: '@popperjs/core'
     version: 2.10.2
+    dev: false
+
+  registry.npmjs.org/@potjs/shared/0.0.2:
+    resolution: {integrity: sha512-XblsCuXcC7YKoY/0cN6hGfrWrB6zyaVo0kTVLnaiyG9hJ5LW0fcAheZ3vMo2svhRIcSeWDbZzEerQNrbYr/Y2w==, registry: https://registry.yarnpkg.com/, tarball: https://registry.npmjs.org/@potjs/shared/-/shared-0.0.2.tgz}
+    name: '@potjs/shared'
+    version: 0.0.2
+    engines: {node: '>=12.0.0'}
+    dependencies:
+      '@vue/shared': registry.npmjs.org/@vue/shared/3.2.31
     dev: false
 
   registry.npmjs.org/@rollup/plugin-babel/5.3.0_@babel+core@7.15.5+rollup@2.57.0:
