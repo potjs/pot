@@ -99,16 +99,50 @@ importers:
       vue-tsc: registry.npmjs.org/vue-tsc/0.29.5_typescript@4.4.4
       yorkie: registry.npmjs.org/yorkie/2.0.0
 
+  packages/cache:
+    specifiers:
+      '@potjs/cipher': ^0.0.2
+      '@potjs/shared': ^0.0.2
+    dependencies:
+      '@potjs/cipher': link:../cipher
+      '@potjs/shared': registry.npmjs.org/@potjs/shared/0.0.2
+
+  packages/cipher:
+    specifiers:
+      '@types/crypto-js': ^4.1.1
+      crypto-js: ^4.1.1
+    dependencies:
+      crypto-js: registry.npmjs.org/crypto-js/4.1.1
+    devDependencies:
+      '@types/crypto-js': registry.npmjs.org/@types/crypto-js/4.1.1
+
+  packages/constant:
+    specifiers:
+      '@types/lodash.mapvalues': ^4.6.6
+      lodash.mapvalues: ^4.6.0
+    dependencies:
+      lodash.mapvalues: registry.npmjs.org/lodash.mapvalues/4.6.0
+    devDependencies:
+      '@types/lodash.mapvalues': registry.npmjs.org/@types/lodash.mapvalues/4.6.6
+
   packages/http:
     specifiers:
+      '@potjs/shared': ^0.0.3
       '@types/lodash.clonedeep': ^4.5.6
-      axios: ^0.21.1
+      axios: ^0.26.1
       lodash.clonedeep: ^4.5.0
     dependencies:
-      axios: registry.npmjs.org/axios/0.21.4
+      '@potjs/shared': link:../shared
+      axios: registry.npmjs.org/axios/0.26.1
       lodash.clonedeep: registry.npmjs.org/lodash.clonedeep/4.5.0
     devDependencies:
       '@types/lodash.clonedeep': registry.npmjs.org/@types/lodash.clonedeep/4.5.6
+
+  packages/shared:
+    specifiers:
+      '@vue/shared': ^3.2.31
+    dependencies:
+      '@vue/shared': registry.npmjs.org/@vue/shared/3.2.31
 
   packages/vue-layout:
     specifiers:
@@ -1712,6 +1746,15 @@ packages:
     version: 2.10.2
     dev: false
 
+  registry.npmjs.org/@potjs/shared/0.0.2:
+    resolution: {integrity: sha512-XblsCuXcC7YKoY/0cN6hGfrWrB6zyaVo0kTVLnaiyG9hJ5LW0fcAheZ3vMo2svhRIcSeWDbZzEerQNrbYr/Y2w==, registry: https://registry.yarnpkg.com/, tarball: https://registry.npmjs.org/@potjs/shared/-/shared-0.0.2.tgz}
+    name: '@potjs/shared'
+    version: 0.0.2
+    engines: {node: '>=12.0.0'}
+    dependencies:
+      '@vue/shared': registry.npmjs.org/@vue/shared/3.2.31
+    dev: false
+
   registry.npmjs.org/@rollup/plugin-babel/5.3.0_@babel+core@7.15.5+rollup@2.57.0:
     resolution: {integrity: sha512-9uIC8HZOnVLrLHxayq/PTzw+uS25E14KPUBh5ktF+18Mjo5yK0ToMMx6epY0uEgkjwJw0aBW4x2horYXh8juWw==, registry: https://registry.yarnpkg.com/, tarball: https://registry.npmjs.org/@rollup/plugin-babel/-/plugin-babel-5.3.0.tgz}
     id: registry.npmjs.org/@rollup/plugin-babel/5.3.0
@@ -1841,6 +1884,12 @@ packages:
     version: 1.0.38
     dev: true
 
+  registry.npmjs.org/@types/crypto-js/4.1.1:
+    resolution: {integrity: sha512-BG7fQKZ689HIoc5h+6D2Dgq1fABRa0RbBWKBd9SP/MVRVXROflpm5fhwyATX5duFmbStzyzyycPB8qUYKDH3NA==, registry: https://registry.yarnpkg.com/, tarball: https://registry.npmjs.org/@types/crypto-js/-/crypto-js-4.1.1.tgz}
+    name: '@types/crypto-js'
+    version: 4.1.1
+    dev: true
+
   registry.npmjs.org/@types/estree/0.0.39:
     resolution: {integrity: sha512-EYNwp3bU+98cpU4lAWYYL7Zz+2gryWH1qbdDTidVd6hkiR6weksdbMadyXKXNPEkQFhXM+hVO9ZygomHXp+AIw==, registry: https://registry.yarnpkg.com/, tarball: https://registry.npmjs.org/@types/estree/-/estree-0.0.39.tgz}
     name: '@types/estree'
@@ -1857,6 +1906,14 @@ packages:
     resolution: {integrity: sha512-cE1jYr2dEg1wBImvXlNtp0xDoS79rfEdGozQVgliDZj1uERH4k+rmEMTudP9b4VQ8O6nRb5gPqft0QzEQGMQgA==, registry: https://registry.yarnpkg.com/, tarball: https://registry.npmjs.org/@types/lodash.clonedeep/-/lodash.clonedeep-4.5.6.tgz}
     name: '@types/lodash.clonedeep'
     version: 4.5.6
+    dependencies:
+      '@types/lodash': registry.npmjs.org/@types/lodash/4.14.174
+    dev: true
+
+  registry.npmjs.org/@types/lodash.mapvalues/4.6.6:
+    resolution: {integrity: sha512-Mt9eg3AqwAt5HShuOu8taiIYg0sLl4w3vDi0++E0VtiOtj9DqQHaxVr3wicVop0eDEqr5ENbht7vsLJlkMHL+w==, registry: https://registry.yarnpkg.com/, tarball: https://registry.npmjs.org/@types/lodash.mapvalues/-/lodash.mapvalues-4.6.6.tgz}
+    name: '@types/lodash.mapvalues'
+    version: 4.6.6
     dependencies:
       '@types/lodash': registry.npmjs.org/@types/lodash/4.14.174
     dev: true
@@ -2296,6 +2353,12 @@ packages:
     name: '@vue/shared'
     version: 3.2.22
 
+  registry.npmjs.org/@vue/shared/3.2.31:
+    resolution: {integrity: sha512-ymN2pj6zEjiKJZbrf98UM2pfDd6F2H7ksKw7NDt/ZZ1fh5Ei39X5tABugtT03ZRlWd9imccoK0hE8hpjpU7irQ==, registry: https://registry.yarnpkg.com/, tarball: https://registry.npmjs.org/@vue/shared/-/shared-3.2.31.tgz}
+    name: '@vue/shared'
+    version: 3.2.31
+    dev: false
+
   registry.npmjs.org/JSONStream/1.3.5:
     resolution: {integrity: sha512-E+iruNOY8VV9s4JEbe1aNEm6MiszPRr/UfcHMz0TQh1BXSxHK+ASV1R6W4HpjBhSeS+54PIsAMCBmwD06LLsqQ==, registry: https://registry.yarnpkg.com/, tarball: https://registry.npmjs.org/JSONStream/-/JSONStream-1.3.5.tgz}
     name: JSONStream
@@ -2498,12 +2561,12 @@ packages:
       postcss-value-parser: registry.npmjs.org/postcss-value-parser/4.1.0
     dev: true
 
-  registry.npmjs.org/axios/0.21.4:
-    resolution: {integrity: sha512-ut5vewkiu8jjGBdqpM44XxjuCjq9LAKeHVmoVfHVzy8eHgxxq8SbAVQNovDA8mVi05kP0Ea/n/UzcSHcTJQfNg==, registry: https://registry.yarnpkg.com/, tarball: https://registry.npmjs.org/axios/-/axios-0.21.4.tgz}
+  registry.npmjs.org/axios/0.26.1:
+    resolution: {integrity: sha512-fPwcX4EvnSHuInCMItEhAGnaSEXRBjtzh9fOtsE6E1G6p7vl7edEeZe11QHf18+6+9gR5PbKV/sGKNaD8YaMeA==, registry: https://registry.yarnpkg.com/, tarball: https://registry.npmjs.org/axios/-/axios-0.26.1.tgz}
     name: axios
-    version: 0.21.4
+    version: 0.26.1
     dependencies:
-      follow-redirects: registry.npmjs.org/follow-redirects/1.14.4
+      follow-redirects: registry.npmjs.org/follow-redirects/1.14.9
     transitivePeerDependencies:
       - debug
     dev: false
@@ -3092,6 +3155,12 @@ packages:
       shebang-command: registry.npmjs.org/shebang-command/2.0.0
       which: registry.npmjs.org/which/2.0.2
     dev: true
+
+  registry.npmjs.org/crypto-js/4.1.1:
+    resolution: {integrity: sha512-o2JlM7ydqd3Qk9CA0L4NL6mTzU2sdx96a+oOfPu8Mkl/PK51vSyoi8/rQ8NknZtk44vq15lmhAj9CIAGwgeWKw==, registry: https://registry.yarnpkg.com/, tarball: https://registry.npmjs.org/crypto-js/-/crypto-js-4.1.1.tgz}
+    name: crypto-js
+    version: 4.1.1
+    dev: false
 
   registry.npmjs.org/css-color-names/1.0.1:
     resolution: {integrity: sha512-/loXYOch1qU1biStIFsHH8SxTmOseh1IJqFvy8IujXOm1h+QjUdDhkzOrR5HG8K8mlxREj0yfi8ewCHx0eMxzA==, registry: https://registry.yarnpkg.com/, tarball: https://registry.npmjs.org/css-color-names/-/css-color-names-1.0.1.tgz}
@@ -4085,10 +4154,10 @@ packages:
     version: 3.2.2
     dev: true
 
-  registry.npmjs.org/follow-redirects/1.14.4:
-    resolution: {integrity: sha512-zwGkiSXC1MUJG/qmeIFH2HBJx9u0V46QGUe3YR1fXG8bXQxq7fLj0RjLZQ5nubr9qNJUZrH+xUcwXEoXNpfS+g==, registry: https://registry.yarnpkg.com/, tarball: https://registry.npmjs.org/follow-redirects/-/follow-redirects-1.14.4.tgz}
+  registry.npmjs.org/follow-redirects/1.14.9:
+    resolution: {integrity: sha512-MQDfihBQYMcyy5dhRDJUHcw7lb2Pv/TuE6xP1vyraLukNDHKbDxDNaOE3NbCAdKQApno+GPRyo1YAp89yCjK4w==, registry: https://registry.yarnpkg.com/, tarball: https://registry.npmjs.org/follow-redirects/-/follow-redirects-1.14.9.tgz}
     name: follow-redirects
-    version: 1.14.4
+    version: 1.14.9
     engines: {node: '>=4.0'}
     peerDependencies:
       debug: '*'
@@ -5062,6 +5131,12 @@ packages:
     name: lodash.ismatch
     version: 4.4.0
     dev: true
+
+  registry.npmjs.org/lodash.mapvalues/4.6.0:
+    resolution: {integrity: sha1-G6+lAF3p3W9PJmaMMMo3IwzJaJw=, registry: https://registry.yarnpkg.com/, tarball: https://registry.npmjs.org/lodash.mapvalues/-/lodash.mapvalues-4.6.0.tgz}
+    name: lodash.mapvalues
+    version: 4.6.0
+    dev: false
 
   registry.npmjs.org/lodash.memoize/4.1.2:
     resolution: {integrity: sha1-vMbEmkKihA7Zl/Mj6tpezRguC/4=, registry: https://registry.yarnpkg.com/, tarball: https://registry.npmjs.org/lodash.memoize/-/lodash.memoize-4.1.2.tgz}

@@ -1,6 +1,6 @@
 {
-  "name": "@potjs/http",
-  "version": "0.1.1",
+  "name": "@potjs/cipher",
+  "version": "0.0.2",
   "files": [
     "dist",
     "src"
@@ -13,7 +13,7 @@
     "build-bundle": "rollup -c",
     "build-types": "tsc -p tsconfig.type.json --outDir temp && api-extractor run && rimraf temp",
     "rollup-types": "tsc -p tsconfig.type.json --outDir dist",
-    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s --commit-path . --lerna-package http",
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s --commit-path . --lerna-package cipher",
     "release": "node ../../scripts/release.js"
   },
   "author": "Anguer",
@@ -24,18 +24,16 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/potjs/pot.git",
-    "directory": "packages/http"
+    "directory": "packages/cipher"
   },
   "bugs": {
     "url": "https://github.com/potjs/pot/issues"
   },
-  "homepage": "https://github.com/potjs/pot/tree/master/packages/http#readme",
+  "homepage": "https://github.com/potjs/pot/tree/master/packages/cipher#readme",
   "dependencies": {
-    "@potjs/shared": "^0.0.3",
-    "axios": "^0.26.1",
-    "lodash.clonedeep": "^4.5.0"
+    "crypto-js": "^4.1.1"
   },
   "devDependencies": {
-    "@types/lodash.clonedeep": "^4.5.6"
+    "@types/crypto-js": "^4.1.1"
   }
 }
